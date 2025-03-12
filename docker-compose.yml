@@ -1,0 +1,13 @@
+services:
+  db:
+    image: bitnami/postgresql:latest
+
+    restart: unless-stopped 
+
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: habitapi
+      POSTGRES_DB: HabitBoostDB
+
+    ports:
+      - 6417:5432 # posta de saida / porta interna

@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum days {
+  sunday
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+}
+
+enum priority {
+  trivial
+  important
+  highlight
+  urgent
+}
+
+enum status {
+  concluded
+  missed
+}
+
+model category {
+  id Int @id @default(autoincrement())
+  name String @unique
+
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  habits habit[]
+}
+
+model user {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  profile profile?
+
+  @@map("tb_user")
+}
+
+model profile {
+  id String @id @default(uuid())
+  username String @unique
+  score BigInt @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  user_id String? @unique
+  user user? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  reminders reminder[]
+  habits habit[]
+  goals goal[]
+}
+
+model habit {
+  id String @id @default(uuid())
+  title String @unique
+  status status
+  days days[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  category_id Int
+  profile_id String?
+
+  category category @relation(fields: [category_id], references: [id], onDelete: SetDefault)
+  profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  goal goal?
+}
+
+model goal {
+  id String @id @default(uuid())
+  title String @unique
+  deadline DateTime // Data de entrega
+  priority priority
+  prize Int //O premio em score por completar tarefa
+
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  profile_id String? @unique
+  habit_id String? @unique
+
+  profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  habit habit? @relation(fields: [habit_id], references: [id], onDelete: Cascade)
+}
+
+model reminder { 
+  id Int @id @default(autoincrement())
+  title String
+  time DateTime
+  days days
+
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  profile_id String?
+
+  profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+}
