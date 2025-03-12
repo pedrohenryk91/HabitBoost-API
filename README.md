@@ -7,6 +7,10 @@ __Requirements:__
 
 __Running:__
 
+- Compose the Docker conteiner
+- Configure environment on .env
+
 ```bash
-npm install 
+npm install
+npm run dev
 ```
