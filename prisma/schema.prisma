@@ -13,24 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum days {
-  sunday
-  monday
-  tuesday
-  wednesday
-  thursday
-  friday
-  saturday
-}
-
-enum priority {
-  trivial
-  important
-  highlight
-  urgent
-}
-
 enum status {
+  unstarted
   concluded
   missed
 }
@@ -49,6 +33,9 @@ model user {
   id String @id @default(uuid())
   email String @unique
   password String
+  username String @unique
+
+  verified_status Boolean @default(false)
 
   created_at DateTime @default(now())
   updated_at DateTime?
@@ -60,8 +47,9 @@ model user {
 
 model profile {
   id String @id @default(uuid())
-  username String @unique
-  score BigInt @default(0)
+  detailed_habit_count Json?
+  total_habit_count Int @default(0)
+  image_url String?
 
   created_at DateTime @default(now())
   updated_at DateTime?
@@ -69,7 +57,6 @@ model profile {
   user_id String? @unique
   user user? @relation(fields: [user_id], references: [id], onDelete: SetNull)
 
-  reminders reminder[]
   habits habit[]
   goals goal[]
 }
@@ -77,8 +64,11 @@ model profile {
 model habit {
   id String @id @default(uuid())
   title String @unique
-  status status
-  days days[]
+  status status @default(unstarted)
+  description String?
+
+  dates DateTime[] //Dias especificos
+  reminder_time DateTime? //Horario do lembrete
 
   created_at DateTime @default(now())
   updated_at DateTime?
@@ -95,9 +85,6 @@ model habit {
 model goal {
   id String @id @default(uuid())
   title String @unique
-  deadline DateTime // Data de entrega
-  priority priority
-  prize Int //O premio em score por completar tarefa
 
   created_at DateTime @default(now())
   updated_at DateTime?
@@ -107,18 +94,4 @@ model goal {
 
   profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   habit habit? @relation(fields: [habit_id], references: [id], onDelete: Cascade)
-}
-
-model reminder { 
-  id Int @id @default(autoincrement())
-  title String
-  time DateTime
-  days days
-
-  created_at DateTime @default(now())
-  updated_at DateTime?
-
-  profile_id String?
-
-  profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 }

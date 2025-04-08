@@ -1,16 +1,15 @@
 -- CreateEnum
-CREATE TYPE "days" AS ENUM ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+CREATE TYPE "days" AS ENUM ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'everyday');
 
 -- CreateEnum
-CREATE TYPE "priority" AS ENUM ('trivial', 'important', 'highlight', 'urgent');
-
--- CreateEnum
-CREATE TYPE "status" AS ENUM ('concluded', 'missed');
+CREATE TYPE "status" AS ENUM ('unstarted', 'concluded', 'missed');
 
 -- CreateTable
 CREATE TABLE "category" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
 
     CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
@@ -20,6 +19,9 @@ CREATE TABLE "tb_user" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "verified" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
 
     CONSTRAINT "tb_user_pkey" PRIMARY KEY ("id")
 );
@@ -28,7 +30,11 @@ CREATE TABLE "tb_user" (
 CREATE TABLE "profile" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
-    "score" BIGINT NOT NULL DEFAULT 0,
+    "detailed_habit_count" JSONB,
+    "total_habit_count" INTEGER NOT NULL DEFAULT 0,
+    "image_url" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
     "user_id" TEXT,
 
     CONSTRAINT "profile_pkey" PRIMARY KEY ("id")
@@ -38,10 +44,11 @@ CREATE TABLE "profile" (
 CREATE TABLE "habit" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "status" "status" NOT NULL DEFAULT 'unstarted',
+    "dates" TIMESTAMP(3)[],
+    "reminder_time" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "last_time_updated" TIMESTAMP(3),
-    "status" "status" NOT NULL,
-    "days" "days"[],
+    "updated_at" TIMESTAMP(3),
     "category_id" INTEGER NOT NULL,
     "profile_id" TEXT,
 
@@ -52,25 +59,14 @@ CREATE TABLE "habit" (
 CREATE TABLE "goal" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "total_reps" INTEGER NOT NULL,
+    "current_reps" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "deadline" TIMESTAMP(3) NOT NULL,
-    "priority" "priority" NOT NULL,
-    "prize" INTEGER NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "profile_id" TEXT,
     "habit_id" TEXT,
 
     CONSTRAINT "goal_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "reminder" (
-    "id" SERIAL NOT NULL,
-    "title" TEXT NOT NULL,
-    "time" TIMESTAMP(3) NOT NULL,
-    "days" "days" NOT NULL,
-    "profile_id" TEXT,
-
-    CONSTRAINT "reminder_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -111,6 +107,3 @@ ALTER TABLE "goal" ADD CONSTRAINT "goal_profile_id_fkey" FOREIGN KEY ("profile_i
 
 -- AddForeignKey
 ALTER TABLE "goal" ADD CONSTRAINT "goal_habit_id_fkey" FOREIGN KEY ("habit_id") REFERENCES "habit"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "reminder" ADD CONSTRAINT "reminder_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
