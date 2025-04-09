@@ -3,10 +3,11 @@ import { PATCHVerifyValidationToken } from "http/controllers/user/PATCH_VerifyVa
 import { PATCHEditUsername } from "http/controllers/user/PATCH_EditUsernameController";
 import { POSTCreateUserController } from "http/controllers/user/POST_CreateUserController";
 import { POSTGenValidationToken } from "http/controllers/user/POST_GenValidationTokenController";
+import { POSTSendRecoverCode } from "http/controllers/user/POST_SendRecoverCodeController";
 
 export async function userRouter(app: FastifyInstance) {
     app.route({
-        url:"/validate/getToken",
+        url:"/validate/sendToken",
         method:"POST",
         handler:POSTGenValidationToken,
     })
@@ -25,11 +26,11 @@ export async function userRouter(app: FastifyInstance) {
         method:"PATCH",
         handler:PATCHEditUsername,
     })
-    // app.route({
-    //     url:"/recover/sendCode",
-    //     method:"POST",
-    //     handler:
-    // })
+    app.route({
+        url:"/recover/sendToken",
+        method:"POST",
+        handler:POSTSendRecoverCode,
+    })
     // app.route({
     //     url:"recover/validate",
     //     method:"PATCH",

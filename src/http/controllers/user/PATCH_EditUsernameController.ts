@@ -9,7 +9,7 @@ export async function PATCHEditUsername(request: FastifyRequest, reply: FastifyR
    try {
         const { id, username } = z.object({
             id:z.string(),
-            username:z.string().min(6).max(20),
+            username:z.string().min(3).max(20),
         }).parse(request.body)
 
         const repo = new PrismaUserRepository()

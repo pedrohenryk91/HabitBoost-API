@@ -24,7 +24,8 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                     properties:{
                                         "id":{ description:"The profile's id, must ignore if creating an new profile" },
                                         "image_url":{ description:"The image url" },
-                                        "created_at":{ description:"The date the profile was created at, must ignore if creating an new profile" },
+                                        "created_at":{ 
+                                            description:"The date the profile was created at, must ignore if creating an new profile" },
                                         "updated_at":{ description:"The date that the profile was updated by the last time,  must ignore if creating an new profile" },
                                         "total_habit_count":{ description:"The total number of habits concluded by the user, must ignore if creating an new profile" },
                                         "detailed_habit_count":{ 
@@ -82,7 +83,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                                 }
                                             }
                                         },
-                                        //TODO: Keep doing
                                     }
                                 }
                             }
@@ -112,9 +112,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "email":{ description: "User email." },
                                         "password":{ description: "User password, must have at least 6 characters"},
                                         "username":{ description: "Username, must have at least 6 characters and at maximum 20"},
-                                        "profileId":{ description:"The profile's id, which will get connected to the user's account."}
+                                        "profileId":{ description:"The profile's id, which will get connected to the user's account. (Optional)"}
                                     },
-                                    required:["email","password","username","profileId"],
+                                    required:["email","password","username"],
                                 }
                             }
                         }
@@ -135,7 +135,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/validate/getToken":{
+            "user/validate/sendToken":{
                 post:{
                     tags:["User"],
                     summary:"The route that sends validation token",
@@ -194,6 +194,35 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
+            "user/recover/sendToken":{
+                post:{
+                    tags:["User"],
+                    summary:"Route to send the recover email with the token.",
+                    description:"This route sends an email with an token to the user who's id was ",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "id":{ description:"The id of the user who wants to recover their password." }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        404:{
+                            description:"If this code appears, it means that the user id was not found. "
+                        },
+                        500:{
+                            description:"Unspecified error."
+                        }
+                    }
+                }
+            },
+            "user/recover/validate":{
+
+            },
             "user/edit/username":{
                 patch:{
                     tags:["User"],
@@ -225,7 +254,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         },
                     }
                 }
-            }
+            },
         }
     },
     transform:jsonSchemaTransform,

@@ -10,7 +10,7 @@ interface CreateUserParams {
     email: string,
     password: string,
     username: string,
-    profile_id: string,
+    profile_id?: string,
 }
 
 export class CreateUserUseCase {
@@ -31,9 +31,11 @@ export class CreateUserUseCase {
             throw new AlreadyInUseError("Username")
         }
 
-        const doesProfileExists = await this.ProfileRepo.findById(profile_id)
-        if(!doesProfileExists){
-            throw new EntityNotFoundError("Profile")
+        if(profile_id){
+            const doesProfileExists = await this.ProfileRepo.findById(profile_id)
+            if(!doesProfileExists){
+                throw new EntityNotFoundError("Profile")
+            }
         }
 
         const welcomeEmail:Email = {

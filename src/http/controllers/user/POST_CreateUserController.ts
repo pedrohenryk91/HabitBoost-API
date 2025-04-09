@@ -13,7 +13,7 @@ export async function POSTCreateUserController(request: FastifyRequest, reply: F
             email: z.string().email(),
             password: z.string().min(6),
             username: z.string().min(3).max(20),
-            profileId: z.string(),
+            profileId: z.string().optional(),
         }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
