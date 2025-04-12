@@ -12,7 +12,10 @@ export class SendRecoverMailUseCase {
         if(!doesUserExists)
             throw new EntityNotFoundError("User")
 
-        const token = genToken(doesUserExists.username)
+        const token = genToken({
+            id: doesUserExists.id,
+            act: "r99",
+        })
 
         const email: Email = {
             to:doesUserExists.email,

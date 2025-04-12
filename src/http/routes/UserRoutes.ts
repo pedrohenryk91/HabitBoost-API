@@ -4,6 +4,7 @@ import { PATCHEditUsername } from "http/controllers/user/PATCH_EditUsernameContr
 import { POSTCreateUserController } from "http/controllers/user/POST_CreateUserController";
 import { POSTGenValidationToken } from "http/controllers/user/POST_GenValidationTokenController";
 import { POSTSendRecoverCode } from "http/controllers/user/POST_SendRecoverCodeController";
+import { PATCHRecoverPassword } from "http/controllers/user/PATCH_RecoverPasswordController";
 
 export async function userRouter(app: FastifyInstance) {
     app.route({
@@ -31,9 +32,9 @@ export async function userRouter(app: FastifyInstance) {
         method:"POST",
         handler:POSTSendRecoverCode,
     })
-    // app.route({
-    //     url:"recover/validate",
-    //     method:"PATCH",
-    //     handler:
-    // })
+    app.route({
+        url:"/recover",
+        method:"PATCH",
+        handler:PATCHRecoverPassword,
+    })
 }
