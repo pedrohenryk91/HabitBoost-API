@@ -13,8 +13,8 @@ export async function POSTGenValidationToken(request: FastifyRequest, reply: Fas
 
         await service.execute(email)
 
-        reply.status(200).send({
-            message:"ok"
+        reply.status(201).send({
+            message:"Token sent."
         })
     }
     catch(err){

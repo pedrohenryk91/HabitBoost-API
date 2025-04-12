@@ -89,6 +89,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     },
                     responses:{
+                        201:{
+                            description:"Success, profile created successfully. Also returns the created profile."
+                        },
                         404:{
                             description:"If this code appears here, it means that the user_id was not found."
                         },
@@ -154,6 +157,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         },
                     },
                     responses:{
+                        200:{
+                            description:"OK, token sent."
+                        },
                         404:{
                             description:"The email was not found on the database."
                         },
@@ -182,6 +188,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     },
                     responses:{
+                        201:{
+                            description:"Success, email validated."
+                        },
                         404:{
                             description:"It means that the user id that was in the token was not found in the database",
                         },
@@ -212,6 +221,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     },
                     responses:{
+                        201:{
+                            description:"Success, token sent."
+                        },
                         404:{
                             description:"If this code appears, it means that the user id was not found. "
                         },
@@ -244,6 +256,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     },
                     responses:{
+                        201:{
+                            description:"Success, password changed."
+                        },
                         404:{
                             description:"The user was somehow not found.(The user data is in the token.)"
                         },
@@ -276,6 +291,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     },
                     responses:{
+                        201:{
+                            description:"Success, username changed."
+                        },
                         404:{
                             description:"It wasn't possible to find the user id."
                         },
@@ -288,6 +306,45 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "user/get/overview/:username":{
+                get:{
+                    tags:["User"],
+                    summary:"Route to get the overview data of an user",
+                    description:"It receives the username of the user than returns the total_habit_count and detailed_habit_count properties of the user.",
+                    parameters:[{
+                        name:"username",
+                        in:"path",
+                        required:true,
+                        description:"The username of the user that will have the data retrived.",
+                        schema:{
+                            type:"string",
+                        }
+                    }],
+                    requestBody:{
+                        content:{
+                            "empty":{
+                                schema:{
+
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        200:{
+                            description:"Success."
+                        },
+                        400:{
+                            description:"This code showing it's face means that somehow the user doesn't have an profile."
+                        },
+                        404:{
+                            description:"The user was not found."
+                        },
+                        500:{
+                            description:"Unknow error."
+                        }
+                    }
+                }
+            }
         }
     },
     transform:jsonSchemaTransform,

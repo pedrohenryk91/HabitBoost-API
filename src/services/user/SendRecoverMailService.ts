@@ -1,5 +1,4 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { NotAllowedError } from "errors/NotAllowedError";
 import { Email } from "lib/types/Email";
 import { UserRepository } from "repositories/UserRepository";
 import { sendMail } from "utils/mail/Mail";
@@ -25,7 +24,7 @@ export class SendRecoverMailUseCase {
                 <p style="font-size: large;">Recover token: ${token}</p>
                 <br>
                 <footer>
-                    <p>If you did not have anything to do with this email or company, please verify tha safety of your data.</p>
+                    <p>If you did not have anything to do with this email or company, please verify the safety of your data.</p>
                     <p>auto-generated</p>
                 </footer>`,
         }

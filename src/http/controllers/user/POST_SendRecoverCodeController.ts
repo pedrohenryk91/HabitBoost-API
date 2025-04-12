@@ -17,7 +17,7 @@ export async function POSTSendRecoverCode(request: FastifyRequest, reply: Fastif
         await service.execute(id)
 
         reply.status(201).send({
-            message: "Email sent."
+            message: "Token sent."
         })
     }
     catch(err) {

@@ -1,3 +1,4 @@
+import { hash } from "bcryptjs";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { IncorrectFormatError } from "errors/IncorrectFormatError";
 import { UserRepository } from "repositories/UserRepository";
@@ -35,8 +36,10 @@ export class RecoverPasswordUseCase {
             throw new EntityNotFoundError("User")
         }
 
+        const password = await hash(new_password, 11)
+
         await this.UserRepo.update(id, {
-            password: new_password,
+            password,
         })
     }
 }
