@@ -8,6 +8,15 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             description:"The API of the HabitBoost App",
             version:"0.0.1",
         },
+        components:{
+            securitySchemes:{
+                "BearerAuth":{
+                    type:"http",
+                    scheme:"bearer",
+                    bearerFormat:"JWT"
+                }
+            }
+        },
         paths:{
             "auth/login":{
                 "post":{
@@ -38,7 +47,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"The user is not verified, so it can not log in."
                         },
                         404:{
-                            description:"The user email was not found."
+                            description:"The user email was not found. Or (less chance) the user's profile was not found."
                         },
                     }
                 }
@@ -377,7 +386,62 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     }
                 }
-            }
+            },
+            "habit/create":{
+                post:{
+                    tags:["Habit"],
+                    summary:"Route to create an habit. NEEDS AUTHORIZATION HEADER",
+                    description:"Route that creates an habit.",
+                    security:[{ "BearerAuth":[] }],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "title":{
+                                            description:"The title of the habit"
+                                        },
+                                        "dates":{
+                                            type:"array",
+                                            items:{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
+                                            description:"An array of dates, those are the days that the habit is suppossed to be done."
+                                        },
+                                        "reminder_time":{
+                                            type:"string",
+                                            format:"date-time",
+                                            description:"The moment (hour) that the reminder of the habit will happen."
+                                        },
+                                        "description":{
+                                            description:"The description of the habit."
+                                        },
+                                        "category_name":{
+                                            description:"The name of the category of the habit (Must exists)."
+                                        },
+                                    },
+                                    required:["title","dates","category_name"],
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Habit created with success, returns the habit id."
+                        },
+                        403:{
+                            description:"User is not verified."
+                        },
+                        404:{
+                            description:"User or Profile was not found. It specifies which on the message."
+                        },
+                        500:{
+                            description:"Unknown error."
+                        }
+                    }
+                }
+            },
         }
     },
     transform:jsonSchemaTransform,

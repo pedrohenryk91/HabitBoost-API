@@ -19,17 +19,23 @@ export class PrismaUserRepository implements UserRepository {
     }
 
     async findByEmail(email: string): Promise<user | null> {
-        return await prisma.user.findUnique({
+        return await prisma.user.findFirst({
             where:{
-                email,
-            }
+                email:{
+                    equals:email,
+                    mode:"insensitive",
+                }
+            },
         })
     }
 
     async findByUsername(username: string): Promise<user | null> {
-        return await prisma.user.findUnique({
+        return await prisma.user.findFirst({
             where:{
-                username,
+                username:{
+                    equals:username,
+                    mode:"insensitive",
+                },
             }
         })
     }

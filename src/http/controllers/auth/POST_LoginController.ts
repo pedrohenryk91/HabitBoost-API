@@ -2,6 +2,7 @@ import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { IncorrectPasswordError } from "errors/IncorrectPasswordError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { LoginUseCase } from "services/auth/LoginUseCase";
 import { z } from "zod";
@@ -16,7 +17,8 @@ export async function POSTLogin(request: FastifyRequest, reply: FastifyReply) {
         const {email, password} = loginParamsSchema.parse(request.body)
     
         const repo = new PrismaUserRepository()
-        const service = new LoginUseCase(repo)
+        const profileRepo = new PrismaProfileRepository()
+        const service = new LoginUseCase(repo, profileRepo)
     
         const {token,username} = await service.execute({
             email,
