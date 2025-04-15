@@ -10,11 +10,13 @@ import { JWT_SECRET } from "./env";
 import { HabitRoutes } from "http/routes/HabitRoutes";
 import { GoalRoutes } from "http/routes/GoalRoutes";
 import { ZodError } from "zod";
+import { authRoutes } from "http/routes/AuthRoutes";
 
 export const app = fastify();
 
 app.register(fastifyJwt, {secret:JWT_SECRET})
 
+app.register(authRoutes, {prefix:"/auth"})
 app.register(userRouter, {prefix:"/user"})
 app.register(profileRoutes, {prefix:"/profile"})
 app.register(HabitRoutes, {prefix:"/habit"})

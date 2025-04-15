@@ -1,7 +1,7 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
-import { VerifyValidationTokenUseCase } from "services/user/VerifyValidationTokenUseCase";
+import { VerifyValidationTokenUseCase } from "services/auth/VerifyValidationTokenUseCase";
 import { z, ZodError } from "zod";
 
 export async function PATCHVerifyValidationToken(request: FastifyRequest, reply: FastifyReply) {

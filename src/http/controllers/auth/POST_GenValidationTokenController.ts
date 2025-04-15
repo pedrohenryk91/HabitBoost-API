@@ -1,7 +1,7 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
-import { SendValidationMailUseCase } from "services/user/SendValidationMailUseCase";
+import { SendValidationMailUseCase } from "services/auth/SendValidationMailUseCase";
 import { z } from "zod";
 
 export async function POSTGenValidationToken(request: FastifyRequest, reply: FastifyReply) {

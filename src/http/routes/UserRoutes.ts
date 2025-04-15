@@ -1,23 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { PATCHVerifyValidationToken } from "http/controllers/user/PATCH_VerifyValidationTokenController";
 import { PATCHEditUsername } from "http/controllers/user/PATCH_EditUsernameController";
 import { POSTCreateUserController } from "http/controllers/user/POST_CreateUserController";
-import { POSTGenValidationToken } from "http/controllers/user/POST_GenValidationTokenController";
 import { POSTSendRecoverCode } from "http/controllers/user/POST_SendRecoverCodeController";
 import { PATCHRecoverPassword } from "http/controllers/user/PATCH_RecoverPasswordController";
 import { GETUserData } from "http/controllers/user/GET_UserDataController";
 
 export async function userRouter(app: FastifyInstance) {
-    app.route({
-        url:"/validate/sendToken",
-        method:"POST",
-        handler:POSTGenValidationToken,
-    })
-    app.route({
-        url:"/validate/verifyToken",
-        method:"PATCH",
-        handler:PATCHVerifyValidationToken,
-    })
     app.route({
         url:"/register",
         method:"POST",

@@ -1,6 +1,5 @@
 import{ SwaggerOptions } from "@fastify/swagger";
 import { jsonSchemaTransform } from "fastify-type-provider-zod";
-import { DetailedHabitCountSchema } from "lib/types/DetailedHabitCount";
 
 export const SwaggerDocumentationOptions:SwaggerOptions = {
     openapi:{
@@ -10,6 +9,105 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             version:"0.0.1",
         },
         paths:{
+            "auth/login":{
+                "post":{
+                    tags:["Auth"],
+                    summary:"Login route",
+                    description:"Login route. User log in.",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        email:{ description:"The user's email" },
+                                        password:{ description:"The user's password" },
+                                    },
+                                    required:["email","password"],
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Success, returns the token and the username of the logged one."
+                        },
+                        400:{
+                            description:"The password is incorrect."
+                        },
+                        403:{
+                            description:"The user is not verified, so it can not log in."
+                        },
+                        404:{
+                            description:"The user email was not found."
+                        },
+                    }
+                }
+            },
+            "auth/validate/sendToken":{
+                post:{
+                    tags:["Auth"],
+                    summary:"The route that sends validation token",
+                    description:"This route will send the user validation Token to the front, if the email is already registered on the database.",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    type:"object",
+                                    properties:{
+                                        "email":{ description:"User email" }
+                                    },
+                                    required:["email"]
+                                },
+                            }
+                        },
+                    },
+                    responses:{
+                        200:{
+                            description:"OK, token sent."
+                        },
+                        404:{
+                            description:"The email was not found on the database."
+                        },
+                        500:{
+                            description:"Unknown error"
+                        },
+                    },
+                }
+            },
+            "auth/validate/verifyToken":{
+                patch:{
+                    tags:["Auth"],
+                    summary:"The route that verifies a token to validate an user",
+                    description:"This route validates a token that's received from the requestBody, if the token is valid (if it was created by the getToken route) it will validate the user which id is on the token.",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    type:"object",
+                                    properties:{
+                                        "token":{ description:"The Token that was sent by the user/validation/getToken route" }
+                                    },
+                                    required:["token"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Success, email validated."
+                        },
+                        404:{
+                            description:"It means that the user id that was in the token was not found in the database",
+                        },
+                        417:{
+                            description:"The token has an specific format, if this code was sent, it means that the token that was passed is incorrect",
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    },
+                }
+            },
             "profile/create":{
                 post:{
                     tags:["Profile"],
@@ -136,71 +234,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Unknown error"
                         },
                     }
-                }
-            },
-            "user/validate/sendToken":{
-                post:{
-                    tags:["User"],
-                    summary:"The route that sends validation token",
-                    description:"This route will send the user validation Token to the front, if the email is already registered on the database.",
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    type:"object",
-                                    properties:{
-                                        "email":{ description:"User email" }
-                                    },
-                                    required:["email"]
-                                },
-                            }
-                        },
-                    },
-                    responses:{
-                        200:{
-                            description:"OK, token sent."
-                        },
-                        404:{
-                            description:"The email was not found on the database."
-                        },
-                        500:{
-                            description:"Unknown error"
-                        },
-                    },
-                }
-            },
-            "user/validate/verifyToken":{
-                patch:{
-                    tags:["User"],
-                    summary:"The route that verifies a token to validate an user",
-                    description:"This route validates a token that's received from the requestBody, if the token is valid (if it was created by the getToken route) it will validate the user which id is on the token.",
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    type:"object",
-                                    properties:{
-                                        "token":{ description:"The Token that was sent by the user/validation/getToken route" }
-                                    },
-                                    required:["token"]
-                                }
-                            }
-                        }
-                    },
-                    responses:{
-                        201:{
-                            description:"Success, email validated."
-                        },
-                        404:{
-                            description:"It means that the user id that was in the token was not found in the database",
-                        },
-                        417:{
-                            description:"The token has an specific format, if this code was sent, it means that the token that was passed is incorrect",
-                        },
-                        500:{
-                            description:"Unknown error"
-                        }
-                    },
                 }
             },
             "user/recover/sendToken":{

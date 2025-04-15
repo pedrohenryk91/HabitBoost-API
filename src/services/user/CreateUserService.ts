@@ -40,7 +40,7 @@ export class CreateUserUseCase {
 
         const welcomeEmail:Email = {
             to:email,
-            subject:"No-Reply Welcome to the HabitBoost",
+            subject:"<No-Reply> Welcome to the HabitBoost",
             text:`Description: Welcome to the HabitBoost app
             
                 Hello ${username},
