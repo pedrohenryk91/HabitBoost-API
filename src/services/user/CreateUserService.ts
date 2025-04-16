@@ -72,9 +72,7 @@ export class CreateUserUseCase {
             password: hashpassword,
             username,
             profile:{
-                connect:{
-                    id:profile_id,
-                }
+                create:true
             }
         })
 

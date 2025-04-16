@@ -9,11 +9,10 @@ import { z } from "zod";
 
 export async function POSTCreateUserController(request: FastifyRequest, reply: FastifyReply){
     try {
-        const {email, password, username, profileId} = z.object({
+        const {email, password, username} = z.object({
             email: z.string().email(),
             password: z.string().min(6),
             username: z.string().min(3).max(20),
-            profileId: z.string().optional(),
         }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
@@ -24,7 +23,6 @@ export async function POSTCreateUserController(request: FastifyRequest, reply: F
             email,
             password,
             username,
-            profile_id: profileId,
         })
 
         reply.status(201).send({

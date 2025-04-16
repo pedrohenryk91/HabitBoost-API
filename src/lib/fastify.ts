@@ -11,6 +11,7 @@ import { HabitRoutes } from "http/routes/HabitRoutes";
 import { GoalRoutes } from "http/routes/GoalRoutes";
 import { ZodError } from "zod";
 import { authRoutes } from "http/routes/AuthRoutes";
+import { OverviewRoutes } from "http/routes/OverviewRoutes";
 
 export const app = fastify();
 
@@ -21,6 +22,7 @@ app.register(userRouter, {prefix:"/user"})
 app.register(profileRoutes, {prefix:"/profile"})
 app.register(HabitRoutes, {prefix:"/habit"})
 app.register(GoalRoutes, {prefix:"/goal"})
+app.register(OverviewRoutes, {prefix:"/overview"})
 
 app.register(cors, {
     origin: true,

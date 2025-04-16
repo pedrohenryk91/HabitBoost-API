@@ -4,6 +4,3 @@ node_modules
 
 migrations_backup
 docs.md
-WeekDays.ts
-Overview.ts
-PATCH_UpdateOverviewController.ts

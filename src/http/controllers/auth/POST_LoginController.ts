@@ -41,11 +41,6 @@ export async function POSTLogin(request: FastifyRequest, reply: FastifyReply) {
                 message:err.message,
             })
         }
-        if(err instanceof NotAllowedError){
-            reply.status(403).send({
-                message:err.message
-            })
-        }
         throw err
     }
 }

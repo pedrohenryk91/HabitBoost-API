@@ -59,9 +59,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         400:{
                             description:"The password is incorrect."
                         },
-                        403:{
-                            description:"The user is not verified, so it can not log in."
-                        },
                         404:{
                             description:"The user email was not found. Or (less chance) the user's profile was not found."
                         },
@@ -266,7 +263,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "email":{ description: "User email." },
                                         "password":{ description: "User password, must have at least 6 characters"},
                                         "username":{ description: "Username, must have at least 6 characters and at maximum 20"},
-                                        "profileId":{ description:"The profile's id, which will get connected to the user's account. (Optional)"}
                                     },
                                     required:["email","password","username"],
                                 }
@@ -558,7 +554,10 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-        }
+            // "overview/update":{
+            //TODO
+            // }
+        },
     },
     transform:jsonSchemaTransform,
 }

@@ -26,10 +26,6 @@ export class LoginUseCase {
         const result = await compare(password, doesUserExists.password)
         if(!result) throw new IncorrectPasswordError()
 
-        if(!doesUserExists.verified_status){
-            throw new NotAllowedError("The user is not verified.")
-        }
-
         const token = genEternalToken({
             id:"7auth-"+doesProfileExists.id,
         })
