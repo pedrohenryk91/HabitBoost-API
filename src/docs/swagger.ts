@@ -1,6 +1,52 @@
 import{ SwaggerOptions } from "@fastify/swagger";
 import { jsonSchemaTransform } from "fastify-type-provider-zod";
 
+const DaySchema: object = {
+    type:"object",
+    properties:{
+        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+    },
+}
+
+const OptionalDaySchema: object = {
+    description:"This is optinal!",
+    nullable:true,
+    type:"object",
+    properties:{
+        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+    },
+}
+
+const OverviewSchema: object = { 
+    description:"An object that contains the data of the habits concluded by the user in a week.",
+    type:"object",
+    properties:{
+        "dom":DaySchema,
+        "seg":DaySchema,
+        "ter":DaySchema,
+        "qua":DaySchema,
+        "qui":DaySchema,
+        "sex":DaySchema,
+        "sab":DaySchema,
+    }
+}
+
+const OptionalOverviewSchema: object = { 
+    description:"An object that contains the data of the habits concluded by the user in a week.",
+    type:"object",
+    properties:{
+        "dom":OptionalDaySchema,
+        "seg":OptionalDaySchema,
+        "ter":OptionalDaySchema,
+        "qua":OptionalDaySchema,
+        "qui":OptionalDaySchema,
+        "sex":OptionalDaySchema,
+        "sab":OptionalDaySchema,
+    }
+}
+
 export const SwaggerDocumentationOptions:SwaggerOptions = {
     openapi:{
         info:{
@@ -154,61 +200,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             description:"The date that the profile was updated by the last time,  must ignore if creating an new profile"
                                         },
                                         "total_habit_count":{ description:"The total number of habits concluded by the user, must ignore if creating an new profile" },
-                                        "overview":{ 
-                                            description:"An object that contains the data of the habits concluded by the user in a week.",
-                                            type:"object",
-                                            properties:{
-                                                "dom":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                },
-                                                "seg":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                },
-                                                "ter":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                },
-                                                "qua":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                },
-                                                "qui":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                },
-                                                "sex":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                },
-                                                "sab":{
-                                                    type:"object",
-                                                    properties:{
-                                                        "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                        "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                    },
-                                                }
-                                            }
-                                        },
+                                        "overview":OverviewSchema,
                                     }
                                 }
                             }
@@ -554,9 +546,37 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            // "overview/update":{
-            //TODO
-            // }
+            "overview/update":{
+                patch:{
+                    tags:["Overview"],
+                    summary:"Route to update an overview",
+                    description:"Route to update an overview, keep in mind that here the days are nullable, making possible to update one day per time.",
+                    security:[{ "BearerAuth":[] }],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "overview":OptionalOverviewSchema,
+                                    },
+                                    required:["overview"],
+                                }
+                            },
+                        },
+                    },
+                    responses:{
+                        201:{
+                            description:"Overview updated"
+                        },
+                        404:{
+                            description:"It was not possible to find the profile (this error is supposed to be impossible!)"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        },
+                    }
+                }
+            }
         },
     },
     transform:jsonSchemaTransform,
