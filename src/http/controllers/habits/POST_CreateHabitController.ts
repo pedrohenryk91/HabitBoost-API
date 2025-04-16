@@ -34,6 +34,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
         })
     
         reply.status(201).send({
+            Description:"Habit created",
             habit_id:id,
         })
     }

@@ -1,6 +1,6 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { DetailedHabitCountSchema } from "lib/types/DetailedHabitCount";
+import { DetailedHabitCountSchema } from "lib/types/Overview";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { CreateProfileUseCase } from "services/profile/CreateProfileService";
@@ -15,10 +15,10 @@ export async function POSTCreateProfileController(request: FastifyRequest, reply
             created_at:z.date().optional(),
             updated_at:z.date().optional(),
             total_habit_count:z.number().optional(),
-            detailed_habit_count:DetailedHabitCountSchema.optional(),
+            overview:DetailedHabitCountSchema.optional(),
         })
 
-        const { id, image_url, created_at, updated_at, total_habit_count, detailed_habit_count } = CreateProfileSchema.parse(request.query)
+        const { id, image_url, created_at, updated_at, total_habit_count, overview } = CreateProfileSchema.parse(request.body)
 
         const profileRepo = new PrismaProfileRepository()
         const userRepo = new PrismaUserRepository()
@@ -30,12 +30,17 @@ export async function POSTCreateProfileController(request: FastifyRequest, reply
             createdAt:created_at,
             updatedAt:updated_at,
             total_habit_count,
-            detailed_habit_count,
+            detailed_habit_count:overview,
         })
 
         reply.status(201).send({
             Description: `Profile created`,
-            profile,
+            Profile:{
+                id:profile.id,
+                image_url:profile.image_url,
+                total_habit_count:profile.total_habit_count,
+                overview:profile.detailed_habit_count,
+            },
         })
     }
     catch(err) {

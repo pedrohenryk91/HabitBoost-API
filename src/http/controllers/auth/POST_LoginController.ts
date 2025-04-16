@@ -26,7 +26,6 @@ export async function POSTLogin(request: FastifyRequest, reply: FastifyReply) {
         })
     
         reply.status(201).send({
-            message:"Login success",
             token,
             username,
         })

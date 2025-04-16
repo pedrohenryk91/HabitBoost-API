@@ -38,7 +38,23 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                     responses:{
                         201:{
-                            description:"Success, returns the token and the username of the logged one."
+                            description:"Success, returns the token and the username of the logged one.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "token":{
+                                                type:"string",
+                                                description:"The authorization token"
+                                            },
+                                            "username":{
+                                                type:"string",
+                                                description:"The name of the logged user"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         400:{
                             description:"The password is incorrect."
@@ -131,11 +147,17 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                     properties:{
                                         "id":{ description:"The profile's id, must ignore if creating an new profile" },
                                         "image_url":{ description:"The image url" },
-                                        "created_at":{ 
+                                        "created_at":{
+                                            type:"string",
+                                            format:"date-time",
                                             description:"The date the profile was created at, must ignore if creating an new profile" },
-                                        "updated_at":{ description:"The date that the profile was updated by the last time,  must ignore if creating an new profile" },
+                                        "updated_at":{
+                                            type:"string",
+                                            format:"date-time",
+                                            description:"The date that the profile was updated by the last time,  must ignore if creating an new profile"
+                                        },
                                         "total_habit_count":{ description:"The total number of habits concluded by the user, must ignore if creating an new profile" },
-                                        "detailed_habit_count":{ 
+                                        "overview":{ 
                                             description:"An object that contains the data of the habits concluded by the user in a week.",
                                             type:"object",
                                             properties:{
@@ -197,7 +219,29 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                     responses:{
                         201:{
-                            description:"Success, profile created successfully. Also returns the created profile."
+                            description:"Success, profile created successfully. Also returns the created profile.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "id":{
+                                                description:"The profile's id",
+                                            },
+                                            "image_url":{
+                                                description:"The url of the profile image"
+                                            },
+                                            "total_habit_count":{
+                                                type:"number",
+                                                description:"The number of habit done"
+                                            },
+                                            "overview":{
+                                                type:"object",
+                                                description:"The same kind of overview object up there on the request body."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         404:{
                             description:"If this code appears here, it means that the user_id was not found."
@@ -363,17 +407,78 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     }],
                     requestBody:{
-                        content:{
-                            "empty":{
-                                schema:{
-
-                                }
-                            }
-                        }
+                        content:{}
                     },
                     responses:{
                         200:{
-                            description:"Success."
+                            description:"Success.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "total_habit_count":{
+                                                type:"number",
+                                                description:"The total number of habits done."
+                                            },
+                                            "overview":{ 
+                                                description:"An object that contains the data of the habits concluded by the user in a week.",
+                                                type:"object",
+                                                properties:{
+                                                    "dom":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    },
+                                                    "seg":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    },
+                                                    "ter":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    },
+                                                    "qua":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    },
+                                                    "qui":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    },
+                                                    "sex":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    },
+                                                    "sab":{
+                                                        type:"object",
+                                                        properties:{
+                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
+                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
+                                                        },
+                                                    }
+                                                }
+                                            },
+                                        }
+                                    }
+                                }
+                            }
                         },
                         400:{
                             description:"This code showing it's face means that somehow the user doesn't have an profile."
@@ -428,7 +533,18 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                     responses:{
                         201:{
-                            description:"Habit created with success, returns the habit id."
+                            description:"Habit created with success, returns the habit id.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "habit_id":{
+                                                description:"The id of the created habit."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         403:{
                             description:"User is not verified."

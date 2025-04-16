@@ -19,7 +19,7 @@ export async function GETUserData(request: FastifyRequest, reply: FastifyReply) 
         const {detailed_habit_count,total_habit_count} = await service.execute(username)
 
         reply.status(200).send({
-            detailed_habit_count,
+            overview:detailed_habit_count,
             total_habit_count,
         })
     }
