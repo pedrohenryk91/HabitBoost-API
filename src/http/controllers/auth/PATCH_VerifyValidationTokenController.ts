@@ -1,5 +1,6 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { VerifyValidationTokenUseCase } from "services/auth/VerifyValidationTokenUseCase";
 import { z, ZodError } from "zod";
@@ -11,12 +12,14 @@ export async function PATCHVerifyValidationToken(request: FastifyRequest, reply:
         }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
-        const service = new VerifyValidationTokenUseCase(userRepo)
+        const profileRepo = new PrismaProfileRepository()
+        const service = new VerifyValidationTokenUseCase(userRepo, profileRepo)
 
-        await service.execute(token)
+        const authToken = await service.execute(token)
 
         reply.status(200).send({
-            Description:"E-mail validated successfully"
+            Description:"E-mail validated successfully",
+            token:authToken,
         })
     }
     catch(err){

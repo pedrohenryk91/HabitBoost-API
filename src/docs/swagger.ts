@@ -111,37 +111,37 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "auth/validate/sendToken":{
-                post:{
-                    tags:["Auth"],
-                    summary:"The route that sends validation token",
-                    description:"This route will send the user validation Token to the front, if the email is already registered on the database.",
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    type:"object",
-                                    properties:{
-                                        "email":{ description:"User email" }
-                                    },
-                                    required:["email"]
-                                },
-                            }
-                        },
-                    },
-                    responses:{
-                        200:{
-                            description:"OK, token sent."
-                        },
-                        404:{
-                            description:"The email was not found on the database."
-                        },
-                        500:{
-                            description:"Unknown error"
-                        },
-                    },
-                }
-            },
+            // "auth/validate/sendToken":{
+            //     post:{
+            //         tags:["Auth"],
+            //         summary:"The route that sends validation token",
+            //         description:"This route will send the user validation Token to the front, if the email is already registered on the database.",
+            //         requestBody:{
+            //             content:{
+            //                 "application/json":{
+            //                     schema:{
+            //                         type:"object",
+            //                         properties:{
+            //                             "email":{ description:"User email" }
+            //                         },
+            //                         required:["email"]
+            //                     },
+            //                 }
+            //             },
+            //         },
+            //         responses:{
+            //             200:{
+            //                 description:"OK, token sent."
+            //             },
+            //             404:{
+            //                 description:"The email was not found on the database."
+            //             },
+            //             500:{
+            //                 description:"Unknown error"
+            //             },
+            //         },
+            //     }
+            // },
             "auth/validate/verifyToken":{
                 patch:{
                     tags:["Auth"],
@@ -162,7 +162,16 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                     responses:{
                         201:{
-                            description:"Success, email validated."
+                            description:"Success, email validated.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "token":{description:"The authorization token."}
+                                        }
+                                    }
+                                }
+                            }
                         },
                         404:{
                             description:"It means that the user id that was in the token was not found in the database",
