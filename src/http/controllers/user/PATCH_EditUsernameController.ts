@@ -12,6 +12,8 @@ export async function PATCHEditUsername(request: FastifyRequest, reply: FastifyR
             username:z.string().min(3).max(20),
         }).parse(request.body)
 
+        //TODO: Change user id to profile id.
+
         const repo = new PrismaUserRepository()
         const service = new EditUserUseCase(repo)
 

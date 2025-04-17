@@ -67,13 +67,14 @@ export class CreateUserUseCase {
 
         const hashpassword = await hash(password, 11)
 
-        const user = this.UserRepo.create({
+        const user = await this.UserRepo.create({
             email,
             password: hashpassword,
             username,
-            profile:{
-                create:true
-            }
+        })
+
+        await this.ProfileRepo.create({
+            user_id:user.id
         })
 
         return user
