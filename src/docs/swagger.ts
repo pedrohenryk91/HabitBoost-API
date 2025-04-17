@@ -146,14 +146,14 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                 patch:{
                     tags:["Auth"],
                     summary:"The route that verifies a token to validate an user",
-                    description:"This route validates a token that's received from the requestBody, if the token is valid (if it was created by the getToken route) it will validate the user which id is on the token.",
+                    description:"This route validates a token that's received from the requestBody, if the token is valid, it will validate the user which id is on the token.",
                     requestBody:{
                         content:{
                             "application/json":{
                                 schema:{
                                     type:"object",
                                     properties:{
-                                        "token":{ description:"The Token that was sent by the user/validation/getToken route" }
+                                        "token":{ description:"The Token that was sent to validate the user" }
                                     },
                                     required:["token"]
                                 }
@@ -245,7 +245,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                 post:{
                     tags:["User"],
                     summary:"Route to create a new user",
-                    description:"Creates an new user, which will have an unvalidated status. User must validate it's account.",
+                    description:"Creates an new user, which will have an unvalidated status. User must validate it's account, an email will be sent with a link to the user.",
                     requestBody:{
                         content:{
                             "application/json":{
