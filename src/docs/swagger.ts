@@ -250,6 +250,38 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "profile/get/overview":{
+                get:{
+                    tags:["Profile"],
+                    summary:"Route to get the overview data of an user. (REMEMBER AUTH TOKEN)",
+                    description:"It receives the username of the user than returns the total_habit_count and detailed_habit_count properties of the user.",
+                    security:[{"BearerAuth":[]}],
+                    responses:{
+                        200:{
+                            description:"Success.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "total_habit_count":{
+                                                type:"number",
+                                                description:"The total number of habits done."
+                                            },
+                                            "overview":OverviewSchema,
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        404:{
+                            description:"The profile was not found."
+                        },
+                        500:{
+                            description:"Unknow error."
+                        }
+                    }
+                }
+            },
             "user/register":{
                 post:{
                     tags:["User"],
@@ -354,141 +386,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/edit/username":{
-                patch:{
-                    tags:["User"],
-                    summary:"Route to edit username",
-                    description:"Route to edit the user's username",
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    type:"object",
-                                    properties:{
-                                        "id":{ description:"The user id" },
-                                        "username":{ description:"The new username" },
-                                    },
-                                    required:["id","username"],
-                                }
-                            }
-                        }
-                    },
-                    responses:{
-                        201:{
-                            description:"Success, username changed."
-                        },
-                        404:{
-                            description:"It wasn't possible to find the user id."
-                        },
-                        409:{
-                            description:"The username is already in use."
-                        },
-                        500:{
-                            description:"Unknown error"
-                        },
-                    }
-                }
-            },
-            "user/get/overview/:username":{
-                get:{
-                    tags:["User"],
-                    summary:"Route to get the overview data of an user",
-                    description:"It receives the username of the user than returns the total_habit_count and detailed_habit_count properties of the user.",
-                    parameters:[{
-                        name:"username",
-                        in:"path",
-                        required:true,
-                        description:"The username of the user that will have the data retrived.",
-                        schema:{
-                            type:"string",
-                        }
-                    }],
-                    requestBody:{
-                        content:{}
-                    },
-                    responses:{
-                        200:{
-                            description:"Success.",
-                            content:{
-                                "application/json":{
-                                    schema:{
-                                        properties:{
-                                            "total_habit_count":{
-                                                type:"number",
-                                                description:"The total number of habits done."
-                                            },
-                                            "overview":{ 
-                                                description:"An object that contains the data of the habits concluded by the user in a week.",
-                                                type:"object",
-                                                properties:{
-                                                    "dom":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    },
-                                                    "seg":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    },
-                                                    "ter":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    },
-                                                    "qua":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    },
-                                                    "qui":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    },
-                                                    "sex":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    },
-                                                    "sab":{
-                                                        type:"object",
-                                                        properties:{
-                                                            "expt":{type:"integer",description:"The expected number of habits to be concluded in the day."},
-                                                            "acvd":{type:"integer",description:"The number of habits concluded in the day."}
-                                                        },
-                                                    }
-                                                }
-                                            },
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        400:{
-                            description:"This code showing it's face means that somehow the user doesn't have an profile."
-                        },
-                        404:{
-                            description:"The user was not found."
-                        },
-                        500:{
-                            description:"Unknow error."
-                        }
-                    }
-                }
-            },
             "habit/create":{
                 post:{
                     tags:["Habit"],
@@ -543,6 +440,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                 }
                             }
                         },
+                        401:{
+                            description:"No authorization was found in request.headers"
+                        },
                         403:{
                             description:"User is not verified."
                         },
@@ -555,11 +455,51 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "overview/update":{
+            "upload/image":{
                 patch:{
-                    tags:["Overview"],
+                    tags:["Upload"],
+                    summary:"Route to upload an profile image to the user",
+                    parameters:[{
+                        name:"api_auth",
+                        in:"headers",
+                        required:true,
+                        description:"The same token that's used for authorization, but here it needs to be in a specific header because headers.authorization is already being used. Use headers.api_auth",
+                        schema:{
+                            type:"string",
+                        },
+                    }],
+                    responses:{
+                        201:{
+                            description:"Image uploaded",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "image_url":{
+                                                description:"The url of the image."
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        },
+                        401:{
+                            description:"No api_auth was found in request.headers"
+                        },
+                        404:{
+                            description:"The user was not found.(Most likely impossible to happen)"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
+            "update/overview":{
+                patch:{
+                    tags:["Update"],
                     summary:"Route to update an overview",
-                    description:"Route to update an overview, keep in mind that here the days are nullable, making possible to update one day per time.",
+                    description:"Route to update an overview, keep in mind that here the days are nullable, making possible to update one day per time. Use auth token.",
                     security:[{ "BearerAuth":[] }],
                     requestBody:{
                         content:{
@@ -577,6 +517,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         201:{
                             description:"Overview updated"
                         },
+                        401:{
+                            description:"No authorization was found in request.headers"
+                        },
                         404:{
                             description:"It was not possible to find the profile (this error is supposed to be impossible!)"
                         },
@@ -585,7 +528,158 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         },
                     }
                 }
-            }
+            },
+            "update/username":{
+                patch:{
+                    tags:["Update"],
+                    summary:"Route to edit username",
+                    description:"Route to edit the username of an logged user. Use auth token.",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    type:"object",
+                                    properties:{
+                                        "old_username":{ description:"The old username" },
+                                        "new_username":{ description:"The new username" },
+                                    },
+                                    required:["old_username","new_username"],
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Success, username changed."
+                        },
+                        400:{
+                            description:"The old_username does not belong to the user."
+                        },
+                        401:{
+                            description:"No authorization was found in request.headers"
+                        },
+                        404:{
+                            description:"The user (this is pretty much impossible) or the old_username was not found."
+                        },
+                        409:{
+                            description:"The username is already in use."
+                        },
+                        500:{
+                            description:"Unknown error"
+                        },
+                    }
+                }
+            },
+            "update/password":{
+                patch:{
+                    tags:["Update"],
+                    summary:"Route to change the password. (REMEMBER USING AUTH TOKEN)",
+                    security:[{"BearerAuth":[]}],
+                    description:"Changes the password of an logged user.",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "old_password":{ description:"User's old password" },
+                                        "new_password":{ description:"The new password"}
+                                    },
+                                    required:["old_password","new_password"],
+                                },
+                            },
+                        },
+                    },
+                    responses:{
+                        201:{
+                            description:"Password changed"
+                        },
+                        401:{
+                            description:"No authorization was found in request.headers"
+                        },
+                        403:{
+                            description:"Incorrect Password"
+                        },
+                        404:{
+                            description:"The user was not found. (This is pretty much impossible)"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    },
+                }
+            },
+            "update/total/:number":{
+                patch:{
+                    tags:["Update"],
+                    security:[{"BearerAuth":[]}],
+                    summary:"Route to update the total habit count of an user",
+                    description:"Route that updates the total habit count of an logged user. Use auth token.",
+                    parameters:[{
+                        name:"number",
+                        in:"path",
+                        required:true,
+                        description:"The new total number.",
+                        schema:{
+                            type:"number"
+                        }
+                    }],
+                    responses:{
+                        201:{
+                            description:"Updated successfully.",
+                        },
+                        404:{
+                            description:"User not found."
+                        },
+                    }
+                }
+            },
+            "update/email":{
+                patch:{
+                    tags:["Update"],
+                    summary:"Route to edit email",
+                    description:"Route to edit the email of an logged user. Use auth token.",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    type:"object",
+                                    properties:{
+                                        "password":{ description:"User's password" },
+                                        "new_email":{ description:"The old email" },
+                                        "old_email":{ description:"The new email" },
+                                    },
+                                    required:["old_email","new_email"],
+                                },
+                            },
+                        },
+                    },
+                    responses:{
+                        201:{
+                            description:"Success, email changed."
+                        },
+                        400:{
+                            description:"The old_email does not belong to the user"
+                        },
+                        401:{
+                            description:"No authorization was found in request.headers"
+                        },
+                        403:{
+                            description:"Incorrect password"
+                        },
+                        404:{
+                            description:"The user or the old_email was not found"
+                        },
+                        409:{
+                            description:"The new_email is already in use"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        },
+                    }
+                }
+            },
         },
     },
     transform:jsonSchemaTransform,

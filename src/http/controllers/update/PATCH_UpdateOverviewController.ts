@@ -1,8 +1,8 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { OverviewOptionalSchema } from "lib/types/Overview";
+import { OverviewOptionalSchema } from "lib/interfaces/Overview";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
-import { UpdateOverviewService } from "services/counter/UpdateOverviewService";
+import { EditProfileUseCase } from "services/profile/EditProfileService";
 import { z } from "zod";
 
 export async function PATCHUpdateOverview(request: FastifyRequest, reply: FastifyReply) {
@@ -14,10 +14,9 @@ export async function PATCHUpdateOverview(request: FastifyRequest, reply: Fastif
         const {overview} = UpdateOverviewParams.parse(request.body)
 
         const profileRepo = new PrismaProfileRepository()
-        const service = new UpdateOverviewService(profileRepo)
+        const service = new EditProfileUseCase(profileRepo)
 
-        await service.execute({
-            id:String(request.user),
+        await service.execute(String(request.user),{
             overview,
         })
 

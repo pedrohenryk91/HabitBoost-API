@@ -1,10 +1,13 @@
 import { AlreadyInUseError } from "errors/AlreadyInUseError";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
+import { IncorrectFormatError } from "errors/IncorrectFormatError";
+import { OverviewOptionalSchema } from "lib/interfaces/Overview";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface EditProfileParams {
     imageUrl?: string,
     thc?: number, //Total Habits Count
+    overview?: object,
 }
 
 export class EditProfileUseCase {
@@ -12,13 +15,23 @@ export class EditProfileUseCase {
     async execute(id: string, {
         imageUrl,
         thc,
+        overview,
     }: EditProfileParams){
         const profileExists = await this.ProfileRepo.findById(id)
         if(!profileExists) throw new EntityNotFoundError("Profile")
 
+        if(overview){
+            const isOverview = OverviewOptionalSchema.safeParse(overview)
+            if(!isOverview.success){
+                throw new IncorrectFormatError("Overview object format is incorrect.")
+            }
+        }
+
         const newProfile = await this.ProfileRepo.update(id, {
             image_url:(imageUrl?imageUrl:profileExists.image_url),
             total_habit_count:(thc?thc:profileExists.total_habit_count),
+            detailed_habit_count:(overview?overview:profileExists.detailed_habit_count),
+            updated_at:new Date(),
         })
 
         return newProfile

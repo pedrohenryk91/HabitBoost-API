@@ -11,10 +11,13 @@
   "dependencies": {
     "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.1.0",
+    "@fastify/multipart": "^9.0.3",
     "@fastify/swagger": "^9.4.2",
     "@fastify/swagger-ui": "^5.2.2",
     "@prisma/client": "^6.4.1",
+    "@supabase/supabase-js": "^2.49.4",
     "@types/bcryptjs": "^2.4.6",
+    "@types/multer": "^1.4.12",
     "@types/nodemailer": "^6.4.17",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",

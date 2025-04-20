@@ -11,18 +11,28 @@ import { HabitRoutes } from "http/routes/HabitRoutes";
 import { GoalRoutes } from "http/routes/GoalRoutes";
 import { ZodError } from "zod";
 import { authRoutes } from "http/routes/AuthRoutes";
-import { OverviewRoutes } from "http/routes/OverviewRoutes";
+import { UpdateRoutes } from "http/routes/UpdateRoutes";
+import { UploadRoutes } from "http/routes/UploadRoutes";
+import fastifyMultipart from "@fastify/multipart";
 
 export const app = fastify();
 
 app.register(fastifyJwt, {secret:JWT_SECRET})
+
+app.register(fastifyMultipart, {
+    attachFieldsToBody: false,
+    limits: {
+        fileSize: 10 * 1024 * 1024 //10 mb
+    },
+})
 
 app.register(authRoutes, {prefix:"/auth"})
 app.register(userRouter, {prefix:"/user"})
 app.register(profileRoutes, {prefix:"/profile"})
 app.register(HabitRoutes, {prefix:"/habit"})
 app.register(GoalRoutes, {prefix:"/goal"})
-app.register(OverviewRoutes, {prefix:"/overview"})
+app.register(UpdateRoutes, {prefix:"/update"})
+app.register(UploadRoutes, {prefix:"/upload"})
 
 app.register(cors, {
     origin: true,

@@ -1,5 +1,5 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { Email } from "lib/types/Email";
+import { Email } from "lib/interfaces/Email";
 import { UserRepository } from "repositories/UserRepository";
 import { sendMail } from "utils/mail/Mail";
 import { genToken } from "utils/token/generateToken";

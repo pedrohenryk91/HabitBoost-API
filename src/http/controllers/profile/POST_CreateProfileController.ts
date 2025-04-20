@@ -1,6 +1,6 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { DetailedHabitCountSchema } from "lib/types/Overview";
+import { DetailedHabitCountSchema } from "lib/interfaces/Overview";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { CreateProfileUseCase } from "services/profile/CreateProfileService";

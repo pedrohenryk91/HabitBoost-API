@@ -1,7 +1,7 @@
 import { hash } from "bcryptjs";
 import { AlreadyInUseError } from "errors/AlreadyInUseError";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { Email } from "lib/types/Email";
+import { Email } from "lib/interfaces/Email";
 import { ProfileRepository } from "repositories/ProfileRepository";
 import { UserRepository } from "repositories/UserRepository";
 import { sendMail } from "utils/mail/Mail";
@@ -68,25 +68,19 @@ export class CreateUserUseCase {
 
                 Best regards,
                 -HabitBoost Team-`,
-            html:`<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>HabitBoost - Account validation</title>
-</head>
-<body style="margin:0; padding:20px; font-family:Arial, sans-serif; background-color:#f4f4f4;">
+            html:`<body style="margin:0; padding:20px; font-family:Arial, sans-serif; background-color:#f4f4f4;">
     <table width="100%" cellpadding="10">
         <tr>
-            <td align="center">
-                <table width="600" bgcolor="#ffffff" cellpadding="20" style="border-radius: 5px;">
+            <td style="text-align: center;">
+                <table width="600" cellpadding="20" style="border-radius: 5px; background-color: #ffffff;">
                     <tr>
-                        <td align="center">
+                        <td style="text-align: center;">
                             <h1 style="color:#333;">Welcome to the HabitBoost app</h1>
                             <p style="font-size:large; color:#555;"> Hello ${username},<br>
                                 Welcome to our app, we hope you'll be able to boost your habits to the maximum.
                             </p>
                             <p style="font-size: large;">Click on the button below to confirm your account:</p>
-                            <a href="habitboost://confirm-email?token=${token}" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
+                            <a href="habitboost://" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
                                 Confirm Account
                             </a>
                             <p style="font-size:large; color:#555;">The link expires in 1 hour.</p>
@@ -99,11 +93,10 @@ export class CreateUserUseCase {
             </td>
         </tr>
     </table>
-</body>
-</html>`
+</body>`//TODO: The link
         }
 
-        await sendMail(welcomeEmail)
+        const result = await sendMail(welcomeEmail)
 
         return user
     }

@@ -1,5 +1,5 @@
 import { MAIL_ADDRESS, MAIL_PASSWORD } from "lib/env"
-import { Email } from "lib/types/Email"
+import { Email } from "lib/interfaces/Email"
 import * as nodemailer from "nodemailer"
 
 const transport = nodemailer.createTransport({
@@ -22,13 +22,5 @@ export async function sendMail(email:Email){
         subject: email.subject,
         text: email.text,
         html: email.html,
-    }, (error, info) => {
-        if(error) {
-            console.log(error)
-            throw error
-        }
-        else {
-            console.log('Email sent: ' + info.response)
-        }
     })
 }

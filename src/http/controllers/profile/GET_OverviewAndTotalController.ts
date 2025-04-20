@@ -6,17 +6,14 @@ import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { GetUserDataUseCase } from "services/user/GetUserDataService";
 import { z } from "zod";
 
-export async function GETUserData(request: FastifyRequest, reply: FastifyReply) {
+export async function GETOverviewAndTotal(request: FastifyRequest, reply: FastifyReply) {
     try {
-        const {username} = z.object({
-            username: z.string().min(3).max(20),
-        }).parse(request.params)
+        const id = String(request.user)
 
         const profileRepo = new PrismaProfileRepository()
-        const userRepo = new PrismaUserRepository()
-        const service = new GetUserDataUseCase(userRepo, profileRepo)
+        const service = new GetUserDataUseCase(profileRepo)
 
-        const {detailed_habit_count,total_habit_count} = await service.execute(username)
+        const {detailed_habit_count,total_habit_count} = await service.execute(id)
 
         reply.status(200).send({
             overview:detailed_habit_count,
@@ -26,12 +23,6 @@ export async function GETUserData(request: FastifyRequest, reply: FastifyReply) 
     catch (err) {
         if(err instanceof EntityNotFoundError){
             reply.status(404).send({
-                message: err.message
-            })
-        }
-
-        if(err instanceof NotAllowedError){
-            reply.status(400).send({
                 message: err.message
             })
         }
