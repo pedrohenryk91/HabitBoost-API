@@ -30,6 +30,12 @@ export class LoginUseCase {
             id:"7auth-"+doesProfileExists.id,
         })
 
+        if(!doesUserExists.verified_status){
+            await this.UserRepo.update(doesUserExists.id,{
+                verified_status:true,
+            })
+        }
+
         return {
             token,
             username: doesUserExists.username,

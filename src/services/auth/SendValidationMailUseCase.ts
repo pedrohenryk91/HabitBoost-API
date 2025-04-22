@@ -21,7 +21,7 @@ export class SendValidationMailUseCase {
 <p style="font-size: large;">You're receiving this message so that we can validate your account here on the HabitBoost App</p>
 
 <p style="font-size: large;">Click on the following link to confirm your account:<br></p>
-<a style="font-size: medium;">habitboost://confirm-email?token=${token}</a>
+<a style="font-size: medium;">https://habitboost.com/confirm-email?token=${token}</a>
 <p>The link expires in 1 hour</p>
 
 <p style="font-size: large;">If it wasn't you that tried to create this account, please ignore this e-mail</p>`

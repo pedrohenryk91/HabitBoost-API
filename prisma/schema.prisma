@@ -79,7 +79,7 @@ model habit {
   category category @relation(fields: [category_id], references: [id], onDelete: SetDefault)
   profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 
-  goal goal?
+  goal goal[]
 }
 
 model goal {
@@ -89,8 +89,8 @@ model goal {
   created_at DateTime @default(now())
   updated_at DateTime?
 
-  profile_id String? @unique
-  habit_id String? @unique
+  profile_id String?
+  habit_id String?
 
   profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   habit habit? @relation(fields: [habit_id], references: [id], onDelete: Cascade)

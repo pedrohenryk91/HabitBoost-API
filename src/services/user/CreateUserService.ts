@@ -80,7 +80,7 @@ export class CreateUserUseCase {
                                 Welcome to our app, we hope you'll be able to boost your habits to the maximum.
                             </p>
                             <p style="font-size: large;">Click on the button below to confirm your account:</p>
-                            <a href="habitboost://" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
+                            <a href="https://habitboost.com/confirm-email=${token}" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
                                 Confirm Account
                             </a>
                             <p style="font-size:large; color:#555;">The link expires in 1 hour.</p>

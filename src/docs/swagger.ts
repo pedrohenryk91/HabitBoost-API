@@ -64,7 +64,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             }
         },
         paths:{
-            "auth/login":{
+            "auth/login":{//OK
                 "post":{
                     tags:["Auth"],
                     summary:"Login route",
@@ -142,7 +142,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             //         },
             //     }
             // },
-            "auth/validate/verifyToken":{
+            "auth/validate/verifyToken":{//OK
                 patch:{
                     tags:["Auth"],
                     summary:"The route that verifies a token to validate an user",
@@ -185,72 +185,72 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
-            "profile/create":{
-                post:{
-                    tags:["Profile"],
-                    summary:"Route to create an profile",
-                    description:"This route creates a new profile",
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    description:"Realize that all properties are optional. This was made so that we can not only create a new profile, but also save one that already exists locally.",
-                                    type:"object",
-                                    properties:{
-                                        "id":{ description:"The profile's id, must ignore if creating an new profile" },
-                                        "image_url":{ description:"The image url" },
-                                        "created_at":{
-                                            type:"string",
-                                            format:"date-time",
-                                            description:"The date the profile was created at, must ignore if creating an new profile" },
-                                        "updated_at":{
-                                            type:"string",
-                                            format:"date-time",
-                                            description:"The date that the profile was updated by the last time,  must ignore if creating an new profile"
-                                        },
-                                        "total_habit_count":{ description:"The total number of habits concluded by the user, must ignore if creating an new profile" },
-                                        "overview":OverviewSchema,
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    responses:{
-                        201:{
-                            description:"Success, profile created successfully. Also returns the created profile.",
-                            content:{
-                                "application/json":{
-                                    schema:{
-                                        properties:{
-                                            "id":{
-                                                description:"The profile's id",
-                                            },
-                                            "image_url":{
-                                                description:"The url of the profile image"
-                                            },
-                                            "total_habit_count":{
-                                                type:"number",
-                                                description:"The number of habit done"
-                                            },
-                                            "overview":{
-                                                type:"object",
-                                                description:"The same kind of overview object up there on the request body."
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        404:{
-                            description:"If this code appears here, it means that the user_id was not found."
-                        },
-                        500:{
-                            description:"Unpredicted error."
-                        },
-                    }
-                }
-            },
-            "profile/get/overview":{
+            // "profile/create":{
+            //     post:{
+            //         tags:["Profile"],
+            //         summary:"Route to create an profile",
+            //         description:"This route creates a new profile",
+            //         requestBody:{
+            //             content:{
+            //                 "application/json":{
+            //                     schema:{
+            //                         description:"Realize that all properties are optional. This was made so that we can not only create a new profile, but also save one that already exists locally.",
+            //                         type:"object",
+            //                         properties:{
+            //                             "id":{ description:"The profile's id, must ignore if creating an new profile" },
+            //                             "image_url":{ description:"The image url" },
+            //                             "created_at":{
+            //                                 type:"string",
+            //                                 format:"date-time",
+            //                                 description:"The date the profile was created at, must ignore if creating an new profile" },
+            //                             "updated_at":{
+            //                                 type:"string",
+            //                                 format:"date-time",
+            //                                 description:"The date that the profile was updated by the last time,  must ignore if creating an new profile"
+            //                             },
+            //                             "total_habit_count":{ description:"The total number of habits concluded by the user, must ignore if creating an new profile" },
+            //                             "overview":OverviewSchema,
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         },
+            //         responses:{
+            //             201:{
+            //                 description:"Success, profile created successfully. Also returns the created profile.",
+            //                 content:{
+            //                     "application/json":{
+            //                         schema:{
+            //                             properties:{
+            //                                 "id":{
+            //                                     description:"The profile's id",
+            //                                 },
+            //                                 "image_url":{
+            //                                     description:"The url of the profile image"
+            //                                 },
+            //                                 "total_habit_count":{
+            //                                     type:"number",
+            //                                     description:"The number of habit done"
+            //                                 },
+            //                                 "overview":{
+            //                                     type:"object",
+            //                                     description:"The same kind of overview object up there on the request body."
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             },
+            //             404:{
+            //                 description:"If this code appears here, it means that the user_id was not found."
+            //             },
+            //             500:{
+            //                 description:"Unpredicted error."
+            //             },
+            //         }
+            //     }
+            // },
+            "profile/get/overview":{//OK
                 get:{
                     tags:["Profile"],
                     summary:"Route to get the overview data of an user. (REMEMBER AUTH TOKEN)",
@@ -282,7 +282,76 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/register":{
+            "profile/get/habits":{//OK
+                get:{
+                    tags:["Profile"],
+                    summary:"Route to get the habits of an user.",
+                    security:[{"BearerAuth":[]}],
+                    description:"It will get the habits of the logged user. Use auth token",
+                    responses:{
+                        200:{
+                            description:"Success",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "habits":{
+                                                properties:{
+                                                    "id":{ description:"Habit's id" },
+                                                    "title":{ description:"The title of the habit" },
+                                                    "dates":{
+                                                        type:"array",
+                                                        items:{
+                                                            type:"string",
+                                                            format:"date-time",
+                                                        },
+                                                        description:"Array that contains the days that the habits are meant to be done."
+                                                    },
+                                                    "status":{
+                                                        type:"string",
+                                                        enum:[
+                                                            "unstarted",
+                                                            "compleetd",
+                                                            "missed",
+                                                        ],
+                                                        description:"The status of the habit."
+                                                    },
+                                                    "created_at":{
+                                                        type:"string",
+                                                        format:"date-time",
+                                                    },
+                                                    "updated_at":{
+                                                        type:"string",
+                                                        format:"date-time",
+                                                    },
+                                                    "description":{
+                                                        description:"The description of the habit"
+                                                    },
+                                                    "category_id":{
+                                                        description:"The id of the habit's category"
+                                                    },
+                                                    "reminder_time":{
+                                                        type:"string",
+                                                        format:"date-time",
+                                                        description:"The time of the habit's reminder"
+                                                    },
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        404:{
+                            description:"User not found (most likely impossible)",
+                        },
+                        500:{
+                            description:"Unknow error"
+                        }
+                    }
+                }
+            },
+            "user/register":{//OK
                 post:{
                     tags:["User"],
                     summary:"Route to create a new user",
@@ -318,23 +387,12 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/recover/sendToken":{
+            "user/recover/sendToken":{//OK
                 post:{
                     tags:["User"],
-                    summary:"Route to send the recover email with the token.",
+                    summary:"Route to send the recover email with the token. (USE AUTH TOKEN)",
+                    security:[{"BearerAuth":[]}],
                     description:"This route sends an email with an token to the user who's id was ",
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    properties:{
-                                        "id":{ description:"The id of the user who wants to recover their password." }
-                                    },
-                                    required:["id"]
-                                }
-                            }
-                        }
-                    },
                     responses:{
                         201:{
                             description:"Success, token sent."
@@ -348,7 +406,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/recover":{
+            "user/recover":{//OK
                 patch:{
                     tags:["User"],
                     summary:"Route that ends the recover password process.",
@@ -385,8 +443,8 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     }
                 }
-            },
-            "habit/create":{
+            },       
+            "habit/create":{//OK
                 post:{
                     tags:["Habit"],
                     summary:"Route to create an habit. NEEDS AUTHORIZATION HEADER",
@@ -455,7 +513,64 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "upload/image":{
+            "goal/create":{//OK
+                post:{
+                    tags:["Goal"],
+                    summary:"",
+                    security:[{"BearerAuth":[]}],
+                    description:"",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "title":{
+                                            description:"The goal's title"
+                                        },
+                                        "habit_it":{
+                                            description:"(Optional) Habit to link with the goal"
+                                        }
+                                    },
+                                    required:["title"],
+                                }
+                            },
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Created",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "id":{ description:"The id of the Goal" },
+                                            "title":{ description:"The title of the Goal" },
+                                            "created_at":{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
+                                            "updated_at":{
+                                                type:"string",
+                                                format:"dade-time",
+                                            },
+                                            "habit_id":{
+                                                description:"The id of the habit which was connected with the goal"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        404:{
+                            description:"The user was not found (most likely impossible)"
+                        },
+                        500:{
+                            description:"Unknow error"
+                        }
+                    },
+                }
+            },
+            "upload/image":{//OK
                 patch:{
                     tags:["Upload"],
                     summary:"Route to upload an profile image to the user",
@@ -495,7 +610,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/overview":{
+            "update/overview":{//OK
                 patch:{
                     tags:["Update"],
                     summary:"Route to update an overview",
@@ -529,7 +644,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/username":{
+            "update/username":{//OK
                 patch:{
                     tags:["Update"],
                     summary:"Route to edit username",
@@ -571,7 +686,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/password":{
+            "update/password":{//OK
                 patch:{
                     tags:["Update"],
                     summary:"Route to change the password. (REMEMBER USING AUTH TOKEN)",
@@ -609,7 +724,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
-            "update/total/:number":{
+            "update/total/:number":{//OK
                 patch:{
                     tags:["Update"],
                     security:[{"BearerAuth":[]}],
@@ -634,7 +749,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/email":{
+            "update/email":{//OK ALERT
                 patch:{
                     tags:["Update"],
                     summary:"Route to edit email",

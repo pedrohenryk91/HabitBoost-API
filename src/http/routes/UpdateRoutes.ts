@@ -37,10 +37,4 @@ export async function UpdateRoutes(app: FastifyInstance) {
         preHandler:[VerifyAuthToken],
         handler:PATCHUpdatePassword,
     })
-    // app.route({
-    //     url:"/image_url",
-    //     method:"PATCH",
-    //     preHandler:[VerifyAuthToken],
-    //     handler:,
-    // }) //TODO: Update Image
 }

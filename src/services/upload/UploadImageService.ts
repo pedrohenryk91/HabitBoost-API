@@ -38,6 +38,7 @@ export class UploadImageUseCase {
 
         await this.ProfileRepo.update(doesProfileExists.id,{
             image_url,
+            updated_at:new Date(),
         })
 
         return {

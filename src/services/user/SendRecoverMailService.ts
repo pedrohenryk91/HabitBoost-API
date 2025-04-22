@@ -1,15 +1,22 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { Email } from "lib/interfaces/Email";
+import { ProfileRepository } from "repositories/ProfileRepository";
 import { UserRepository } from "repositories/UserRepository";
 import { sendMail } from "utils/mail/Mail";
 import { genToken } from "utils/token/generateToken";
 
 export class SendRecoverMailUseCase {
-    constructor(private UserRepo: UserRepository){}
+    constructor(private UserRepo: UserRepository, private ProfileRepo: ProfileRepository){}
     async execute(id: string){
-        const doesUserExists = await this.UserRepo.findById(id)
-        if(!doesUserExists)
+        const doesProfileExists = await this.ProfileRepo.findById(id)
+        if(!doesProfileExists) {
+            throw new EntityNotFoundError("Profile")
+        }
+
+        const doesUserExists = await this.UserRepo.findById(String(doesProfileExists.user_id))
+        if(!doesUserExists){
             throw new EntityNotFoundError("User")
+        }
 
         const token = genToken({
             id: doesUserExists.id,
