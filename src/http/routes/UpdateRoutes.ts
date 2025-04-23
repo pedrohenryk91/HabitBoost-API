@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { PATCHUpdateEmail } from "http/controllers/update/PATCH_UpdateEmailController";
+import { PATCHUpdateGoal } from "http/controllers/update/PATCH_UpdateGoalController";
 import { PATCHUpdateHabitStatus } from "http/controllers/update/PATCH_UpdateHabitStatusController";
 import { PATCHUpdateOverview } from "http/controllers/update/PATCH_UpdateOverviewController";
 import { PATCHUpdatePassword } from "http/controllers/update/PATCH_UpdatePasswordController";
@@ -50,5 +51,11 @@ export async function UpdateRoutes(app: FastifyInstance) {
         method:"PUT",
         preHandler:VerifyAuthToken,
         handler:PUTUpdateHabit,
+    })
+    app.route({
+        url:"/goal",
+        method:"PATCH",
+        preHandler:VerifyAuthToken,
+        handler:PATCHUpdateGoal,
     })
 }

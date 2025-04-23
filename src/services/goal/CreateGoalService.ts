@@ -17,10 +17,10 @@ export class CreateGoalUseCase {
         if(!doesProfileExists){
             throw new EntityNotFoundError("Profile")
         }
-    
+
         const {id,created_at,updated_at} = await this.GoalRepository.create({
             title,
-            habit_id:(habit_id?habit_id:undefined),
+            habit_id,
             profile_id,
         })
 

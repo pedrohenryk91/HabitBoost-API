@@ -6,7 +6,7 @@ import { ProfileRepository } from "repositories/ProfileRepository";
 import { isUserVerifiedFromProfile } from "utils/IsUserVerified";
 
 interface CreateHabitParams {
-    category_name: string,
+    category_id: number,
     profile_id: string,
     title: string,
     dates: Date[],
@@ -17,7 +17,7 @@ interface CreateHabitParams {
 export class CreateHabitUseCase {
     constructor(private HabitRepo: HabitRepository, private ProfileRepo: ProfileRepository){}
     async execute({
-        category_name,
+        category_id,
         profile_id,
         title,
         dates,
@@ -45,7 +45,7 @@ export class CreateHabitUseCase {
             },
             category:{
                 connect:{
-                    name:category_name,
+                    id:category_id,
                 }
             }
         })

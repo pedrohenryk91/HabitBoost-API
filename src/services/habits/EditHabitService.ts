@@ -10,7 +10,7 @@ interface UpdateHabitParams {
     title?: string,
     status?: status,
     description?: string,
-    category_name?: string,
+    category_id?: number,
     reminder_time?: Date,
 }
 
@@ -21,17 +21,16 @@ export class EditHabitUseCase {
         title,
         status,
         description,
-        category_name,
+        category_id,
         reminder_time,
     }: UpdateHabitParams){
         const doesProfileExists = await this.ProfileRepo.findById(profile_id)
         if(!doesProfileExists){
             throw new EntityNotFoundError("Profile")
         }
-
         
-        const doesCategoryExists = (category_name?await this.CategoryRepo.findByName(category_name):undefined)
-        if(category_name && !doesCategoryExists){
+        const doesCategoryExists = (category_id?await this.CategoryRepo.findById(category_id):undefined)
+        if(category_id && !doesCategoryExists){
             throw new EntityNotFoundError("Category")
         }
 
@@ -66,7 +65,7 @@ export class EditHabitUseCase {
             created_at,
             updated_at,
             description,
-            category_name,
+            category_id,
             reminder_time,
         }
     }

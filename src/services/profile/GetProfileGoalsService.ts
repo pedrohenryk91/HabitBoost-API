@@ -15,10 +15,11 @@ export class GetProfileGoalsUseCase {
         const goalsResolved = await Promise.all(goals)
 
         const goalsFiltered = goalsResolved.map((goal)=>{
-            const {id,title,created_at,updated_at} = goal
+            const {id,title,habit_id,created_at,updated_at} = goal
             return {
                 id,
                 title,
+                habit_id,
                 created_at,
                 updated_at,
             }

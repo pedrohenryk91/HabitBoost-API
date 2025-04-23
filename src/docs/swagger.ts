@@ -86,6 +86,25 @@ const HabitSchema: object = {
     }
 }
 
+const GoalSchema: object = {
+    type:"object",
+    properties:{
+    "id":{ description:"The id of the Goal" },
+    "title":{ description:"The title of the Goal" },
+    "created_at":{
+        type:"string",
+        format:"date-time",
+    },
+    "updated_at":{
+        type:"string",
+        format:"dade-time",
+    },
+    "habit_id":{
+        description:"The id of the habit which was connected with the goal"
+    }
+}
+}
+
 export const SwaggerDocumentationOptions:SwaggerOptions = {
     openapi:{
         info:{
@@ -96,6 +115,11 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
         components:{
             securitySchemes:{
                 "BearerAuth":{
+                    type:"http",
+                    scheme:"bearer",
+                    bearerFormat:"JWT"
+                },
+                "api_auth":{
                     type:"http",
                     scheme:"bearer",
                     bearerFormat:"JWT"
@@ -478,7 +502,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     }
                 }
-            },       
+            },
             "habit/create":{//OK
                 post:{
                     tags:["Habit"],
@@ -509,11 +533,11 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "description":{
                                             description:"The description of the habit."
                                         },
-                                        "category_name":{
-                                            description:"The name of the category of the habit (Must exists)."
+                                        "category_id":{
+                                            description:"The id of the category of the habit (Must exists)."
                                         },
                                     },
-                                    required:["title","dates","category_name"],
+                                    required:["title","dates","category_id"],
                                 }
                             }
                         }
@@ -570,23 +594,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Created",
                             content:{
                                 "application/json":{
-                                    schema:{
-                                        properties:{
-                                            "id":{ description:"The id of the Goal" },
-                                            "title":{ description:"The title of the Goal" },
-                                            "created_at":{
-                                                type:"string",
-                                                format:"date-time",
-                                            },
-                                            "updated_at":{
-                                                type:"string",
-                                                format:"dade-time",
-                                            },
-                                            "habit_id":{
-                                                description:"The id of the habit which was connected with the goal"
-                                            }
-                                        }
-                                    }
+                                    schema:GoalSchema
                                 }
                             }
                         },
@@ -654,7 +662,8 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             "upload/image":{//OK BUG -> NÃO ESTÁ ATUALIZANDO PERFIL, PORÉM ENVIA A IMAGEM
                 patch:{
                     tags:["Upload"],
-                    summary:"Route to upload an profile image to the user",
+                    summary:"Route to upload an profile image to the user (CHECK PARAMETERS DESCRIPTION)",
+                    security:[{"api_auth":[]}],
                     parameters:[{
                         name:"api_auth",
                         in:"headers",
@@ -949,7 +958,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "description":{
                                             description:"The description of the habit."
                                         },
-                                        "category_name":{
+                                        "category_id":{
                                             description:"The name of the category of the habit (Must exists)."
                                         }
                                     },
@@ -978,8 +987,50 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         }
                     }
                 }
-            }
-            //"update/goal","create/category","delete/user","delete/habit","delete/goal"
+            },
+            "update/goal":{//OK
+                patch:{
+                    summary:"Route to update an goal",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "goal_id":{
+                                            description:"The id of the goal to be updated"
+                                        },
+                                        "new_title":{
+                                            description:"The new name of the goal"
+                                        },
+                                    },
+                                    required:["goal_id","new_title"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Updated",
+                            content:{
+                                "application/json":{
+                                    schema:GoalSchema
+                                }
+                            }
+                        },
+                        403:{
+                            description:"The user does not own the goal"
+                        },
+                        404:{
+                            description:"The user or the goal was not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
+            //"category/search/:named","update/goal","delete/user","delete/habit","delete/goal","delete/category"
         },
     },
     transform:jsonSchemaTransform,

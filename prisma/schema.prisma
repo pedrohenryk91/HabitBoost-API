@@ -21,11 +21,14 @@ enum status {
 
 model category {
   id Int @id @default(autoincrement())
-  name String @unique
+  name String
 
   created_at DateTime @default(now())
   updated_at DateTime?
 
+  profile_id String
+
+  profile profile? @relation(fields: [profile_id], references: [id])
   habits habit[]
 }
 
@@ -57,13 +60,14 @@ model profile {
   user_id String? @unique
   user user? @relation(fields: [user_id], references: [id], onDelete: SetNull)
 
+  category category[]
   habits habit[]
   goals goal[]
 }
 
 model habit {
   id String @id @default(uuid())
-  title String @unique
+  title String
   status status @default(unstarted)
   description String?
 
@@ -84,7 +88,7 @@ model habit {
 
 model goal {
   id String @id @default(uuid())
-  title String @unique
+  title String
 
   created_at DateTime @default(now())
   updated_at DateTime?

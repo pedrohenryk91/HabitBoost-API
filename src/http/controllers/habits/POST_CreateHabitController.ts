@@ -32,19 +32,19 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
             dates:datesSchema,
             reminder_time:reminderSchema.optional(),
             description:z.string().optional(),
-            category_name:z.string(),
+            category_id:z.coerce.number(),
         })
     
         const profile_id = String(request.user)
     
-        const {category_name,dates,title,reminder_time,description} = CreateHabitSchema.parse(request.body)
+        const {category_id,dates,title,reminder_time,description} = CreateHabitSchema.parse(request.body)
     
         const habitRepo = new PrismaHabitRepository()
         const profileRepo = new PrismaProfileRepository()
         const service = new CreateHabitUseCase(habitRepo, profileRepo)
     
         const {id,status,created_at,updated_at} = await service.execute({
-            category_name,
+            category_id,
             profile_id,
             dates,
             title,
@@ -61,7 +61,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
                 status,
                 created_at,
                 updated_at,
-                category_name,
+                category_id,
                 reminder_time,
             },
         })
