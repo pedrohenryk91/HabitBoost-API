@@ -40,9 +40,10 @@ export class PrismaProfileRepository implements ProfileRepository {
                 id,
             },
             data:{
-                image_url:data.image_url,
+                image_url:(data.image_url?data.image_url:undefined),
                 detailed_habit_count:(data.detailed_habit_count?data.detailed_habit_count:undefined),
                 total_habit_count:data.total_habit_count,
+                updated_at:data.updated_at,
             },
         })
     }

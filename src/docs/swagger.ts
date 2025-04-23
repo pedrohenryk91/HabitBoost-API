@@ -47,6 +47,45 @@ const OptionalOverviewSchema: object = {
     }
 }
 
+const HabitSchema: object = {
+    type:"object",
+    properties:{
+        "id":{
+            description:"The habit id"
+        },
+        "title":{
+            description:"The title of the habit"
+        },
+        "dates":{
+            type:"array",
+            items:{
+                type:"string",
+                format:"date-time",
+            },
+            description:"An array of dates, those are the days that the habit is suppossed to be done."
+        },
+        "created_at":{
+            type:"string",
+            format:"date-time",
+        },
+        "updated_at":{
+            type:"string",
+            format:"date-time",
+        },
+        "reminder_time":{
+            type:"string",
+            format:"date-time",
+            description:"The moment (hour) that the reminder of the habit will happen."
+        },
+        "description":{
+            description:"The description of the habit."
+        },
+        "category_name":{
+            description:"The name of the category of the habit (Must exists)."
+        },
+    }
+}
+
 export const SwaggerDocumentationOptions:SwaggerOptions = {
     openapi:{
         info:{
@@ -293,50 +332,46 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Success",
                             content:{
                                 "application/json":{
+                                    schema:HabitSchema
+                                }
+                            }
+                        },
+                        404:{
+                            description:"User not found (most likely impossible)",
+                        },
+                        500:{
+                            description:"Unknow error"
+                        }
+                    }
+                }
+            },
+            "profile/get/goals":{//OK
+                get:{
+                    tags:["Profile"],
+                    summary:"Route to get the goals of an user.",
+                    security:[{"BearerAuth":[]}],
+                    description:"It will get the goals of the logged user. Use auth token",
+                    responses:{
+                        200:{
+                            description:"Success",
+                            content:{
+                                "application/json":{
                                     schema:{
                                         properties:{
-                                            "habits":{
-                                                properties:{
-                                                    "id":{ description:"Habit's id" },
-                                                    "title":{ description:"The title of the habit" },
-                                                    "dates":{
-                                                        type:"array",
-                                                        items:{
-                                                            type:"string",
-                                                            format:"date-time",
-                                                        },
-                                                        description:"Array that contains the days that the habits are meant to be done."
-                                                    },
-                                                    "status":{
-                                                        type:"string",
-                                                        enum:[
-                                                            "unstarted",
-                                                            "compleetd",
-                                                            "missed",
-                                                        ],
-                                                        description:"The status of the habit."
-                                                    },
-                                                    "created_at":{
-                                                        type:"string",
-                                                        format:"date-time",
-                                                    },
-                                                    "updated_at":{
-                                                        type:"string",
-                                                        format:"date-time",
-                                                    },
-                                                    "description":{
-                                                        description:"The description of the habit"
-                                                    },
-                                                    "category_id":{
-                                                        description:"The id of the habit's category"
-                                                    },
-                                                    "reminder_time":{
-                                                        type:"string",
-                                                        format:"date-time",
-                                                        description:"The time of the habit's reminder"
-                                                    },
-                                                }
-                                            }
+                                            "id":{
+                                                description:"The goal id"
+                                            },
+                                            "title":{
+                                                description:"The goal title"
+                                            },
+                                            "created_at":{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
+                                            "updated_at":{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
                                         }
                                     }
                                 }
@@ -488,13 +523,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Habit created with success, returns the habit id.",
                             content:{
                                 "application/json":{
-                                    schema:{
-                                        properties:{
-                                            "habit_id":{
-                                                description:"The id of the created habit."
-                                            }
-                                        }
-                                    }
+                                    schema:HabitSchema
                                 }
                             }
                         },
@@ -570,7 +599,59 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
-            "upload/image":{//OK
+            "category/create/:name":{//OK
+                post:{
+                    tags:["Category"],
+                    summary:"Create category",
+                    security:[{"BearerAuth":[]}],
+                    parameters:[{
+                        name:"name",
+                        in:"path",
+                        description:"The category name",
+                        required:true,
+                        schema:{
+                            type:"string"
+                        }
+                    }],
+                    responses:{
+                        201:{
+                            description:"Habit created with success, returns the habit id.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "id":{
+                                                description:"The category id",
+                                            },
+                                            "name":{
+                                                description:"The category name"
+                                            },
+                                            "created_at":{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
+                                            "updated_at":{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        403:{
+                            description:"The category's name is already in use."
+                        },
+                        404:{
+                            description:"User was not found."
+                        },
+                        500:{
+                            description:"Unknown error."
+                        }
+                    }
+                }
+            },
+            "upload/image":{//OK BUG -> NÃO ESTÁ ATUALIZANDO PERFIL, PORÉM ENVIA A IMAGEM
                 patch:{
                     tags:["Upload"],
                     summary:"Route to upload an profile image to the user",
@@ -795,6 +876,110 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "update/habit/status":{//OK
+                patch:{
+                    tags:["Update"],
+                    summary:"Update habit status",
+                    security:[{"BearerAuth":[]}],
+                    parameters:[{
+                        name:"string",
+                        in:"path",
+                        description:"The status",
+                        schema:{
+                            type:"string",
+                            enum:[
+                                "unstarted",
+                                "concluded",
+                                "missed",
+                            ]
+                        },
+                        required:true,
+                    }],
+                    responses:{
+                        201:{
+                            description:"Updated",
+                            content:{
+                                "application/json":{
+                                    schema:HabitSchema
+                                }
+                            }
+                        },
+                        403:{
+                            description:"User does not own the habit."
+                        },
+                        404:{
+                            description:"User or habit or category not found. Check the message to know which."
+                        },
+                        500:{
+                            description:"Unknow error"
+                        }
+                    },
+                }
+            },
+            "update/habit":{//OK
+                put:{
+                    tags:["Update"],
+                    summary:"Route to edit an habit",
+                    security:[{"BearerAuth":[]}],
+                    description:"Route to edit all the information of an habit except status.Except habit_id, every property is OPTIONAL.",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "habit_id":{
+                                            description:"The id of the habit to be updated."
+                                        },
+                                        "title":{
+                                            description:"The title of the habit"
+                                        },
+                                        "dates":{
+                                            type:"array",
+                                            items:{
+                                                type:"string",
+                                                format:"date-time",
+                                            },
+                                            description:"An array of dates, those are the days that the habit is suppossed to be done."
+                                        },
+                                        "reminder_time":{
+                                            type:"string",
+                                            format:"date-time",
+                                            description:"The moment (hour) that the reminder of the habit will happen."
+                                        },
+                                        "description":{
+                                            description:"The description of the habit."
+                                        },
+                                        "category_name":{
+                                            description:"The name of the category of the habit (Must exists)."
+                                        }
+                                    },
+                                    required:["habit_id"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Updated",
+                            content:{
+                                "application/json":{
+                                    schema:HabitSchema
+                                }
+                            }
+                        },
+                        403:{
+                            description:"User does not own the habit."
+                        },
+                        404:{
+                            description:"User or habit or category not found. Check the message to know which."
+                        },
+                        500:{
+                            description:"Unknow error"
+                        }
+                    }
+                }
+            }
+            //"update/goal","create/category","delete/user","delete/habit","delete/goal"
         },
     },
     transform:jsonSchemaTransform,

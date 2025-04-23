@@ -14,6 +14,7 @@ import { authRoutes } from "http/routes/AuthRoutes";
 import { UpdateRoutes } from "http/routes/UpdateRoutes";
 import { UploadRoutes } from "http/routes/UploadRoutes";
 import fastifyMultipart from "@fastify/multipart";
+import { CategoryRoutes } from "http/routes/CategoryRoutes";
 
 export const app = fastify();
 
@@ -33,6 +34,7 @@ app.register(HabitRoutes, {prefix:"/habit"})
 app.register(GoalRoutes, {prefix:"/goal"})
 app.register(UpdateRoutes, {prefix:"/update"})
 app.register(UploadRoutes, {prefix:"/upload"})
+app.register(CategoryRoutes, {prefix:"/category"})
 
 app.register(cors, {
     origin: true,

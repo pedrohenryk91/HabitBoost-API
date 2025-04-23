@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+import { GETGoalsController } from "http/controllers/profile/GET_GetGoalsController";
 import { GETUserHabits } from "http/controllers/profile/GET_GetHabitsController";
 import { GETOverviewAndTotal } from "http/controllers/profile/GET_OverviewAndTotalController";
 import { POSTCreateProfileController } from "http/controllers/profile/POST_CreateProfileController";
@@ -22,6 +23,12 @@ export async function profileRoutes(app: FastifyInstance) {
         preHandler:[VerifyAuthToken],
         handler:GETUserHabits,
     })
+    app.route({
+        url:"/get/goals",
+        method:"GET",
+        preHandler:[VerifyAuthToken],
+        handler:GETGoalsController,
+    })    
     // app.route({
     //     url:"/delete",
     //     method:"DELETE",

@@ -6,12 +6,31 @@ import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileReposi
 import { CreateHabitUseCase } from "services/habits/CreateHabitService";
 import { z } from "zod";
 
+const datesSchema = z.preprocess(
+    (arg) => {
+        if (Array.isArray(arg)) {
+            return arg.map(item => new Date(item));
+        }
+        return [];
+    },
+    z.array(z.date())
+);
+
+const reminderSchema = z.preprocess((arg) => {
+    if (typeof arg === "string") {
+        const date = new Date(arg);
+        return isNaN(date.getTime()) ? undefined : date; 
+    }
+    return arg;
+}, z.date())
+
+
 export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyReply) {
     try {
         const CreateHabitSchema = z.object({
             title:z.string(),
-            dates:z.array(z.date()),
-            reminder_time:z.date().optional(),
+            dates:datesSchema,
+            reminder_time:reminderSchema.optional(),
             description:z.string().optional(),
             category_name:z.string(),
         })
@@ -24,7 +43,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
         const profileRepo = new PrismaProfileRepository()
         const service = new CreateHabitUseCase(habitRepo, profileRepo)
     
-        const id = await service.execute({
+        const {id,status,created_at,updated_at} = await service.execute({
             category_name,
             profile_id,
             dates,
@@ -35,7 +54,16 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
     
         reply.status(201).send({
             Description:"Habit created",
-            habit_id:id,
+            habit:{
+                id,
+                title,
+                dates,
+                status,
+                created_at,
+                updated_at,
+                category_name,
+                reminder_time,
+            },
         })
     }
     catch (err) {

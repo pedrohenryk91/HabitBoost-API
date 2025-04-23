@@ -33,7 +33,7 @@ export class CreateHabitUseCase {
             throw new NotAllowedError("The user is not verified.")
         }
 
-        const {id} = await this.HabitRepo.create({
+        const habit = await this.HabitRepo.create({
             title,
             dates,
             description,
@@ -50,6 +50,6 @@ export class CreateHabitUseCase {
             }
         })
 
-        return id
+        return habit
     }
 }

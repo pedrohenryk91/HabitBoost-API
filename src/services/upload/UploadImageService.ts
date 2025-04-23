@@ -33,8 +33,8 @@ export class UploadImageUseCase {
             throw error
         }
 
-        const result = supabase.storage.from("pics-073").getPublicUrl(`uploads/${name}`)
-        const image_url = result.data.publicUrl
+        const result = await supabase.storage.from("pics-073").getPublicUrl(`uploads/${name}`)
+        const image_url = await result.data.publicUrl
 
         await this.ProfileRepo.update(doesProfileExists.id,{
             image_url,

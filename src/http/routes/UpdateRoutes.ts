@@ -1,9 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { PATCHUpdateEmail } from "http/controllers/update/PATCH_UpdateEmailController";
+import { PATCHUpdateHabitStatus } from "http/controllers/update/PATCH_UpdateHabitStatusController";
 import { PATCHUpdateOverview } from "http/controllers/update/PATCH_UpdateOverviewController";
 import { PATCHUpdatePassword } from "http/controllers/update/PATCH_UpdatePasswordController";
 import { PATCHUpdateTotalCount } from "http/controllers/update/PATCH_UpdateTotalCountController";
 import { PATCHUpdateUsername } from "http/controllers/update/PATCH_UpdateUsernameController";
+import { PUTUpdateHabit } from "http/controllers/update/PUT_UpdateHabitController";
 import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
 
 export async function UpdateRoutes(app: FastifyInstance) {
@@ -36,5 +38,17 @@ export async function UpdateRoutes(app: FastifyInstance) {
         method:"PATCH",
         preHandler:[VerifyAuthToken],
         handler:PATCHUpdatePassword,
+    })
+    app.route({
+        url:"/habit/status",
+        method:"PATCH",
+        preHandler:VerifyAuthToken,
+        handler:PATCHUpdateHabitStatus,
+    })
+    app.route({
+        url:"/habit",
+        method:"PUT",
+        preHandler:VerifyAuthToken,
+        handler:PUTUpdateHabit,
     })
 }

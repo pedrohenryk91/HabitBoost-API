@@ -3,6 +3,12 @@ import { prisma } from "lib/prisma";
 import { CategoryRepository } from "repositories/CategoryRepository";
 
 export class PrismaCategoryRepository implements CategoryRepository {
+    async create(data: Prisma.categoryCreateInput): Promise<category> {
+        return await prisma.category.create({
+            data,
+        })
+    }
+
     async findById(id: number): Promise<category | null> {
         return await prisma.category.findUnique({
             where:{
