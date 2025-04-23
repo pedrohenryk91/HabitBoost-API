@@ -27,4 +27,12 @@ export class PrismaCategoryRepository implements CategoryRepository {
             }
         })
     }
+
+    async findByProfileId(profile_id: string): Promise<category[]> {
+        return await prisma.category.findMany({
+            where:{
+                profile_id,
+            }
+        })
+    }
 }

@@ -313,6 +313,50 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             //         }
             //     }
             // },
+            "profile/get/categories":{//OK
+                get:{
+                    tags:["Profile"],
+                    summary:"Get the user's categories",
+                    security:[{"BearerAuth":[]}],
+                    description:"Get the user's categories. Named profile because tecnically it's profile not user.",
+                    responses:{
+                        200:{
+                            description:"Okay, found",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        type:"array",
+                                        items:{
+                                            properties:{
+                                                "id":{
+                                                    description:"The id of the category"
+                                                },
+                                                "name":{
+                                                    description:"The title of the category"
+                                                },
+                                                "created_at":{
+                                                    type:"string",
+                                                    format:"date-time",
+                                                },
+                                                "updated_at":{
+                                                    type:"string",
+                                                    format:"date-time",
+                                                },
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
             "profile/get/overview":{//OK
                 get:{
                     tags:["Profile"],
@@ -990,6 +1034,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             },
             "update/goal":{//OK
                 patch:{
+                    tags:["Update"],
                     summary:"Route to update an goal",
                     security:[{"BearerAuth":[]}],
                     requestBody:{
@@ -1030,7 +1075,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            //"category/search/:named","update/goal","delete/user","delete/habit","delete/goal","delete/category"
+            //"delete/user","delete/habit","delete/goal","delete/category"
         },
     },
     transform:jsonSchemaTransform,
