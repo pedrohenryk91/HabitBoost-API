@@ -3,6 +3,7 @@ import { POSTCreateUserController } from "http/controllers/user/POST_CreateUserC
 import { POSTSendRecoverCode } from "http/controllers/user/POST_SendRecoverCodeController";
 import { PATCHRecoverPassword } from "http/controllers/user/PATCH_RecoverPasswordController";
 import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
+import { DELETEUser } from "http/controllers/user/DELETE_DeleteUserController";
 
 export async function userRouter(app: FastifyInstance) {
     app.route({
@@ -20,5 +21,11 @@ export async function userRouter(app: FastifyInstance) {
         url:"/recover",
         method:"PATCH",
         handler:PATCHRecoverPassword,
+    })
+    app.route({
+        url:"/delete",
+        method:"DELETE",
+        preHandler:VerifyAuthToken,
+        handler:DELETEUser,
     })
 }

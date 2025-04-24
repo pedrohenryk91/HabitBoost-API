@@ -32,7 +32,6 @@ export async function PATCHRecoverPassword(request: FastifyRequest, reply: Fasti
                 message:err.message,
             })
         }
-
         if(err instanceof EntityNotFoundError){
             reply.status(404).send({
                 message: err.message,

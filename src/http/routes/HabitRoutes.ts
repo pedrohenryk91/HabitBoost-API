@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+import { DELETEHabit } from "http/controllers/habits/DELETE_DeleteHabitController";
 import { POSTCreateHabit } from "http/controllers/habits/POST_CreateHabitController";
 import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
 
@@ -9,22 +10,10 @@ export async function HabitRoutes(app: FastifyInstance) {
         preHandler:[VerifyAuthToken],
         handler:POSTCreateHabit,
     })
-    // app.route({
-    //     url:"/get/"
-    // })
-    // app.route({
-    //     url:"/edit/name/:new",
-    //     method:"PATCH",
-    //     handler:
-    // })
-    // app.route({
-    //     url:"/edit/status/:new",
-    //     method:"PATCH",
-    //     handler:
-    // })
-    // app.route({
-    //     url:"/delete",
-    //     method:"DELETE",
-    //     handler:
-    // })
+    app.route({
+        url:"/delete",
+        method:"DELETE",
+        preHandler:VerifyAuthToken,
+        handler:DELETEHabit,
+    })    
 }

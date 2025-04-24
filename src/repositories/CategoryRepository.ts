@@ -6,5 +6,5 @@ export interface CategoryRepository {
     findByName(name: string): Promise<category | null>
     findByProfileId(profile_id: string): Promise<category[]>
     // update(id: number, data: Partial<category>): Promise<category | null>
-    // delete(id: number): Promise<void>
+    delete(id: number): Promise<void>
 }

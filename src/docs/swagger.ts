@@ -250,6 +250,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             },
             "ranking":{//OK
                 get:{
+                    tags:["Ranking"],
                     summary:"Route to get the ranking",
                     security:[{"BearerAuth":[]}],
                     responses:{
@@ -582,6 +583,25 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "user/delete":{
+                delete:{
+                    tags:["User"],
+                    summary:"Route to delete an user. It deletes the logged user",
+                    description:"Route to delete an user. Deletes the logged user.",
+                    security:[{"BearerAuth":[]}],
+                    responses:{
+                        200:{
+                            description:"Ok, deleted",
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
             "habit/create":{//OK
                 post:{
                     tags:["Habit"],
@@ -645,6 +665,41 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "habit/delete":{
+                delete:{
+                    tags:["Habit"],
+                    summary:"Route to delete an habit",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "habit_id":{
+                                            description:"Id of the habit to be deleted"
+                                        }
+                                    },
+                                    required:["habit_id"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        200:{
+                            description:"Ok, deleted",
+                        },
+                        403:{
+                            description:"User does not own habit"
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
             "goal/create":{//OK
                 post:{
                     tags:["Goal"],
@@ -684,6 +739,41 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Unknow error"
                         }
                     },
+                }
+            },
+            "goal/delete":{
+                delete:{
+                    tags:["Goal"],
+                    summary:"Route to delete an goal",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "goal_id":{
+                                            description:"Id of the goal to be deleted"
+                                        }
+                                    },
+                                    required:["goal_id"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        200:{
+                            description:"Ok, deleted",
+                        },
+                        403:{
+                            description:"User does not own goal"
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
                 }
             },
             "category/create/:name":{//OK
@@ -734,6 +824,42 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         },
                         500:{
                             description:"Unknown error."
+                        }
+                    }
+                }
+            },
+            "category/delete":{
+                delete:{
+                    tags:["Category"],
+                    summary:"Route to delete an category",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "category_id":{
+                                            type:"number",
+                                            description:"Id of the category to be deleted"
+                                        },
+                                    },
+                                    required:["category_id"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        200:{
+                            description:"Ok, deleted",
+                        },
+                        403:{
+                            description:"User does not own category"
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
                         }
                     }
                 }
@@ -1110,7 +1236,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            //"delete/user","delete/habit","delete/goal","delete/category"
         },
     },
     transform:jsonSchemaTransform,
