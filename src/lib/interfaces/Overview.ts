@@ -5,6 +5,8 @@ const DailyInfo = z.object({
     acvd: z.number(),//O Número que realmente foi atingido
 })
 
+type DailyInfo = z.infer<typeof DailyInfo>
+
 export const OverviewSchema = z.object({
     dom: DailyInfo,
     seg: DailyInfo,
@@ -13,7 +15,10 @@ export const OverviewSchema = z.object({
     qui: DailyInfo,
     sex: DailyInfo,
     sab: DailyInfo,
+    total:z.number().optional(),
 })
+
+type Overview = z.infer<typeof OverviewSchema>;
 
 export const OverviewOptionalSchema = z.object({
     dom: DailyInfo.optional(),
@@ -23,4 +28,30 @@ export const OverviewOptionalSchema = z.object({
     qui: DailyInfo.optional(),
     sex: DailyInfo.optional(),
     sab: DailyInfo.optional(),
+    total:z.number().optional(),
 })
+
+export type OverviewOptionalType = z.infer<typeof OverviewOptionalSchema>
+
+export class OverviewOptional implements OverviewOptionalType {
+    dom?: { expt: number; acvd: number }
+    seg?: { expt: number; acvd: number }
+    ter?: { expt: number; acvd: number }
+    qua?: { expt: number; acvd: number }
+    qui?: { expt: number; acvd: number }
+    sex?: { expt: number; acvd: number }
+    sab?: { expt: number; acvd: number }
+    total?: number
+  
+    constructor(data: OverviewOptionalType) {
+        Object.assign(this, data)
+    }
+  
+    totalAcvd(): number {
+        return (["dom", "seg", "ter", "qua", "qui", "sex", "sab"] as const)
+            .map(dia => (this[dia] as DailyInfo)?.acvd ?? 0)
+            .reduce((total, valor) => total + valor, 0)
+    }
+}
+  
+  

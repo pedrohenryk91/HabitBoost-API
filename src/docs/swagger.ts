@@ -248,6 +248,41 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
+            "ranking":{//OK
+                get:{
+                    summary:"Route to get the ranking",
+                    security:[{"BearerAuth":[]}],
+                    responses:{
+                        201:{
+                            description:"ok",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "username":{
+                                                description:"The name of the user"
+                                            },
+                                            "image_url":{
+                                                description:"Url of the user image"
+                                            },
+                                            "weektotal":{
+                                                type:"number",
+                                                description:"The total of the week of the user"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
             // "profile/create":{
             //     post:{
             //         tags:["Profile"],

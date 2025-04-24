@@ -18,6 +18,18 @@ export class PrismaProfileRepository implements ProfileRepository {
         })
     }
 
+    async getRanking(){
+        const topUsers: [] = await prisma.$queryRaw`
+            SELECT p.*, u.username
+            FROM profile p
+            JOIN tb_user u ON p.user_id = u.id
+            ORDER BY p.detailed_habit_count->>'total' DESC, p.updated_at DESC
+            LIMIT 3;
+        `;
+
+        return topUsers
+    }
+
     async findById(id: string): Promise<profile | null> {
         return await prisma.profile.findUnique({
             where:{

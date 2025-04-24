@@ -15,6 +15,7 @@ import { UpdateRoutes } from "http/routes/UpdateRoutes";
 import { UploadRoutes } from "http/routes/UploadRoutes";
 import fastifyMultipart from "@fastify/multipart";
 import { CategoryRoutes } from "http/routes/CategoryRoutes";
+import { RankRoutes } from "http/routes/RankRoutes";
 
 export const app = fastify();
 
@@ -32,6 +33,7 @@ app.register(userRouter, {prefix:"/user"})
 app.register(profileRoutes, {prefix:"/profile"})
 app.register(HabitRoutes, {prefix:"/habit"})
 app.register(GoalRoutes, {prefix:"/goal"})
+app.register(RankRoutes, {prefix:"/ranking"})
 app.register(UpdateRoutes, {prefix:"/update"})
 app.register(UploadRoutes, {prefix:"/upload"})
 app.register(CategoryRoutes, {prefix:"/category"})

@@ -1,13 +1,13 @@
 import { AlreadyInUseError } from "errors/AlreadyInUseError";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { IncorrectFormatError } from "errors/IncorrectFormatError";
-import { OverviewOptionalSchema } from "lib/interfaces/Overview";
+import { OverviewOptional, OverviewOptionalSchema, OverviewOptionalType } from "lib/interfaces/Overview";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface EditProfileParams {
     imageUrl?: string,
     thc?: number, //Total Habits Count
-    overview?: object,
+    overview?: OverviewOptionalType,
 }
 
 export class EditProfileUseCase {
@@ -25,6 +25,8 @@ export class EditProfileUseCase {
             if(!isOverview.success){
                 throw new IncorrectFormatError("Overview object format is incorrect.")
             }
+            const overviewObject = new OverviewOptional(isOverview.data)
+            overview.total = overviewObject.totalAcvd()
         }
 
         const newProfile = await this.ProfileRepo.update(id, {
