@@ -119,11 +119,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     scheme:"bearer",
                     bearerFormat:"JWT"
                 },
-                "api_auth":{
-                    type:"http",
-                    scheme:"bearer",
-                    bearerFormat:"JWT"
-                }
             }
         },
         paths:{
@@ -583,7 +578,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/delete":{
+            "user/delete":{//OK
                 delete:{
                     tags:["User"],
                     summary:"Route to delete an user. It deletes the logged user",
@@ -665,7 +660,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "habit/delete":{
+            "habit/delete":{//OK
                 delete:{
                     tags:["Habit"],
                     summary:"Route to delete an habit",
@@ -741,7 +736,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
-            "goal/delete":{
+            "goal/delete":{//OK
                 delete:{
                     tags:["Goal"],
                     summary:"Route to delete an goal",
@@ -828,7 +823,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "category/delete":{
+            "category/delete":{//OK
                 delete:{
                     tags:["Category"],
                     summary:"Route to delete an category",
@@ -864,20 +859,25 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "upload/image":{//OK BUG -> NÃO ESTÁ ATUALIZANDO PERFIL, PORÉM ENVIA A IMAGEM
+            "upload/image":{//OK
                 patch:{
                     tags:["Upload"],
                     summary:"Route to upload an profile image to the user (CHECK PARAMETERS DESCRIPTION)",
-                    security:[{"api_auth":[]}],
-                    parameters:[{
-                        name:"api_auth",
-                        in:"headers",
-                        required:true,
-                        description:"The same token that's used for authorization, but here it needs to be in a specific header because headers.authorization is already being used. Use headers.api_auth",
-                        schema:{
-                            type:"string",
-                        },
-                    }],
+                    security:[{"BeaererAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "multipart/form-data":{
+                                schema:{
+                                    properties:{
+                                        "file":{
+                                            description:"The image"
+                                        },
+                                    },
+                                    required:["file"]
+                                }
+                            }
+                        }
+                    },
                     responses:{
                         201:{
                             description:"Image uploaded",
