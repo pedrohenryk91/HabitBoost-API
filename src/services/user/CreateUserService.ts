@@ -48,7 +48,10 @@ export class CreateUserUseCase {
         })
 
         await this.ProfileRepo.create({
-            user_id:user.id
+            user_id:user.id,
+            detailed_habit_count:{
+                total:0,
+            }
         })
 
         const token = genToken(user.id)

@@ -4,7 +4,7 @@ import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface TempProfile {
     id: string,
-    detailed_habit_count: OverviewOptionalType,
+    detailed_habit_count: OverviewOptionalType | null,
     image_url: string | null,
     created_at:Date,
     updated_at?:Date,
@@ -24,10 +24,15 @@ export class GetRankingService {
 
         const topUsers = resolvedUsers.map((user)=>{
             const {username,image_url,created_at,detailed_habit_count,} = user
+            let weektotal
+            if(!detailed_habit_count){
+                weektotal = 0
+            }
+            weektotal = (detailed_habit_count?.total?detailed_habit_count.total:0)
             return {
                 username,
                 image_url,
-                weektotal:detailed_habit_count.total,
+                weektotal,
             }
         })
 
