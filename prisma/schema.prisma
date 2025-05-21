@@ -26,6 +26,8 @@ model category {
   created_at DateTime @default(now())
   updated_at DateTime?
 
+  is_custom Boolean @default(false)
+
   profile_id String
 
   profile profile? @relation(fields: [profile_id], references: [id])
@@ -95,6 +97,9 @@ model goal {
 
   profile_id String?
   habit_id String?
+
+  current_count Int
+  target_count Int
 
   profile profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   habit habit? @relation(fields: [habit_id], references: [id], onDelete: Cascade)

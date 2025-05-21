@@ -101,6 +101,14 @@ const GoalSchema: object = {
     },
     "habit_id":{
         description:"The id of the habit which was connected with the goal"
+    },
+    "target_count":{
+        type:"number",
+        description:"The target count of the goal"
+    },
+    "current_count":{
+        type:"number",
+        description:"The current count of the goal"
     }
 }
 }
@@ -365,6 +373,10 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                                 "name":{
                                                     description:"The title of the category"
                                                 },
+                                                "is_custom":{
+                                                    type:"boolean",
+                                                    description:"True if the category is custom, otherwise false"
+                                                },
                                                 "created_at":{
                                                     type:"string",
                                                     format:"date-time",
@@ -471,6 +483,14 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                                 type:"string",
                                                 format:"date-time",
                                             },
+                                            "target_count":{
+                                                type:"number",
+                                                description:"The target count of the goal"
+                                            },
+                                            "current_count":{
+                                                type:"number",
+                                                description:"The current count of the goal"
+                                            }
                                         }
                                     }
                                 }
@@ -709,11 +729,15 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "title":{
                                             description:"The goal's title"
                                         },
+                                        "target_count":{
+                                            type:"number",
+                                            description:"The target count of the goal",
+                                        },
                                         "habit_it":{
                                             description:"(Optional) Habit to link with the goal"
                                         }
                                     },
-                                    required:["title"],
+                                    required:["title","target_count"],
                                 }
                             },
                         }
@@ -797,6 +821,10 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             },
                                             "name":{
                                                 description:"The category name"
+                                            },
+                                            "is_custom":{
+                                                type:"boolean",
+                                                description:"True if the category is custom, otherwise false"
                                             },
                                             "created_at":{
                                                 type:"string",

@@ -12,9 +12,10 @@ export async function POSTCreateGoal(request: FastifyRequest, reply: FastifyRepl
         const GoalSchema = z.object({
             title:z.string(),
             habit_id:z.string().optional(),
+            target_count:z.coerce.number(),
         })
     
-        const {habit_id,title} = GoalSchema.parse(request.body)
+        const {habit_id,title,target_count} = GoalSchema.parse(request.body)
 
         const profileRepo = new PrismaProfileRepository()
         const goalRepo = new PrismaGoalRepository()
@@ -23,6 +24,7 @@ export async function POSTCreateGoal(request: FastifyRequest, reply: FastifyRepl
         const goal = await service.execute(id,{
             title,
             habit_id,
+            target_count,
         })
 
         reply.status(201).send({

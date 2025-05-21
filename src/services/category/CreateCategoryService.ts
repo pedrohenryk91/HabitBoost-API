@@ -20,8 +20,9 @@ export class CreateCategoryUseCase {
         const doesCategoryAlreadyExists = await this.CategoryRepo.findByName(name)
         if(doesCategoryAlreadyExists) throw new AlreadyInUseError("Category")
 
-        const {id,created_at,updated_at} = await this.CategoryRepo.create({
+        const {id,created_at,updated_at,is_custom} = await this.CategoryRepo.create({
             name,
+            is_custom:true,
             profile:{
                 connect:{
                     id:profile_id,
@@ -32,6 +33,7 @@ export class CreateCategoryUseCase {
         return {
             id,
             name,
+            is_custom,
             created_at,
             updated_at,
         }
