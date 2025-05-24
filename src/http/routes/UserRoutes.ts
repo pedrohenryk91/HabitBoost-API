@@ -4,6 +4,7 @@ import { POSTSendRecoverCode } from "http/controllers/user/POST_SendRecoverCodeC
 import { PATCHRecoverPassword } from "http/controllers/user/PATCH_RecoverPasswordController";
 import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
 import { DELETEUser } from "http/controllers/user/DELETE_DeleteUserController";
+import { GETUserData } from "http/controllers/user/GET_GetUserDataController";
 
 export async function userRouter(app: FastifyInstance) {
     app.route({
@@ -16,6 +17,12 @@ export async function userRouter(app: FastifyInstance) {
         method:"POST",
         preHandler:[VerifyAuthToken],
         handler:POSTSendRecoverCode,
+    })
+    app.route({
+        url:"/get",
+        method:"GET",
+        preHandler:VerifyAuthToken,
+        handler:GETUserData,
     })
     app.route({
         url:"/recover",

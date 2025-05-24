@@ -598,6 +598,46 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "user/get":{
+                get:{
+                    tags:["User"],
+                    summary:"Route to get the user data. Requires Auth token.",
+                    security:[{"BearerAuth":[]}],
+                    responses:{
+                        200:{
+                            description:"Success",
+                            content:{
+                                "application/json":{
+                                    example:{
+                                        "username":"John Doe",
+                                        "email":"johndoe123@email.com",
+                                        "imageUrl":"freeimages.com/cats"
+                                    },
+                                    schema:{
+                                        properties:{
+                                            "username":{
+                                                description:"The name of the user"
+                                            },
+                                            "email":{
+                                                description:"The user email"
+                                            },
+                                            "imageUrl":{
+                                                description:"The image url of the user's profile picture"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        404:{
+                            description:"User was not found."
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },
             "user/delete":{//OK
                 delete:{
                     tags:["User"],
