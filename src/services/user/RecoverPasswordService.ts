@@ -5,41 +5,16 @@ import { UserRepository } from "repositories/UserRepository";
 import { verifyToken } from "utils/token/verifyToken";
 import { z } from "zod";
 
-interface RecoverPasswordParams {
-    token: string,
-    new_password: string,
-}
-
 export class RecoverPasswordUseCase {
     constructor(private UserRepo: UserRepository){}
-    async execute({
-        new_password,
-        token,
-    }: RecoverPasswordParams){
-        const RecoverTokenFormat = z.object({
-            sub:z.object({
-                id: z.string(),
-                act: z.literal("r99")
-            })
-        })
+    async execute(code: string){
+        
+        
 
-        const result = RecoverTokenFormat.safeParse(verifyToken(token))
+        // const doesUserExists = await this.UserRepo.findById(id)
+        // if(!doesUserExists){
+        //     throw new EntityNotFoundError("User")
+        // }
 
-        if(!result.success){
-            throw new IncorrectFormatError("The token format is incorrect.")
-        }
-
-        const {id} = result.data.sub
-
-        const doesUserExists = await this.UserRepo.findById(id)
-        if(!doesUserExists){
-            throw new EntityNotFoundError("User")
-        }
-
-        const password = await hash(new_password, 11)
-
-        await this.UserRepo.update(id, {
-            password,
-        })
     }
 }

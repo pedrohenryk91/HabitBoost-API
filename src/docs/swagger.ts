@@ -56,14 +56,6 @@ const HabitSchema: object = {
         "title":{
             description:"The title of the habit"
         },
-        "dates":{
-            type:"array",
-            items:{
-                type:"string",
-                format:"date-time",
-            },
-            description:"An array of dates, those are the days that the habit is suppossed to be done."
-        },
         "created_at":{
             type:"string",
             format:"date-time",
@@ -80,44 +72,104 @@ const HabitSchema: object = {
         "description":{
             description:"The description of the habit."
         },
-        "category_name":{
-            description:"The name of the category of the habit (Must exists)."
+        "category_id":{
+            description:"The id of the category of the habit (Must exists)."
         },
+        "statusByDate":{
+            type:"object"
+        }
+    }
+}
+
+const HabitWithGoalSchema: object = {
+    type:"object",
+    properties:{
+        "id":{
+            description:"The habit id"
+        },
+        "title":{
+            description:"The title of the habit"
+        },
+        "createdAt":{
+            type:"string",
+            format:"date-time",
+        },
+        "updatedAt":{
+            type:"string",
+            format:"date-time",
+        },
+        "reminderTime":{
+            type:"string",
+            format:"date-time",
+            description:"The moment (hour) that the reminder of the habit will happen."
+        },
+        "description":{
+            description:"The description of the habit."
+        },
+        "categoryId":{
+            description:"The id of the category of the habit (Must exists)."
+        },
+        "statusByDate":{
+            type:"object"
+        },
+        "goals":{
+            type:"object",
+            properties:{
+                "id":{ description:"The id of the Goal" },
+                "title":{ description:"The title of the Goal" },
+                "createdAt":{
+                    type:"string",
+                    format:"date-time",
+                },
+                "updatedAt":{
+                    type:"string",
+                    format:"dade-time",
+                },
+                "targetCount":{
+                    type:"number",
+                    description:"The target count of the goal"
+                },
+                "currentCount":{
+                    type:"number",
+                    description:"The current count of the goal"
+                }
+            }
+        }
     }
 }
 
 const GoalSchema: object = {
-    type:"object",
+    type:"array",
     properties:{
-    "id":{ description:"The id of the Goal" },
-    "title":{ description:"The title of the Goal" },
-    "created_at":{
-        type:"string",
-        format:"date-time",
-    },
-    "updated_at":{
-        type:"string",
-        format:"dade-time",
-    },
-    "habit_id":{
-        description:"The id of the habit which was connected with the goal"
-    },
-    "target_count":{
-        type:"number",
-        description:"The target count of the goal"
-    },
-    "current_count":{
-        type:"number",
-        description:"The current count of the goal"
+        "id":{ description:"The id of the Goal" },
+        "title":{ description:"The title of the Goal" },
+        "created_at":{
+            type:"string",
+            format:"date-time",
+        },
+        "updated_at":{
+            type:"string",
+            format:"dade-time",
+        },
+        "habit_id":{
+            description:"The id of the habit which was connected with the goal"
+        },
+        "target_count":{
+            type:"number",
+            description:"The target count of the goal"
+        },
+        "current_count":{
+            type:"number",
+            description:"The current count of the goal"
+        }
     }
-}
 }
 
 export const SwaggerDocumentationOptions:SwaggerOptions = {
     openapi:{
         info:{
             title:"HabitBoostAPI",
-            description:"The API of the HabitBoost App",
+            description:"The API of the HabitBoost App\n\n⚠️ **AVISO:** RECUPERAR SENHA ESTÁ FORA DE SERVIÇO.",
             version:"0.0.1",
         },
         components:{
@@ -443,7 +495,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Success",
                             content:{
                                 "application/json":{
-                                    schema:HabitSchema
+                                    schema:HabitWithGoalSchema
                                 }
                             }
                         },
@@ -671,14 +723,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "title":{
                                             description:"The title of the habit"
                                         },
-                                        "dates":{
-                                            type:"array",
-                                            items:{
-                                                type:"string",
-                                                format:"date-time",
-                                            },
-                                            description:"An array of dates, those are the days that the habit is suppossed to be done."
-                                        },
                                         "reminder_time":{
                                             type:"string",
                                             format:"date-time",
@@ -690,6 +734,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "category_id":{
                                             description:"The id of the category of the habit (Must exists)."
                                         },
+                                        "statusByDate":{
+                                            type:"object",
+                                        }
                                     },
                                     required:["title","dates","category_id"],
                                 }
@@ -835,7 +882,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "category/create/:name":{//OK
+            "category/create/:name/:iconId":{//OK
                 post:{
                     tags:["Category"],
                     summary:"Create category",
@@ -847,7 +894,15 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         required:true,
                         schema:{
                             type:"string"
-                        }
+                        },
+                    },{
+                        name:"iconId",
+                        in:"path",
+                        description:"The icon id",
+                        required:true,
+                        schema:{
+                            type:"string",
+                        },
                     }],
                     responses:{
                         201:{
@@ -861,6 +916,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             },
                                             "name":{
                                                 description:"The category name"
+                                            },
+                                            "icon_id":{
+                                                description:"Icon Id"
                                             },
                                             "is_custom":{
                                                 type:"boolean",

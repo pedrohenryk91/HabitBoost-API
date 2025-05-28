@@ -8,13 +8,15 @@ import { z } from "zod";
 
 export async function POSTSendRecoverCode(request: FastifyRequest, reply: FastifyReply) {
     try {
-        const id = String(request.user)
+        const {email} = z.object({
+            email:z.string().email()
+        }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
         const profileRepo = new PrismaProfileRepository()
         const service = new SendRecoverMailUseCase(userRepo, profileRepo)
 
-        await service.execute(id)
+        await service.execute(email)
 
         reply.status(201).send({
             message: "Token sent."

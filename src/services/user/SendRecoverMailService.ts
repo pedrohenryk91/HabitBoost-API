@@ -7,28 +7,20 @@ import { genToken } from "utils/token/generateToken";
 
 export class SendRecoverMailUseCase {
     constructor(private UserRepo: UserRepository, private ProfileRepo: ProfileRepository){}
-    async execute(id: string){
-        const doesProfileExists = await this.ProfileRepo.findById(id)
-        if(!doesProfileExists) {
-            throw new EntityNotFoundError("Profile")
-        }
-
-        const doesUserExists = await this.UserRepo.findById(String(doesProfileExists.user_id))
+    async execute(email: string){
+        const doesUserExists = await this.UserRepo.findByEmail(email)
         if(!doesUserExists){
             throw new EntityNotFoundError("User")
         }
 
-        const token = genToken({
-            id: doesUserExists.id,
-            act: "r99",
-        })
+        const code = "AINDAN";
 
-        const email: Email = {
+        const mail: Email = {
             to:doesUserExists.email,
             subject:"No-Reply Recover Password",
             html:`<h1>Recover Password</h1>
                 <br>
-                <p style="font-size: large;">Recover token: ${token}</p>
+                <p style="font-size: large;">Recover token: ${code}</p>
                 <br>
                 <footer>
                     <p>If you did not have anything to do with this email or company, please verify the safety of your data.</p>
@@ -36,6 +28,6 @@ export class SendRecoverMailUseCase {
                 </footer>`,
         }
 
-        await sendMail(email)
+        await sendMail(mail)
     }
 }

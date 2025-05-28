@@ -1,21 +1,12 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { statusByDateSchema } from "lib/types/StatusByDate";
 import { PrismaCategoryRepository } from "repositories/prisma/PrismaCategoryRepository";
 import { PrismaHabitRepository } from "repositories/prisma/PrismaHabitRepository";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { EditHabitUseCase } from "services/habits/EditHabitService";
 import { z } from "zod";
-
-const datesSchema = z.preprocess(
-    (arg) => {
-        if (Array.isArray(arg)) {
-            return arg.map(item => new Date(item));
-        }
-        return [];
-    },
-    z.array(z.date())
-);
 
 const reminderSchema = z.preprocess((arg) => {
     if (typeof arg === "string") {
@@ -31,15 +22,16 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
         const id = String(request.user)
 
         const UpdateHabitSchema = z.object({
+            status:z.enum(["unstarted","concluded","missed"]).optional(),
             habit_id:z.string(),
             title:z.string().optional(),
-            dates:datesSchema.optional(),
             description:z.string().optional(),
             reminder_time:reminderSchema.optional(),
             category_id:z.coerce.number().optional(),
+            statusByDate:statusByDateSchema.optional(),
         })
 
-        const {habit_id,category_id,dates,description,reminder_time,title} = UpdateHabitSchema.parse(request.body)
+        const {status,habit_id,category_id,statusByDate,description,reminder_time,title} = UpdateHabitSchema.parse(request.body)
 
         const categoryRepo = new PrismaCategoryRepository()
         const profileRepo = new PrismaProfileRepository()
@@ -47,10 +39,11 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
         const service = new EditHabitUseCase(habitRepo,profileRepo,categoryRepo)
 
         const habit = await service.execute(id, habit_id,{
+            status_by_date:statusByDate,
             category_id,
-            dates,
             description,
             reminder_time:(reminder_time?new Date(reminder_time):undefined),
+            status,
             title,
         })
 
@@ -69,7 +62,7 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
             reply.status(404).send({
                 message:err.message,
             })
-        }        
+        }
         throw err
     }
 }

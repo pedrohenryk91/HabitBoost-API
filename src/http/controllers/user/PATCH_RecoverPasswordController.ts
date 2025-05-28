@@ -8,19 +8,15 @@ import { z } from "zod";
 export async function PATCHRecoverPassword(request: FastifyRequest, reply: FastifyReply) {
     try {
         const RecoverPasswordParams = z.object({
-            token: z.string(),
-            new_password: z.string().min(6),
+            code: z.string(),
         })
 
-        const {token, new_password} = RecoverPasswordParams.parse(request.body)
+        const {code} = RecoverPasswordParams.parse(request.body)
 
         const userRepo = new PrismaUserRepository()
         const service = new RecoverPasswordUseCase(userRepo)
 
-        await service.execute({
-            token,
-            new_password,
-        })
+        await service.execute(code)
 
         reply.status(201).send({
             description:"Password changed successfully.",

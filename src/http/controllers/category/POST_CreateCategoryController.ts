@@ -10,8 +10,9 @@ export async function POSTCreateCategory(request:FastifyRequest, reply:FastifyRe
     try {
         const id = String(request.user)
 
-        const {name} = z.object({
-            name:z.string()
+        const {name,iconId} = z.object({
+            name:z.string(),
+            iconId:z.string(),
         }).parse(request.params)
 
         const categoryRepo = new PrismaCategoryRepository()
@@ -20,6 +21,7 @@ export async function POSTCreateCategory(request:FastifyRequest, reply:FastifyRe
 
         const category = await service.execute({
             name,
+            iconId,
             profile_id:id
         })
 

@@ -1,4 +1,5 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
+import { Goal } from "lib/types/HabitWithGoal";
 import { HabitRepository } from "repositories/HabitRepository";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
@@ -15,17 +16,29 @@ export class GetProfileHabitsUseCase {
         const habitsResolved = await Promise.all(habits)
 
         const habitsFiltered = habitsResolved.map((habit)=>{
-            const {id,category_id,created_at,dates,description,reminder_time,status,title,updated_at} = habit
+            const {id,category_id,created_at,status_by_date,description,reminder_time,status,title,updated_at,goals} = habit
+            const goalsFiltered: Goal[] = goals.map(goal => {
+                const {id,created_at,current_count,habit_id,target_count,title,updated_at} = goal;
+                return {
+                    id,
+                    createdAt: created_at,
+                    updatedAt: updated_at,
+                    title,
+                    currentCount:current_count,
+                    targetCount:target_count
+                }
+            });
             return {
                 id,
+                goals:goalsFiltered,
                 title,
-                dates,
                 status,
-                created_at,
-                updated_at,
+                createdAt:created_at,
+                updatedAt:updated_at,
                 description,
-                category_id,
-                reminder_time,
+                categoryId:category_id,
+                reminderTime:reminder_time,
+                statusByDate:status_by_date,
             }
         })
         return habitsFiltered
