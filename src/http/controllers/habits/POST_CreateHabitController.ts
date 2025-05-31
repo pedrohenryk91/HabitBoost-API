@@ -34,7 +34,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
         const profileRepo = new PrismaProfileRepository()
         const service = new CreateHabitUseCase(habitRepo, profileRepo)
     
-        const {id,status,created_at,updated_at} = await service.execute({
+        const {id,status,created_at,updated_at,status_by_date} = await service.execute({
             category_id,
             profile_id,
             title,
@@ -53,7 +53,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
                 updated_at,
                 category_id,
                 reminder_time,
-                statusByDate,
+                statusByDate: status_by_date,
             },
         })
     }

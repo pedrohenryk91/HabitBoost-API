@@ -14,11 +14,11 @@ export type HabitWithGoal = {
     title: string;
     status: status;
     description: string | null;
-    status_by_date: Prisma.JsonValue;
-    reminder_time: Date | null;
-    created_at: Date;
-    updated_at: Date | null;
-    category_id: number;
-    profile_id: string | null;
+    statusByDate: Prisma.JsonValue;
+    reminderTime: Date | null;
+    createdAt: Date;
+    updatedAt: Date | null;
+    categoryId: number;
+    profileId: string | null;
     goals: goal[];
 };
