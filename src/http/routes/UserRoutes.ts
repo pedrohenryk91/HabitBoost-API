@@ -13,9 +13,8 @@ export async function userRouter(app: FastifyInstance) {
         handler:POSTCreateUserController,
     })
     app.route({
-        url:"/recover/sendToken",
+        url:"/recover/sendCode",
         method:"POST",
-        preHandler:[VerifyAuthToken],
         handler:POSTSendRecoverCode,
     })
     app.route({

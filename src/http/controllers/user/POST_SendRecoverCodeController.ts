@@ -16,10 +16,16 @@ export async function POSTSendRecoverCode(request: FastifyRequest, reply: Fastif
         const profileRepo = new PrismaProfileRepository()
         const service = new SendRecoverMailUseCase(userRepo, profileRepo)
 
-        await service.execute(email)
+        const code = await service.execute(email)
+        
+        reply.setCookie("recover_cookie", code, {
+            signed:true,
+            path:"/user/recover/sendCode",
+            maxAge:3600,
+        })
 
         reply.status(201).send({
-            message: "Token sent."
+            message: "Code sent."
         })
     }
     catch(err) {

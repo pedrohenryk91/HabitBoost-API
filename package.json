@@ -9,6 +9,7 @@
   "author": "Pedro Henryk",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.1.0",
     "@fastify/multipart": "^9.0.3",

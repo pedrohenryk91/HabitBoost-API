@@ -6,16 +6,16 @@ import cors from "@fastify/cors"
 import { profileRoutes } from "http/routes/ProfileRoutes";
 import { userRouter } from "http/routes/UserRoutes";
 import fastifyJwt from "@fastify/jwt";
-import { JWT_SECRET } from "./env";
+import { COOKIE_SECRET, JWT_SECRET } from "./env";
 import { HabitRoutes } from "http/routes/HabitRoutes";
 import { GoalRoutes } from "http/routes/GoalRoutes";
-import { ZodError } from "zod";
 import { authRoutes } from "http/routes/AuthRoutes";
 import { UpdateRoutes } from "http/routes/UpdateRoutes";
 import { UploadRoutes } from "http/routes/UploadRoutes";
 import fastifyMultipart from "@fastify/multipart";
 import { CategoryRoutes } from "http/routes/CategoryRoutes";
 import { RankRoutes } from "http/routes/RankRoutes";
+import fastifyCookie from "@fastify/cookie";
 
 export const app = fastify();
 
@@ -26,6 +26,11 @@ app.register(fastifyMultipart, {
     limits: {
         fileSize: 10 * 1024 * 1024 //10 mb
     },
+})
+
+app.register(fastifyCookie, {
+    secret:COOKIE_SECRET,
+    parseOptions:{}
 })
 
 app.register(authRoutes, {prefix:"/auth"})

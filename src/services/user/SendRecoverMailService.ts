@@ -13,14 +13,14 @@ export class SendRecoverMailUseCase {
             throw new EntityNotFoundError("User")
         }
 
-        const code = "AINDAN";
+        const code = String(Math.floor(100000 + Math.random() * 900000))
 
         const mail: Email = {
             to:doesUserExists.email,
             subject:"No-Reply Recover Password",
             html:`<h1>Recover Password</h1>
                 <br>
-                <p style="font-size: large;">Recover token: ${code}</p>
+                <p style="font-size: large;">Recover code: ${code}</p>
                 <br>
                 <footer>
                     <p>If you did not have anything to do with this email or company, please verify the safety of your data.</p>
@@ -29,5 +29,7 @@ export class SendRecoverMailUseCase {
         }
 
         await sendMail(mail)
+
+        return code
     }
 }
