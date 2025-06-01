@@ -169,7 +169,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
     openapi:{
         info:{
             title:"HabitBoostAPI",
-            description:"The API of the HabitBoost App\n\n⚠️ **AVISO:** RECUPERAR SENHA ESTÁ FORA DE SERVIÇO.",
+            description:"The API of the HabitBoost App\n\n",
             version:"0.0.1",
         },
         components:{
