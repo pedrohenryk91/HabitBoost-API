@@ -1,6 +1,7 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { ExpiredCookieError } from "errors/ExpiredCookieError";
 import { IncorrectFormatError } from "errors/IncorrectFormatError";
+import { IncorrectCodeError } from "errors/IncorretCodeError";
 import { InvalidCookieError } from "errors/InvalidCookieError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
@@ -38,6 +39,11 @@ export async function PATCHRecoverPassword(request: FastifyRequest, reply: Fasti
         })
     }
     catch (err) {
+        if(err instanceof IncorrectCodeError){
+            reply.status(400).send({
+                message:err.message,
+            })
+        }
         if(err instanceof InvalidCookieError || err instanceof ExpiredCookieError){
             reply.status(401).send({
                 message:err.message,
