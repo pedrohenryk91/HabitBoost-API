@@ -10,15 +10,15 @@ export async function DELETEGoal(request: FastifyRequest, reply: FastifyReply){
     try {
         const id = String(request.user)
 
-        const {goal_id} = z.object({
-            goal_id:z.string()
-        }).parse(request.body)
+        const {goalId} = z.object({
+            goalId:z.string()
+        }).parse(request.params)
 
         const profileRepo = new PrismaProfileRepository()
         const goalRepo = new PrismaGoalRepository()
         const service = new DeleteGoalUseCase(goalRepo,profileRepo)
 
-        await service.execute(id,goal_id)
+        await service.execute(id,goalId)
 
         reply.status(200).send({
             Description:"Deleted."

@@ -1,54 +1,39 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { ExpiredCookieError } from "errors/ExpiredCookieError";
-import { IncorrectFormatError } from "errors/IncorrectFormatError";
-import { IncorrectCodeError } from "errors/IncorretCodeError";
-import { InvalidCookieError } from "errors/InvalidCookieError";
+import { InvalidTokenError } from "errors/InvalidTokenError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
-import { RecoverPasswordUseCase } from "services/user/RecoverPasswordService";
+import { RecoverPasswordService } from "services/user/RecoverPasswordService";
 import { z } from "zod";
 
 export async function PATCHRecoverPassword(request: FastifyRequest, reply: FastifyReply) {
     try {
-        const recoverPasswordParams = z.object({
-            email: z.string().email(),
-            newPassword: z.string().min(6),
-            code: z.string(),
+        const RecoverPasswordParamsSchema = z.object({
+            newPassword:z.string().min(6),
+            email:z.string().email(),
+            token:z.string(),
         })
 
-        const recoverCookieSchema = z.object({
-            recoverCookie: z.string()
-        })
+        const {newPassword,email,token} = RecoverPasswordParamsSchema.parse(request.body)
 
-        const {code,email,newPassword} = recoverPasswordParams.parse(request.body)
-        const {recoverCookie} = recoverCookieSchema.parse(request.cookies)
-
-        const userRepo = new PrismaUserRepository()
-        const service = new RecoverPasswordUseCase(userRepo)
-        const unsignedCookie = request.unsignCookie(recoverCookie)
+        const repo = new PrismaUserRepository()
+        const service = new RecoverPasswordService(repo)
 
         await service.execute({
+            token,
             email,
-            code,
             newPassword,
-            unsignedCookie,
         })
 
         reply.status(201).send({
-            description:"Password changed successfully.",
+            Description:"Password updated."
         })
     }
     catch (err) {
-        if(err instanceof IncorrectCodeError){
+        if(err instanceof InvalidTokenError){
             reply.status(400).send({
                 message:err.message,
             })
-        }
-        if(err instanceof InvalidCookieError || err instanceof ExpiredCookieError){
-            reply.status(401).send({
-                message:err.message,
-            })
-        }
+        }        
         if(err instanceof EntityNotFoundError){
             reply.status(404).send({
                 message: err.message,

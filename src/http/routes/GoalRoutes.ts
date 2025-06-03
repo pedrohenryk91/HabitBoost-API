@@ -11,7 +11,7 @@ export async function GoalRoutes(app: FastifyInstance) {
         handler:POSTCreateGoal,
     })
     app.route({
-        url:"/delete",
+        url:"/delete/:goalId",
         method:"DELETE",
         preHandler:VerifyAuthToken,
         handler:DELETEGoal,

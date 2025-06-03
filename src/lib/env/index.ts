@@ -1,7 +1,7 @@
 import "dotenv/config"
 import {z} from "zod"
 
-export const {COOKIE_SECRET,SUPA_EMAIL,SUPA_PASSWORD,PROJECT_LINK,PROJECT_KEY,MAIL_ADDRESS,MAIL_PASSWORD,JWT_SECRET,NODE_ENV,HOST,PORT} = z.object({
+export const {COOKIE_SECRET,SUPA_EMAIL,SUPA_PASSWORD,PROJECT_LINK,PROJECT_KEY,MAIL_ADDRESS,MAIL_PASSWORD,JWT_SECRET,NODE_ENV,HOST,PORT,PASSWORD_SIGN} = z.object({
     MAIL_PASSWORD:z.string(),
     MAIL_ADDRESS:z.string(),
     JWT_SECRET:z.string(),
@@ -13,4 +13,5 @@ export const {COOKIE_SECRET,SUPA_EMAIL,SUPA_PASSWORD,PROJECT_LINK,PROJECT_KEY,MA
     PROJECT_KEY:z.string(),
     SUPA_EMAIL:z.string().email(),
     SUPA_PASSWORD:z.string(),
+    PASSWORD_SIGN:z.string()
 }).parse(process.env)

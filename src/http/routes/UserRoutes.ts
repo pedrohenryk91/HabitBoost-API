@@ -1,10 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { POSTCreateUserController } from "http/controllers/user/POST_CreateUserController";
 import { POSTSendRecoverCode } from "http/controllers/user/POST_SendRecoverCodeController";
-import { PATCHRecoverPassword } from "http/controllers/user/PATCH_RecoverPasswordController";
+import { PATCHValidateCode } from "http/controllers/user/PATCH_ValidateCodeController";
 import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
 import { DELETEUser } from "http/controllers/user/DELETE_DeleteUserController";
 import { GETUserData } from "http/controllers/user/GET_GetUserDataController";
+import { PATCHRecoverPassword } from "http/controllers/user/PATCH_RecoverPasswordController";
 
 export async function userRouter(app: FastifyInstance) {
     app.route({
@@ -18,15 +19,20 @@ export async function userRouter(app: FastifyInstance) {
         handler:POSTSendRecoverCode,
     })
     app.route({
-        url:"/get",
-        method:"GET",
-        preHandler:VerifyAuthToken,
-        handler:GETUserData,
+        url:"/recover/validate",
+        method:"PATCH",
+        handler:PATCHValidateCode,
     })
     app.route({
         url:"/recover",
         method:"PATCH",
         handler:PATCHRecoverPassword,
+    })
+    app.route({
+        url:"/get",
+        method:"GET",
+        preHandler:VerifyAuthToken,
+        handler:GETUserData,
     })
     app.route({
         url:"/delete",

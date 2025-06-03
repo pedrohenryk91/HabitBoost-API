@@ -9,7 +9,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
         })
     }
 
-    async findById(id: number): Promise<category | null> {
+    async findById(id: string): Promise<category | null> {
         return await prisma.category.findUnique({
             where:{
                 id,
@@ -36,7 +36,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
         })
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: string): Promise<void> {
         await prisma.category.delete({
             where:{
                 id,

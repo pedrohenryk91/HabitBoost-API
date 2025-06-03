@@ -8,21 +8,23 @@ import { z } from "zod";
 
 export async function POSTCreateCategory(request:FastifyRequest, reply:FastifyReply) {
     try {
-        const id = String(request.user)
+        const profile_id = String(request.user)
 
-        const {name,iconId} = z.object({
+        const {id,name,iconId} = z.object({
+            id:z.string(),
             name:z.string(),
             iconId:z.string(),
-        }).parse(request.params)
+        }).parse(request.body)
 
         const categoryRepo = new PrismaCategoryRepository()
         const profileRepo = new PrismaProfileRepository()
         const service = new CreateCategoryUseCase(categoryRepo,profileRepo)
 
         const category = await service.execute({
+            id,
             name,
             iconId,
-            profile_id:id
+            profile_id,
         })
 
         reply.status(201).send({

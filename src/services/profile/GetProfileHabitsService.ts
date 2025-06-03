@@ -16,29 +16,18 @@ export class GetProfileHabitsUseCase {
         const habitsResolved = await Promise.all(habits)
 
         const habitsFiltered = habitsResolved.map((habit)=>{
-            const {id,categoryId,createdAt,statusByDate,description,reminderTime,status,title,updatedAt,goals} = habit
-            const goalsFiltered: Goal[] = goals.map(goal => {
-                const {id,created_at,current_count,habit_id,target_count,title,updated_at} = goal;
-                return {
-                    id,
-                    createdAt: created_at,
-                    updatedAt: updated_at,
-                    title,
-                    currentCount:current_count,
-                    targetCount:target_count
-                }
-            });
+            const {id,category_id,created_at,status_by_date,description,reminder_time,status,title,days,updated_at} = habit
             return {
                 id,
-                goals:goalsFiltered,
+                days,
                 title,
                 status,
-                createdAt,
-                updatedAt,
+                createdAt:created_at,
+                updatedAt:updated_at,
                 description,
-                categoryId,
-                reminderTime,
-                statusByDate,
+                categoryId:category_id,
+                reminderTime:reminder_time,
+                statusByDate:status_by_date,
             }
         })
         return habitsFiltered

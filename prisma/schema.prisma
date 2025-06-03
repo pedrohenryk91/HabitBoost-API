@@ -19,8 +19,19 @@ enum status {
   missed
 }
 
+enum days {
+  everyday
+  sunday
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+}
+
 model category {
-  id Int @id @default(autoincrement())
+  id String @id
   name String
 
   created_at DateTime @default(now())
@@ -73,6 +84,7 @@ model habit {
   title String
   status status @default(unstarted)
   description String?
+  days String[]
 
   status_by_date Json //{"2025-05-05":"unstarted"}
   reminder_time DateTime? //Horario do lembrete
@@ -80,7 +92,7 @@ model habit {
   created_at DateTime @default(now())
   updated_at DateTime?
 
-  category_id Int
+  category_id String
   profile_id String?
 
   category category @relation(fields: [category_id], references: [id], onDelete: SetDefault)

@@ -6,7 +6,9 @@ import { ProfileRepository } from "repositories/ProfileRepository";
 interface EditGoalParams {
     goal_id: string,
     profile_id: string,
-    new_title: string,
+    target_count?: number,
+    current_count?: number,
+    new_title?: string,
 }
 
 export class EditGoalUseCase {
@@ -14,6 +16,8 @@ export class EditGoalUseCase {
     async execute({
         goal_id,
         new_title,
+        target_count,
+        current_count,
         profile_id,
     }: EditGoalParams){
         const doesProfileExists = await this.ProfileRepo.findById(profile_id)
@@ -30,8 +34,24 @@ export class EditGoalUseCase {
             throw new NotAllowedError("User does not own goal.")
         }
 
+        if(current_count && target_count){
+            if(current_count > target_count){
+                throw new NotAllowedError("Current count can not be higher than Target count.")
+            }
+        } else if(current_count){
+            if(current_count > doesGoalExists.target_count){
+                throw new NotAllowedError("Current count can not be higher than Target count.")
+            }
+        } else if(target_count){
+            if(target_count < doesGoalExists.current_count){
+                throw new NotAllowedError("Target count can not be lower than Current count.")
+            }
+        }
+
         const goal = await this.GoalRepo.update(goal_id, {
             title:new_title,
+            current_count,
+            target_count,
             updated_at:new Date(),
         })
 
@@ -47,6 +67,8 @@ export class EditGoalUseCase {
             habit_id,
             created_at,
             updated_at,
+            target_count,
+            current_count,
         }
     }
 }

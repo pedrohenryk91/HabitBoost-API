@@ -10,15 +10,15 @@ export async function DELETECategory(request: FastifyRequest, reply: FastifyRepl
     try {
         const id = String(request.user)
 
-        const {category_id} = z.object({
-            category_id:z.coerce.number()
-        }).parse(request.body)
+        const {categoryId} = z.object({
+            categoryId:z.string()
+        }).parse(request.params)
 
         const profileRepo = new PrismaProfileRepository()
         const categoryRepo = new PrismaCategoryRepository()
         const service = new DeleteCategoryUseCase(categoryRepo,profileRepo)
 
-        await service.execute(id,category_id)
+        await service.execute(id,categoryId)
 
         reply.status(200).send({
             Description:"Deleted."

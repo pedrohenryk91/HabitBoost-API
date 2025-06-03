@@ -5,7 +5,7 @@ import { ProfileRepository } from "repositories/ProfileRepository"
 
 export class DeleteCategoryUseCase {
     constructor(private CategoryRepo:CategoryRepository, private ProfileRepo: ProfileRepository){}
-    async execute(profile_id: string, category_id: number){
+    async execute(profile_id: string, category_id: string){
         const doesProfileExists = await this.ProfileRepo.findById(profile_id)
         if(!doesProfileExists){
             throw new EntityNotFoundError("Profile")
@@ -13,7 +13,7 @@ export class DeleteCategoryUseCase {
 
         const doesCategoryExists = await this.CategoryRepo.findById(category_id)
         if(!doesCategoryExists){
-            throw new EntityNotFoundError("Goal")
+            throw new EntityNotFoundError("Category")
         }
 
         if(doesCategoryExists.profile_id !== profile_id){

@@ -16,7 +16,6 @@ const reminderSchema = z.preprocess((arg) => {
     return arg;
 }, z.date())
 
-
 export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply) {
     try {
         const id = String(request.user)
@@ -24,14 +23,15 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
         const UpdateHabitSchema = z.object({
             status:z.enum(["unstarted","concluded","missed"]).optional(),
             habit_id:z.string(),
+            days:z.array(z.string()),
             title:z.string().optional(),
             description:z.string().optional(),
             reminder_time:reminderSchema.optional(),
-            category_id:z.coerce.number().optional(),
+            category_id:z.string().optional(),
             statusByDate:statusByDateSchema.optional(),
         })
 
-        const {status,habit_id,category_id,statusByDate,description,reminder_time,title} = UpdateHabitSchema.parse(request.body)
+        const {days,status,habit_id,category_id,statusByDate,description,reminder_time,title} = UpdateHabitSchema.parse(request.body)
 
         const categoryRepo = new PrismaCategoryRepository()
         const profileRepo = new PrismaProfileRepository()
@@ -45,6 +45,7 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
             reminder_time:(reminder_time?new Date(reminder_time):undefined),
             status,
             title,
+            days,
         })
 
         reply.status(201).send({

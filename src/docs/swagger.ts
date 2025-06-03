@@ -56,6 +56,12 @@ const HabitSchema: object = {
         "title":{
             description:"The title of the habit"
         },
+        "days":{
+            type:"array",
+            items:{
+                type:"string"
+            }
+        },
         "created_at":{
             type:"string",
             format:"date-time",
@@ -77,63 +83,6 @@ const HabitSchema: object = {
         },
         "statusByDate":{
             type:"object"
-        }
-    }
-}
-
-const HabitWithGoalSchema: object = {
-    type:"object",
-    properties:{
-        "id":{
-            description:"The habit id"
-        },
-        "title":{
-            description:"The title of the habit"
-        },
-        "createdAt":{
-            type:"string",
-            format:"date-time",
-        },
-        "updatedAt":{
-            type:"string",
-            format:"date-time",
-        },
-        "reminderTime":{
-            type:"string",
-            format:"date-time",
-            description:"The moment (hour) that the reminder of the habit will happen."
-        },
-        "description":{
-            description:"The description of the habit."
-        },
-        "categoryId":{
-            description:"The id of the category of the habit (Must exists)."
-        },
-        "statusByDate":{
-            type:"object"
-        },
-        "goals":{
-            type:"object",
-            properties:{
-                "id":{ description:"The id of the Goal" },
-                "title":{ description:"The title of the Goal" },
-                "createdAt":{
-                    type:"string",
-                    format:"date-time",
-                },
-                "updatedAt":{
-                    type:"string",
-                    format:"dade-time",
-                },
-                "targetCount":{
-                    type:"number",
-                    description:"The target count of the goal"
-                },
-                "currentCount":{
-                    type:"number",
-                    description:"The current count of the goal"
-                }
-            }
         }
     }
 }
@@ -495,7 +444,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Success",
                             content:{
                                 "application/json":{
-                                    schema:HabitWithGoalSchema
+                                    schema:HabitSchema
                                 }
                             }
                         },
@@ -619,11 +568,11 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "user/recover":{//OK
+            "user/recover/validate":{//OK
                 patch:{
                     tags:["User"],
-                    summary:"Route that ends the recover password process.",
-                    description:"This route receives an token and the new password.It will validate the token, if succeeds, than changes the user password to the new one.",
+                    summary:"Route that validates the recover code.",
+                    description:"This route recieves the code of the user, the recover cookies and validates them.",
                     parameters:[{
                         name:"recoverCookie",
                         in:"cookie",
@@ -641,21 +590,26 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "code":{
                                             description:"The code that the user received"
                                         },
-                                        "email":{
-                                            description:"The email of the user"
-                                        },
-                                        "newPassword":{
-                                            description:"The new password to use if the token gets validated."
-                                        },
                                     },
-                                    required:["newPassword", "email", "code"],
+                                    required:["code"],
                                 },
                             }
                         }
                     },
                     responses:{
                         201:{
-                            description:"Success, password changed."
+                            description:"Success, password changed.",
+                            content:{
+                                "application/json":{
+                                    schema:{
+                                        properties:{
+                                            "token":{
+                                                description:"Token to be used on the user/recover route."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         400:{
                             description:"The code was incorrect."
@@ -665,6 +619,47 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         },
                         404:{
                             description:"The user was somehow not found.(The user data is in the token.)"
+                        },
+                        500:{
+                            description:"Unknown error."
+                        }
+                    }
+                }
+            },
+            "user/recover":{//OK
+                patch:{
+                    tags:["User"],
+                    summary:"Route that ends the recover password process.",
+                    description:"This route receives an token and the new password.It will validate the token, if succeeds, than changes the user password to the new one.",
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "newPassword":{
+                                            description:"The user's new password"
+                                        },
+                                        "email":{
+                                            description:"The email of the user"
+                                        },
+                                        "token":{
+                                            description:"The code that the user received"
+                                        },
+                                    },
+                                    required:["token","email","newPassword"],
+                                },
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Success, password changed."
+                        },
+                        400:{
+                            description:"The token was invalid."
+                        },
+                        404:{
+                            description:"The user was somehow not found."
                         },
                         500:{
                             description:"Unknown error."
@@ -742,6 +737,13 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             "application/json":{
                                 schema:{
                                     properties:{
+                                        "days":{
+                                            type:"array",
+                                            items:{
+                                                type:"string",
+                                                example:"monday",
+                                            }
+                                        },
                                         "title":{
                                             description:"The title of the habit"
                                         },
@@ -789,25 +791,15 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "habit/delete":{//OK
+            "habit/delete/:habitId":{//OK
                 delete:{
                     tags:["Habit"],
                     summary:"Route to delete an habit",
                     security:[{"BearerAuth":[]}],
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    properties:{
-                                        "habit_id":{
-                                            description:"Id of the habit to be deleted"
-                                        }
-                                    },
-                                    required:["habit_id"]
-                                }
-                            }
-                        }
-                    },
+                    parameters:[{
+                        name:"habitId",
+                        in:"path",
+                    }],
                     responses:{
                         200:{
                             description:"Ok, deleted",
@@ -869,25 +861,15 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
-            "goal/delete":{//OK
+            "goal/delete/:goalId":{//OK
                 delete:{
                     tags:["Goal"],
                     summary:"Route to delete an goal",
                     security:[{"BearerAuth":[]}],
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    properties:{
-                                        "goal_id":{
-                                            description:"Id of the goal to be deleted"
-                                        }
-                                    },
-                                    required:["goal_id"]
-                                }
-                            }
-                        }
-                    },
+                    parameters:[{
+                        name:"goalId",
+                        in:"path",
+                    }],
                     responses:{
                         200:{
                             description:"Ok, deleted",
@@ -904,28 +886,30 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "category/create/:name/:iconId":{//OK
+            "category/create":{//OK
                 post:{
                     tags:["Category"],
                     summary:"Create category",
                     security:[{"BearerAuth":[]}],
-                    parameters:[{
-                        name:"name",
-                        in:"path",
-                        description:"The category name",
-                        required:true,
-                        schema:{
-                            type:"string"
-                        },
-                    },{
-                        name:"iconId",
-                        in:"path",
-                        description:"The icon id",
-                        required:true,
-                        schema:{
-                            type:"string",
-                        },
-                    }],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "id":{
+                                            type:"string"
+                                        },
+                                        "name":{
+                                            type:"string"
+                                        },
+                                        "iconId":{
+                                            type:"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     responses:{
                         201:{
                             description:"Habit created with success, returns the habit id.",
@@ -971,26 +955,15 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "category/delete":{//OK
+            "category/delete/:categoryId":{//OK
                 delete:{
                     tags:["Category"],
                     summary:"Route to delete an category",
                     security:[{"BearerAuth":[]}],
-                    requestBody:{
-                        content:{
-                            "application/json":{
-                                schema:{
-                                    properties:{
-                                        "category_id":{
-                                            type:"number",
-                                            description:"Id of the category to be deleted"
-                                        },
-                                    },
-                                    required:["category_id"]
-                                }
-                            }
-                        }
-                    },
+                    parameters:[{
+                        name:"categoryId",
+                        in:"path",
+                    }],
                     responses:{
                         200:{
                             description:"Ok, deleted",
@@ -1295,13 +1268,11 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "title":{
                                             description:"The title of the habit"
                                         },
-                                        "dates":{
+                                        "days":{
                                             type:"array",
                                             items:{
                                                 type:"string",
-                                                format:"date-time",
                                             },
-                                            description:"An array of dates, those are the days that the habit is suppossed to be done."
                                         },
                                         "reminder_time":{
                                             type:"string",
@@ -1313,6 +1284,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         },
                                         "category_id":{
                                             description:"The name of the category of the habit (Must exists)."
+                                        },
+                                        "statusByDate":{
+                                            type:"object"
                                         }
                                     },
                                     required:["habit_id"]
@@ -1357,8 +1331,16 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "new_title":{
                                             description:"The new name of the goal"
                                         },
+                                        "target_count":{
+                                            type:"number",
+                                            description:"The target count"
+                                        },
+                                        "current_count":{
+                                            type:"number",
+                                            description:"current count"
+                                        }
                                     },
-                                    required:["goal_id","new_title"]
+                                    required:["goal_id","new_title","current_count","target_count"]
                                 }
                             }
                         }

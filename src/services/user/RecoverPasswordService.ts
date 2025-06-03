@@ -1,54 +1,37 @@
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { ExpiredCookieError } from "errors/ExpiredCookieError";
-import { IncorrectFormatError } from "errors/IncorrectFormatError";
-import { IncorrectCodeError } from "errors/IncorretCodeError";
-import { InvalidCookieError } from "errors/InvalidCookieError";
+import { InvalidTokenError } from "errors/InvalidTokenError";
+import { PASSWORD_SIGN } from "lib/env";
 import { UserRepository } from "repositories/UserRepository";
-import { verifyToken } from "utils/token/verifyToken";
-import { z } from "zod";
 
-interface UnsignedCookie {
-    renew: boolean,
-    valid: boolean,
-    value: string | null,
-}
-
-interface RecoverPasswordParams {
-    code: string,
-    email: string,
+interface Params {
     newPassword: string,
-    unsignedCookie: UnsignedCookie,
+    token: string,
+    email: string,
 }
 
-export class RecoverPasswordUseCase {
+export class RecoverPasswordService {
     constructor(private UserRepo: UserRepository){}
     async execute({
-        code,
-        email,
         newPassword,
-        unsignedCookie,
-    }: RecoverPasswordParams){
+        email,
+        token,
+    }: Params){
         const doesUserExists = await this.UserRepo.findByEmail(email)
         if(!doesUserExists){
             throw new EntityNotFoundError("User")
         }
 
-        if(!unsignedCookie.valid){
-            throw new InvalidCookieError()
+        const result = await compare(PASSWORD_SIGN, token)
+        if(!result){
+            throw new InvalidTokenError()
         }
 
-        if(unsignedCookie.renew){
-            throw new ExpiredCookieError()
-        }
-
-        if(code !== unsignedCookie.value){
-            throw new IncorrectCodeError()
-        }
+        const hashed = await hash(newPassword, Math.floor(Math.random()*12)+10)
 
         await this.UserRepo.update(doesUserExists.id, {
-            password: await hash(newPassword, 11),
-            updated_at:new Date()
+            password:hashed,
+            updated_at:new Date(),
         })
     }
 }

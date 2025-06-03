@@ -4,6 +4,7 @@ import { CategoryRepository } from "repositories/CategoryRepository";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface CreateCategoryParams {
+    id: string,
     name: string,
     iconId: string,
     profile_id: string,
@@ -12,6 +13,7 @@ interface CreateCategoryParams {
 export class CreateCategoryUseCase {
     constructor(private CategoryRepo: CategoryRepository, private ProfileRepo: ProfileRepository){}
     async execute({
+        id,
         name,
         iconId,
         profile_id,
@@ -22,7 +24,8 @@ export class CreateCategoryUseCase {
         const doesCategoryAlreadyExists = await this.CategoryRepo.findByName(name)
         if(doesCategoryAlreadyExists) throw new AlreadyInUseError("Category")
 
-        const {id,created_at,updated_at,is_custom} = await this.CategoryRepo.create({
+        const {created_at,updated_at,is_custom} = await this.CategoryRepo.create({
+            id,
             name,
             is_custom:true,
             icon_id:iconId,

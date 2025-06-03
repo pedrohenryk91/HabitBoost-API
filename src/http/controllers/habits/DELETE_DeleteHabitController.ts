@@ -10,15 +10,15 @@ export async function DELETEHabit(request: FastifyRequest, reply: FastifyReply){
     try {
         const id = String(request.user)
 
-        const {habit_id} = z.object({
-            habit_id:z.string()
-        }).parse(request.body)
+        const {habitId} = z.object({
+            habitId:z.string()
+        }).parse(request.params)
 
         const profileRepo = new PrismaProfileRepository()
         const habitRepo = new PrismaHabitRepository()
         const service = new DeleteHabitUseCase(habitRepo,profileRepo)
 
-        await service.execute(id,habit_id)
+        await service.execute(id,habitId)
 
         reply.status(200).send({
             Description:"Deleted."

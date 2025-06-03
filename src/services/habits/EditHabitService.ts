@@ -1,4 +1,4 @@
-import { status } from "@prisma/client";
+import { days, status } from "@prisma/client";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { StatusByDate } from "lib/types/StatusByDate";
@@ -7,10 +7,11 @@ import { HabitRepository } from "repositories/HabitRepository";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface UpdateHabitParams {
+    days?: string[]
     title?: string,
     status?: status,
     description?: string,
-    category_id?: number,
+    category_id?: string,
     reminder_time?: Date,
     status_by_date?: StatusByDate
 }
@@ -18,6 +19,7 @@ interface UpdateHabitParams {
 export class EditHabitUseCase {
     constructor(private HabitRepo: HabitRepository, private ProfileRepo: ProfileRepository, private CategoryRepo: CategoryRepository){}
     async execute(profile_id: string, habit_id: string, {
+        days,
         title,
         status,
         description,
@@ -45,6 +47,9 @@ export class EditHabitUseCase {
         }
 
         const habit = await this.HabitRepo.update(habit_id,{
+            days:{
+                set:days
+            },
             title,
             status,
             description,
@@ -64,6 +69,7 @@ export class EditHabitUseCase {
         const {id,created_at,updated_at} = habit
         return {
             id,
+            days,
             title,
             status,
             created_at,

@@ -11,7 +11,7 @@ export async function HabitRoutes(app: FastifyInstance) {
         handler:POSTCreateHabit,
     })
     app.route({
-        url:"/delete",
+        url:"/delete/:habitId",
         method:"DELETE",
         preHandler:VerifyAuthToken,
         handler:DELETEHabit,

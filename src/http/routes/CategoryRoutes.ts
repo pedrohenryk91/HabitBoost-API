@@ -5,13 +5,13 @@ import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
 
 export async function CategoryRoutes(app: FastifyInstance) {
     app.route({
-        url:"/create/:name",
+        url:"/create",
         method:"POST",
         preHandler:VerifyAuthToken,
         handler:POSTCreateCategory,
     })
     app.route({
-        url:"/delete",
+        url:"/delete/:categoryId",
         method:"DELETE",
         preHandler:VerifyAuthToken,
         handler:DELETECategory,
