@@ -20,7 +20,7 @@ export async function POSTSendRecoverCode(request: FastifyRequest, reply: Fastif
         
         reply.setCookie("recover_cookie", code, {
             signed:true,
-            path:"/user/recover/sendCode",
+            path:"/",
             maxAge:3600,
         })
 
