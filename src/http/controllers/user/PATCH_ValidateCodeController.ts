@@ -18,7 +18,7 @@ export async function PATCHValidateCode(request: FastifyRequest, reply: FastifyR
         })
 
         const {code} = recoverPasswordParams.parse(request.body)
-        const {recoverCookie} = recoverCookieSchema.parse(request.body)
+        const {recoverCookie} = recoverCookieSchema.parse(request.cookies.recoverCookie)
 
         const userRepo = new PrismaUserRepository()
         const service = new ValidateCodeUseCase(userRepo)

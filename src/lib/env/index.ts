@@ -1,5 +1,7 @@
-import "dotenv/config"
+import dotenv from "dotenv"
 import {z} from "zod"
+
+dotenv.config({ override: true })
 
 export const {COOKIE_SECRET,SUPA_EMAIL,SUPA_PASSWORD,PROJECT_LINK,PROJECT_KEY,MAIL_ADDRESS,MAIL_PASSWORD,JWT_SECRET,NODE_ENV,HOST,PORT,PASSWORD_SIGN} = z.object({
     MAIL_PASSWORD:z.string(),
