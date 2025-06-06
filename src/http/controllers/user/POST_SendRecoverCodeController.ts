@@ -18,9 +18,10 @@ export async function POSTSendRecoverCode(request: FastifyRequest, reply: Fastif
 
         const code = await service.execute(email)
         
-        reply.setCookie("recover_cookie", code, {
+        reply.setCookie("recoverCookie", code, {
             signed:true,
             path:"/",
+            httpOnly:true,
             sameSite:"none",
             maxAge:3600,
         })
