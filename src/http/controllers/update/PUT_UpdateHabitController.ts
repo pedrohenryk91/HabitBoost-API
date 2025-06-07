@@ -8,14 +8,6 @@ import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileReposi
 import { EditHabitUseCase } from "services/habits/EditHabitService";
 import { z } from "zod";
 
-const reminderSchema = z.preprocess((arg) => {
-    if (typeof arg === "string") {
-        const date = new Date(arg);
-        return isNaN(date.getTime()) ? undefined : date; 
-    }
-    return arg;
-}, z.date())
-
 export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply) {
     try {
         const id = String(request.user)
@@ -25,7 +17,7 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
             days:z.array(z.string()).optional(),
             title:z.string().optional(),
             description:z.string().optional(),
-            reminderTime:reminderSchema.optional(),
+            reminderTime:z.coerce.date().optional(),
             categoryId:z.string().optional(),
             statusByDate:statusByDateSchema.optional(),
         })

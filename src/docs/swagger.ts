@@ -89,7 +89,7 @@ const HabitSchema: object = {
 }
 
 const GoalSchema: object = {
-    type:"array",
+    type:"object",
     properties:{
         "id":{ description:"The id of the Goal" },
         "title":{ description:"The title of the Goal" },

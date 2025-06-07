@@ -8,21 +8,13 @@ import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileReposi
 import { CreateHabitUseCase } from "services/habits/CreateHabitService";
 import { z } from "zod";
 
-const reminderSchema = z.preprocess((arg) => {
-    if (typeof arg === "string") {
-        const date = new Date(arg);
-        return isNaN(date.getTime()) ? undefined : date; 
-    }
-    return arg;
-}, z.date())
-
 export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyReply) {
     try {
         const CreateHabitSchema = z.object({
             id:z.string(),
             title:z.string(),
             days:z.array(z.string()),
-            reminderTime:reminderSchema.optional(),
+            reminderTime:z.coerce.date().optional(),
             description:z.string().optional(),
             categoryId:z.string(),
             statusByDate:statusByDateSchema,
