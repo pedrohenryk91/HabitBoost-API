@@ -12,17 +12,20 @@ export async function PATCHUpdateHabitStatus(request:FastifyRequest, reply:Fasti
     try {
         const id = String(request.user)
 
-        const {status,habit_id} = z.object({
+        const {status} = z.object({
             status:z.enum(["unstarted","concluded","missed"]),
-            habit_id:z.string(),
         }).parse(request.body)
+
+        const {habitId} = z.object({
+            habitId: z.string()
+        }).parse(request.params)
 
         const categoryRepo = new PrismaCategoryRepository()
         const profileRepo = new PrismaProfileRepository()
         const habitRepo = new PrismaHabitRepository()
         const service = new EditHabitUseCase(habitRepo,profileRepo,categoryRepo)
 
-        const habit = await service.execute(id, habit_id,{
+        const habit = await service.execute(id, habitId,{
             status,
         })
 

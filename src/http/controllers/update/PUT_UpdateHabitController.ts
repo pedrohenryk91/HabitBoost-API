@@ -22,8 +22,7 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
 
         const UpdateHabitSchema = z.object({
             status:z.enum(["unstarted","concluded","missed"]).optional(),
-            habit_id:z.string(),
-            days:z.array(z.string()),
+            days:z.array(z.string()).optional(),
             title:z.string().optional(),
             description:z.string().optional(),
             reminder_time:reminderSchema.optional(),
@@ -31,14 +30,15 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
             statusByDate:statusByDateSchema.optional(),
         })
 
-        const {days,status,habit_id,category_id,statusByDate,description,reminder_time,title} = UpdateHabitSchema.parse(request.body)
+        const {habitId} = z.object({habitId:z.string()}).parse(request.params)
+        const {days,status,category_id,statusByDate,description,reminder_time,title} = UpdateHabitSchema.parse(request.body)
 
         const categoryRepo = new PrismaCategoryRepository()
         const profileRepo = new PrismaProfileRepository()
         const habitRepo = new PrismaHabitRepository()
         const service = new EditHabitUseCase(habitRepo,profileRepo,categoryRepo)
 
-        const habit = await service.execute(id, habit_id,{
+        const habit = await service.execute(id, habitId,{
             status_by_date:statusByDate,
             category_id,
             description,

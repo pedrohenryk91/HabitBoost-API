@@ -799,6 +799,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     parameters:[{
                         name:"habitId",
                         in:"path",
+                        required:true,
                     }],
                     responses:{
                         200:{
@@ -869,6 +870,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     parameters:[{
                         name:"goalId",
                         in:"path",
+                        required:true
                     }],
                     responses:{
                         200:{
@@ -963,6 +965,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     parameters:[{
                         name:"categoryId",
                         in:"path",
+                        required:true
                     }],
                     responses:{
                         200:{
@@ -1211,23 +1214,14 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/habit/status":{//OK
+            "update/habit/status/:habitId":{//OK
                 patch:{
                     tags:["Update"],
                     summary:"Update habit status",
                     security:[{"BearerAuth":[]}],
                     parameters:[{
-                        name:"string",
+                        name:"habitId",
                         in:"path",
-                        description:"The status",
-                        schema:{
-                            type:"string",
-                            enum:[
-                                "unstarted",
-                                "concluded",
-                                "missed",
-                            ]
-                        },
                         required:true,
                     }],
                     responses:{
@@ -1251,20 +1245,22 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     },
                 }
             },
-            "update/habit":{//OK
+            "update/habit/:habitId":{//OK
                 put:{
                     tags:["Update"],
                     summary:"Route to edit an habit",
                     security:[{"BearerAuth":[]}],
                     description:"Route to edit all the information of an habit except status.Except habit_id, every property is OPTIONAL.",
+                    parameters:[{
+                        in:"path",
+                        name:"habitId",
+                        required:true
+                    }],
                     requestBody:{
                         content:{
                             "application/json":{
                                 schema:{
                                     properties:{
-                                        "habit_id":{
-                                            description:"The id of the habit to be updated."
-                                        },
                                         "title":{
                                             description:"The title of the habit"
                                         },
@@ -1315,19 +1311,21 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/goal":{//OK
+            "update/goal/:goalId":{//OK
                 patch:{
                     tags:["Update"],
                     summary:"Route to update an goal",
                     security:[{"BearerAuth":[]}],
+                    parameters:[{
+                        in:"path",
+                        name:"goalId",
+                        required:true
+                    }],
                     requestBody:{
                         content:{
                             "application/json":{
                                 schema:{
                                     properties:{
-                                        "goal_id":{
-                                            description:"The id of the goal to be updated"
-                                        },
                                         "new_title":{
                                             description:"The new name of the goal"
                                         },

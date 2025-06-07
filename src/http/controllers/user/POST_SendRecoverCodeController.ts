@@ -17,7 +17,7 @@ export async function POSTSendRecoverCode(request: FastifyRequest, reply: Fastif
         const service = new SendRecoverMailUseCase(userRepo, profileRepo)
 
         const code = await service.execute(email)
-        
+
         reply.setCookie("recoverCookie", code, {
             signed:true,
             path:"/",

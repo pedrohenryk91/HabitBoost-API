@@ -41,19 +41,19 @@ export async function UpdateRoutes(app: FastifyInstance) {
         handler:PATCHUpdatePassword,
     })
     app.route({
-        url:"/habit/status",
+        url:"/habit/status/:habitId",
         method:"PATCH",
         preHandler:VerifyAuthToken,
         handler:PATCHUpdateHabitStatus,
     })
     app.route({
-        url:"/habit",
+        url:"/habit/:habitId",
         method:"PUT",
         preHandler:VerifyAuthToken,
         handler:PUTUpdateHabit,
     })
     app.route({
-        url:"/goal",
+        url:"/goal/:goalId",
         method:"PATCH",
         preHandler:VerifyAuthToken,
         handler:PATCHUpdateGoal,

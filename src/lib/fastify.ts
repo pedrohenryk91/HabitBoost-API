@@ -45,7 +45,7 @@ app.register(CategoryRoutes, {prefix:"/category"})
 
 app.register(cors, {
     origin: true,
-    methods: ["GET","POST","PUT","PATCH","DELETE"],
+    methods: ["GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS"],
     allowedHeaders: ["Content-Type","Authorization"],
     credentials: true,
 })

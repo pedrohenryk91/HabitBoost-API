@@ -9,8 +9,8 @@ import { z } from "zod";
 export async function PATCHUpdateGoal(request:FastifyRequest, reply:FastifyReply) {
     try {
         const profile_id = String(request.user)
-        const {goal_id,new_title,current_count,target_count} = z.object({
-            goal_id:z.string(),
+        const {goalId} = z.object({ goalId: z.string()} ).parse(request.params)
+        const {new_title,current_count,target_count} = z.object({
             new_title:z.string().min(3).optional(),
             current_count: z.coerce.number().optional(),
             target_count:z.coerce.number().optional(),
@@ -21,7 +21,7 @@ export async function PATCHUpdateGoal(request:FastifyRequest, reply:FastifyReply
         const service = new EditGoalUseCase(goalRepo,profileRepo)
 
         const goal = await service.execute({
-            goal_id,
+            goal_id:goalId,
             new_title,
             current_count,
             target_count,
