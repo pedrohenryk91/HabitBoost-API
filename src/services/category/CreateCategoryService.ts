@@ -7,6 +7,8 @@ interface CreateCategoryParams {
     id: string,
     name: string,
     iconId: string,
+    createdAt?:Date,
+    updatedAt?:Date,
     profile_id: string,
 }
 
@@ -16,6 +18,8 @@ export class CreateCategoryUseCase {
         id,
         name,
         iconId,
+        createdAt,
+        updatedAt,
         profile_id,
     }: CreateCategoryParams){
         const doesProfileExists = await this.ProfileRepo.findById(profile_id)
@@ -33,16 +37,18 @@ export class CreateCategoryUseCase {
                 connect:{
                     id:profile_id,
                 }
-            }
+            },
+            created_at:createdAt,
+            updated_at:updatedAt,
         })
 
         return {
             id,
             name,
             iconId,
-            is_custom,
-            created_at,
-            updated_at,
+            isCustom:is_custom,
+            createdAt:created_at,
+            updatedAt:updated_at,
         }
     }
 }

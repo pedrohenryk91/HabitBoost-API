@@ -15,13 +15,14 @@ export class GetProfileCategoriesUseCase {
         const resolvedCategories = await Promise.all(categories)
 
         const filteredCategories = categories.map((category)=>{
-            const {id,name,created_at,updated_at,is_custom} = category
+            const {id,name,created_at,updated_at,is_custom,icon_id} = category
             return {
                 id,
                 name,
-                is_custom,
-                created_at,
-                updated_at,
+                iconId:icon_id,
+                isCustom:is_custom,
+                createdAt:created_at,
+                updatedAt:updated_at,
             }
         })
 

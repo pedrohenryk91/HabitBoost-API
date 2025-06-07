@@ -11,10 +11,10 @@ export async function PATCHUpdateEmail(request: FastifyRequest, reply: FastifyRe
     try {
         const id = String(request.user)
 
-        const {password,new_email,old_email} = z.object({
+        const {password,newEmail,oldEmail} = z.object({
             password:z.string().min(6),
-            old_email:z.string().email(),
-            new_email:z.string().email(),
+            oldEmail:z.string().email(),
+            newEmail:z.string().email(),
         }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
@@ -23,8 +23,8 @@ export async function PATCHUpdateEmail(request: FastifyRequest, reply: FastifyRe
 
         await service.execute(id,{
             password,
-            old_email,
-            new_email,
+            old_email:oldEmail,
+            new_email:newEmail,
         })
 
         reply.status(201).send({

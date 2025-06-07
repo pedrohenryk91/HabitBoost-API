@@ -20,11 +20,11 @@ export class GetProfileGoalsUseCase {
             return {
                 id,
                 title,
-                habit_id,
-                created_at,
-                updated_at,
-                target_count,
-                current_count,
+                habitId:habit_id,
+                createdAt:created_at,
+                updatedAt:updated_at,
+                targetCount:target_count,
+                currentCount:current_count,
             }
         })
     

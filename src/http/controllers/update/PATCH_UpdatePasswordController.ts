@@ -11,9 +11,9 @@ export async function PATCHUpdatePassword(request: FastifyRequest, reply: Fastif
     try {
         const id = String(request.user)
 
-        const {new_password,old_password} = z.object({
-            new_password: z.string().min(6),
-            old_password: z.string().min(6),
+        const {newPassword,oldPassword} = z.object({
+            newPassword: z.string().min(6),
+            oldPassword: z.string().min(6),
         }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
@@ -21,8 +21,8 @@ export async function PATCHUpdatePassword(request: FastifyRequest, reply: Fastif
         const service = new ChangePasswordUseCase(userRepo, profileRepo)
 
         await service.execute(id, {
-            new_password,
-            old_password,
+            new_password:newPassword,
+            old_password:oldPassword,
         })
 
         reply.status(201).send({

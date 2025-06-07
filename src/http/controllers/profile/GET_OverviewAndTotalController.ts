@@ -17,7 +17,7 @@ export async function GETOverviewAndTotal(request: FastifyRequest, reply: Fastif
 
         reply.status(200).send({
             overview:detailed_habit_count,
-            total_habit_count,
+            totalHabitCount:total_habit_count,
         })
     }
     catch (err) {

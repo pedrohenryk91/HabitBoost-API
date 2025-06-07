@@ -35,7 +35,5 @@ export class EditProfileUseCase {
             detailed_habit_count:(overview?overview:profileExists.detailed_habit_count),
             updated_at:new Date(),
         })
-
-        return newProfile
     }
 }

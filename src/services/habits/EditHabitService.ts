@@ -71,13 +71,12 @@ export class EditHabitUseCase {
             id,
             days,
             title,
-            status,
-            created_at,
-            updated_at,
+            createdAt: created_at,
+            updatedAt: updated_at,
             description,
-            category_id,
-            reminder_time,
-            status_by_date,
+            categoryId: category_id,
+            reminderTime: reminder_time,
+            statusByDate:status_by_date,
         }
     }
 }

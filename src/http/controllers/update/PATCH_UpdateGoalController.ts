@@ -10,10 +10,10 @@ export async function PATCHUpdateGoal(request:FastifyRequest, reply:FastifyReply
     try {
         const profile_id = String(request.user)
         const {goalId} = z.object({ goalId: z.string()} ).parse(request.params)
-        const {new_title,current_count,target_count} = z.object({
-            new_title:z.string().min(3).optional(),
-            current_count: z.coerce.number().optional(),
-            target_count:z.coerce.number().optional(),
+        const {currentCount,newTitle,targetCount} = z.object({
+            newTitle:z.string().min(3).optional(),
+            currentCount: z.coerce.number().optional(),
+            targetCount:z.coerce.number().optional(),
         }).parse(request.body)
 
         const profileRepo = new PrismaProfileRepository()
@@ -22,9 +22,9 @@ export async function PATCHUpdateGoal(request:FastifyRequest, reply:FastifyReply
 
         const goal = await service.execute({
             goal_id:goalId,
-            new_title,
-            current_count,
-            target_count,
+            new_title:newTitle,
+            current_count:currentCount,
+            target_count:targetCount,
             profile_id,
         })
 

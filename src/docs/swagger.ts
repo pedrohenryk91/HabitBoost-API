@@ -62,15 +62,15 @@ const HabitSchema: object = {
                 type:"string"
             }
         },
-        "created_at":{
+        "createdAt":{
             type:"string",
             format:"date-time",
         },
-        "updated_at":{
+        "updatedAt":{
             type:"string",
             format:"date-time",
         },
-        "reminder_time":{
+        "reminderTime":{
             type:"string",
             format:"date-time",
             description:"The moment (hour) that the reminder of the habit will happen."
@@ -78,13 +78,14 @@ const HabitSchema: object = {
         "description":{
             description:"The description of the habit."
         },
-        "category_id":{
+        "categoryId":{
             description:"The id of the category of the habit (Must exists)."
         },
         "statusByDate":{
             type:"object"
         }
-    }
+    },
+    required:["id","title","days","categoryId","statusByDate"]
 }
 
 const GoalSchema: object = {
@@ -92,26 +93,53 @@ const GoalSchema: object = {
     properties:{
         "id":{ description:"The id of the Goal" },
         "title":{ description:"The title of the Goal" },
-        "created_at":{
+        "createdAt":{
             type:"string",
             format:"date-time",
         },
-        "updated_at":{
+        "updatedAt":{
             type:"string",
             format:"dade-time",
         },
-        "habit_id":{
+        "habitId":{
             description:"The id of the habit which was connected with the goal"
         },
-        "target_count":{
+        "targetCount":{
             type:"number",
             description:"The target count of the goal"
         },
-        "current_count":{
+        "currentCount":{
             type:"number",
             description:"The current count of the goal"
         }
-    }
+    },
+    required:["id","title","habitId","targetCount"]
+}
+
+const CategorySchema: object = {
+                                    properties:{
+                                        "id":{
+                                            type:"string"
+                                        },
+                                        "name":{
+                                            type:"string"
+                                        },
+                                        "iconId":{
+                                            type:"string"
+                                        },
+                                        "isCustom":{
+                                            type:"boolean"
+                                        },
+                                        "createdAt":{
+                                            type:"string",
+                                            format:"date-time"
+                                        },
+                                        "updatedAt":{
+                                            type:"string",
+                                            format:"date-time"
+                                        }
+                                    },
+                                    required:["id","name","iconId","isCustom"]
 }
 
 export const SwaggerDocumentationOptions:SwaggerOptions = {
@@ -267,7 +295,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             "username":{
                                                 description:"The name of the user"
                                             },
-                                            "image_url":{
+                                            "imageUrl":{
                                                 description:"Url of the user image"
                                             },
                                             "weektotal":{
@@ -374,15 +402,18 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                                 "name":{
                                                     description:"The title of the category"
                                                 },
-                                                "is_custom":{
+                                                "iconId":{
+                                                    type:"string",
+                                                },
+                                                "isCustom":{
                                                     type:"boolean",
                                                     description:"True if the category is custom, otherwise false"
                                                 },
-                                                "created_at":{
+                                                "createdAt":{
                                                     type:"string",
                                                     format:"date-time",
                                                 },
-                                                "updated_at":{
+                                                "updatedAt":{
                                                     type:"string",
                                                     format:"date-time",
                                                 },
@@ -414,7 +445,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                 "application/json":{
                                     schema:{
                                         properties:{
-                                            "total_habit_count":{
+                                            "totalHabitCount":{
                                                 type:"number",
                                                 description:"The total number of habits done."
                                             },
@@ -476,19 +507,19 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             "title":{
                                                 description:"The goal title"
                                             },
-                                            "created_at":{
+                                            "createdAt":{
                                                 type:"string",
                                                 format:"date-time",
                                             },
-                                            "updated_at":{
+                                            "updatedAt":{
                                                 type:"string",
                                                 format:"date-time",
                                             },
-                                            "target_count":{
+                                            "targetCount":{
                                                 type:"number",
                                                 description:"The target count of the goal"
                                             },
-                                            "current_count":{
+                                            "currentCount":{
                                                 type:"number",
                                                 description:"The current count of the goal"
                                             }
@@ -746,7 +777,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "title":{
                                             description:"The title of the habit"
                                         },
-                                        "reminder_time":{
+                                        "reminderTime":{
                                             type:"string",
                                             format:"date-time",
                                             description:"The moment (hour) that the reminder of the habit will happen."
@@ -754,7 +785,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                         "description":{
                                             description:"The description of the habit."
                                         },
-                                        "category_id":{
+                                        "categoryId":{
                                             description:"The id of the category of the habit (Must exists)."
                                         },
                                         "statusByDate":{
@@ -825,21 +856,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     requestBody:{
                         content:{
                             "application/json":{
-                                schema:{
-                                    properties:{
-                                        "title":{
-                                            description:"The goal's title"
-                                        },
-                                        "target_count":{
-                                            type:"number",
-                                            description:"The target count of the goal",
-                                        },
-                                        "habit_it":{
-                                            description:"(Optional) Habit to link with the goal"
-                                        }
-                                    },
-                                    required:["title","target_count"],
-                                }
+                                schema:GoalSchema,
                             },
                         }
                     },
@@ -895,19 +912,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     requestBody:{
                         content:{
                             "application/json":{
-                                schema:{
-                                    properties:{
-                                        "id":{
-                                            type:"string"
-                                        },
-                                        "name":{
-                                            type:"string"
-                                        },
-                                        "iconId":{
-                                            type:"string"
-                                        }
-                                    }
-                                }
+                                schema:CategorySchema
                             }
                         }
                     },
@@ -916,31 +921,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             description:"Habit created with success, returns the habit id.",
                             content:{
                                 "application/json":{
-                                    schema:{
-                                        properties:{
-                                            "id":{
-                                                description:"The category id",
-                                            },
-                                            "name":{
-                                                description:"The category name"
-                                            },
-                                            "icon_id":{
-                                                description:"Icon Id"
-                                            },
-                                            "is_custom":{
-                                                type:"boolean",
-                                                description:"True if the category is custom, otherwise false"
-                                            },
-                                            "created_at":{
-                                                type:"string",
-                                                format:"date-time",
-                                            },
-                                            "updated_at":{
-                                                type:"string",
-                                                format:"date-time",
-                                            },
-                                        }
-                                    }
+                                    schema:CategorySchema
                                 }
                             }
                         },
@@ -1074,10 +1055,10 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                 schema:{
                                     type:"object",
                                     properties:{
-                                        "old_username":{ description:"The old username" },
-                                        "new_username":{ description:"The new username" },
+                                        "oldUsername":{ description:"The old username" },
+                                        "newUsername":{ description:"The new username" },
                                     },
-                                    required:["old_username","new_username"],
+                                    required:["oldUsername","newUsername"],
                                 }
                             }
                         }
@@ -1115,10 +1096,10 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                             "application/json":{
                                 schema:{
                                     properties:{
-                                        "old_password":{ description:"User's old password" },
-                                        "new_password":{ description:"The new password"}
+                                        "oldPassword":{ description:"User's old password" },
+                                        "newPassword":{ description:"The new password"}
                                     },
-                                    required:["old_password","new_password"],
+                                    required:["oldPassword","newPassword"],
                                 },
                             },
                         },
@@ -1180,10 +1161,10 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                     type:"object",
                                     properties:{
                                         "password":{ description:"User's password" },
-                                        "new_email":{ description:"The old email" },
-                                        "old_email":{ description:"The new email" },
+                                        "newEmail":{ description:"The old email" },
+                                        "oldEmail":{ description:"The new email" },
                                     },
-                                    required:["old_email","new_email"],
+                                    required:["oldEmail","newEmail"],
                                 },
                             },
                         },

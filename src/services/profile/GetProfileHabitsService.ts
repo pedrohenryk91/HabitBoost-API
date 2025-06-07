@@ -21,7 +21,6 @@ export class GetProfileHabitsUseCase {
                 id,
                 days,
                 title,
-                status,
                 createdAt:created_at,
                 updatedAt:updated_at,
                 description,

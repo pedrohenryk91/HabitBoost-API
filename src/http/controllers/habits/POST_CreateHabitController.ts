@@ -19,29 +19,33 @@ const reminderSchema = z.preprocess((arg) => {
 export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyReply) {
     try {
         const CreateHabitSchema = z.object({
+            id:z.string(),
             title:z.string(),
             days:z.array(z.string()),
-            reminder_time:reminderSchema.optional(),
+            reminderTime:reminderSchema.optional(),
             description:z.string().optional(),
-            category_id:z.string(),
-            statusByDate:statusByDateSchema
+            categoryId:z.string(),
+            statusByDate:statusByDateSchema,
+            createdAt:z.coerce.date().optional(),
+            updatedAt:z.coerce.date().optional(),
         })
     
         const profile_id = String(request.user)
     
-        const {days,statusByDate,category_id,title,reminder_time,description} = CreateHabitSchema.parse(request.body)
+        const {id,days,statusByDate,categoryId,title,reminderTime,description} = CreateHabitSchema.parse(request.body)
     
         const habitRepo = new PrismaHabitRepository()
         const profileRepo = new PrismaProfileRepository()
         const service = new CreateHabitUseCase(habitRepo, profileRepo)
     
         const result = await service.execute({
-            category_id,
+            category_id:categoryId,
             profile_id,
             title,
             days,
+            id,
             description,
-            reminder_time,
+            reminder_time:reminderTime,
             status_by_date: statusByDate,
         })
 

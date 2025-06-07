@@ -11,9 +11,9 @@ export async function PATCHUpdateUsername(request: FastifyRequest, reply: Fastif
    try {
         const id = String(request.user)
 
-        const { old_username, new_username } = z.object({
-            old_username: z.string().min(3).max(20),
-            new_username:z.string().min(3).max(20),
+        const { oldUsername, newUsername } = z.object({
+            oldUsername: z.string().min(3).max(20),
+            newUsername:z.string().min(3).max(20),
         }).parse(request.body)
 
         const userRepo = new PrismaUserRepository()
@@ -21,8 +21,8 @@ export async function PATCHUpdateUsername(request: FastifyRequest, reply: Fastif
         const service = new EditUsernameUseCase(userRepo, profileRepo)
 
         await service.execute(id, {
-            old_username,
-            new_username,
+            old_username:oldUsername,
+            new_username:newUsername,
         })
 
         reply.status(201).send({

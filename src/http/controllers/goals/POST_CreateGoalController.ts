@@ -8,23 +8,31 @@ import { z } from "zod";
 
 export async function POSTCreateGoal(request: FastifyRequest, reply: FastifyReply) {
     try {
-        const id = String(request.user)
+        const profile_id = String(request.user)
         const GoalSchema = z.object({
+            id:z.string(),
             title:z.string(),
-            habit_id:z.string().optional(),
-            target_count:z.coerce.number(),
+            habitId:z.string().optional(),
+            targetCount:z.coerce.number(),
+            currentCount:z.coerce.number().optional(),
+            createdAt:z.coerce.date().optional(),
+            updatedAt:z.coerce.date().optional(),
         })
     
-        const {habit_id,title,target_count} = GoalSchema.parse(request.body)
+        const {id,habitId,title,targetCount,currentCount,createdAt,updatedAt} = GoalSchema.parse(request.body)
 
         const profileRepo = new PrismaProfileRepository()
         const goalRepo = new PrismaGoalRepository()
         const service = new CreateGoalUseCase(goalRepo,profileRepo)
 
-        const goal = await service.execute(id,{
+        const goal = await service.execute(profile_id,{
+            id,
             title,
-            habit_id,
-            target_count,
+            habit_id:habitId,
+            target_count:targetCount,
+            current_count:currentCount,
+            createdAt,
+            updatedAt,
         })
 
         reply.status(201).send({

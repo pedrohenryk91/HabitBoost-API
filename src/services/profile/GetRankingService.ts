@@ -31,7 +31,7 @@ export class GetRankingService {
             weektotal = (detailed_habit_count?.total?detailed_habit_count.total:0)
             return {
                 username,
-                image_url,
+                imageUrl:image_url,
                 weektotal,
             }
         })
