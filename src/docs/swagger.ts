@@ -741,7 +741,6 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             type:"array",
                                             items:{
                                                 type:"string",
-                                                example:"monday",
                                             }
                                         },
                                         "title":{
@@ -762,7 +761,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             type:"object",
                                         }
                                     },
-                                    required:["title","category_id"],
+                                    required:["title","category_id","statusByDate"],
                                 }
                             }
                         }

@@ -1,6 +1,7 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { Habit } from "lib/types/Habit";
 import { statusByDateSchema } from "lib/types/StatusByDate";
 import { PrismaHabitRepository } from "repositories/prisma/PrismaHabitRepository";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
@@ -34,7 +35,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
         const profileRepo = new PrismaProfileRepository()
         const service = new CreateHabitUseCase(habitRepo, profileRepo)
     
-        const {id,status,created_at,updated_at,status_by_date} = await service.execute({
+        const result = await service.execute({
             category_id,
             profile_id,
             title,
@@ -44,20 +45,21 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
             status_by_date: statusByDate,
         })
 
+        const habit: Habit = {
+            id:result.id,
+            title:result.title,
+            description:(result.description?result.description:undefined),
+            statusByDate:statusByDateSchema.parse(result.status_by_date),
+            categoryId:result.category_id,
+            createdAt:result.created_at,
+            updatedAt:result.updated_at,
+            days:result.days,
+            reminderTime:String(result.reminder_time),
+        }
+
         reply.status(201).send({
             Description:"Habit created",
-            habit:{
-                id,
-                days,
-                title,
-                status,
-                createdAt: created_at,
-                updatedAt: updated_at,
-                categoryId:category_id,
-                description,
-                reminder_time,
-                statusByDate: status_by_date,
-            },
+            
         })
     }
     catch (err) {
