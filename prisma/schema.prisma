@@ -87,7 +87,7 @@ model habit {
   days String[]
 
   status_by_date Json //{"2025-05-05":"unstarted"}
-  reminder_time DateTime? //Horario do lembrete
+  reminder_time String? //Horario do lembrete
 
   created_at DateTime @default(now())
   updated_at DateTime?

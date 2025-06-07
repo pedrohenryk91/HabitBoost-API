@@ -14,7 +14,7 @@ export async function POSTCreateHabit(request: FastifyRequest, reply: FastifyRep
             id:z.string(),
             title:z.string(),
             days:z.array(z.string()),
-            reminderTime:z.coerce.date().optional(),
+            reminderTime:z.string().optional(),
             description:z.string().optional(),
             categoryId:z.string(),
             statusByDate:statusByDateSchema,

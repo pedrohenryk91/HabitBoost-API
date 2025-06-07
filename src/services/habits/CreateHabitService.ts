@@ -14,7 +14,7 @@ interface CreateHabitParams {
     id: string,
     days: string[],
     description?: string,
-    reminder_time?: Date,
+    reminder_time?: string,
     status_by_date: StatusByDate,
     createdAt?:Date,
     updatedAt?:Date,

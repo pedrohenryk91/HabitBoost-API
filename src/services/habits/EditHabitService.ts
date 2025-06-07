@@ -12,7 +12,7 @@ interface UpdateHabitParams {
     status?: status,
     description?: string,
     category_id?: string,
-    reminder_time?: Date,
+    reminder_time?: string,
     status_by_date?: StatusByDate
 }
 

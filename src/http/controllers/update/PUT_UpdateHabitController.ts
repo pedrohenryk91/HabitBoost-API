@@ -17,7 +17,7 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
             days:z.array(z.string()).optional(),
             title:z.string().optional(),
             description:z.string().optional(),
-            reminderTime:z.coerce.date().optional(),
+            reminderTime:z.string().optional(),
             categoryId:z.string().optional(),
             statusByDate:statusByDateSchema.optional(),
         })
@@ -34,7 +34,7 @@ export async function PUTUpdateHabit(request:FastifyRequest, reply:FastifyReply)
             status_by_date:statusByDate,
             category_id:categoryId,
             description,
-            reminder_time:(reminderTime?new Date(reminderTime):undefined),
+            reminder_time:reminderTime,
             status,
             title,
             days,
