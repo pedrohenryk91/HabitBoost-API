@@ -6,13 +6,15 @@ import { PrismaCategoryRepository } from "repositories/prisma/PrismaCategoryRepo
 import { PrismaHabitRepository } from "repositories/prisma/PrismaHabitRepository";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { EditHabitUseCase } from "services/habits/EditHabitService";
+import { EditStatusByDateUseCase } from "services/habits/EditStatusByDateService";
 import { z } from "zod";
 
 export async function PATCHUpdateHabitStatus(request:FastifyRequest, reply:FastifyReply) {
     try {
         const id = String(request.user)
 
-        const {status} = z.object({
+        const {date,status} = z.object({
+            date:z.string(),
             status:z.enum(["unstarted","concluded","missed"]),
         }).parse(request.body)
 
@@ -20,13 +22,13 @@ export async function PATCHUpdateHabitStatus(request:FastifyRequest, reply:Fasti
             habitId: z.string()
         }).parse(request.params)
 
-        const categoryRepo = new PrismaCategoryRepository()
         const profileRepo = new PrismaProfileRepository()
         const habitRepo = new PrismaHabitRepository()
-        const service = new EditHabitUseCase(habitRepo,profileRepo,categoryRepo)
+        const service = new EditStatusByDateUseCase(habitRepo, profileRepo)
 
-        const habit = await service.execute(id, habitId,{
+        const habit = await service.execute(habitId, id,{
             status,
+            date,
         })
 
         reply.status(201).send({

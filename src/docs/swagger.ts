@@ -1209,6 +1209,31 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         in:"path",
                         required:true,
                     }],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    type:"object",
+                                    properties:{
+                                        "date":{
+                                            type:"string",
+                                            description:"The date of the status",
+                                            example:"2025-06-07"
+                                        },
+                                        "status":{
+                                            type:"string",
+                                            description:"The object that has the specified date will have it's status updated to this.",
+                                            enum:[
+                                                "unstarted",
+                                                "concluded",
+                                                "missed",
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     responses:{
                         201:{
                             description:"Updated",
