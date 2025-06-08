@@ -488,12 +488,17 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "profile/get/goals":{//OK
+            "profile/get/goals/:habitId":{//OK
                 get:{
                     tags:["Profile"],
                     summary:"Route to get the goals of an user.",
                     security:[{"BearerAuth":[]}],
                     description:"It will get the goals of the logged user. Use auth token",
+                    parameters:[{
+                        name:"habitId",
+                        in:"path",
+                        required:true
+                    }],
                     responses:{
                         200:{
                             description:"Success",

@@ -5,13 +5,13 @@ import { ProfileRepository } from "repositories/ProfileRepository";
 
 export class GetProfileGoalsUseCase {
     constructor(private GoalRepo: GoalRepository, private ProfileRepo: ProfileRepository){}
-    async execute(id: string){
+    async execute(id: string, habit_id: string){
         const doesProfileExists = await this.ProfileRepo.findById(id)
         if(!doesProfileExists){
             throw new EntityNotFoundError("Profile")
         }
 
-        const goals = await this.GoalRepo.findByProfileId(id)
+        const goals = await this.GoalRepo.findByHabitId(habit_id)
 
         const goalsResolved = await Promise.all(goals)
 

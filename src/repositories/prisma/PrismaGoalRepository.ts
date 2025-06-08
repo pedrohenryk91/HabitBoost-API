@@ -17,6 +17,14 @@ export class PrismaGoalRepository implements GoalRepository {
         })
     }
 
+    async findByHabitId(habitId: string): Promise<goal[]> {
+        return await prisma.goal.findMany({
+            where:{
+                habit_id:habitId,
+            }
+        })
+    }
+
     async findByProfileId(profileId: string): Promise<goal[]> {
         return await prisma.goal.findMany({
             where:{

@@ -25,7 +25,7 @@ export async function profileRoutes(app: FastifyInstance) {
         handler:GETUserHabits,
     })
     app.route({
-        url:"/get/goals",
+        url:"/get/goals/:habitId",
         method:"GET",
         preHandler:[VerifyAuthToken],
         handler:GETGoalsController,
