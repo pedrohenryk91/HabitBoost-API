@@ -22,6 +22,7 @@ export async function POSTSendRecoverCode(request: FastifyRequest, reply: Fastif
             signed:true,
             path:"/",
             httpOnly:true,
+            secure:true,
             sameSite:"none",
             maxAge:3600,
         })
