@@ -1153,8 +1153,8 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
-            "update/email":{//OK ALERT
-                patch:{
+            "update/email/request":{//OK ALERT
+                post:{
                     tags:["Update"],
                     summary:"Route to edit email",
                     description:"Route to edit the email of an logged user. Use auth token.",
@@ -1196,6 +1196,40 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                         500:{
                             description:"Unknown error"
                         },
+                    }
+                }
+            },
+            "update/email/validate":{
+                patch:{
+                    summary:"Route to validate the update email token.",
+                    security:[{"BearerAuth":[]}],
+                    requestBody:{
+                        content:{
+                            "application/json":{
+                                schema:{
+                                    properties:{
+                                        "token":{
+                                            description:"The token sent to the user by email."
+                                        }
+                                    },
+                                    required:["token"]
+                                }
+                            }
+                        }
+                    },
+                    responses:{
+                        201:{
+                            description:"Email updated"
+                        },
+                        400:{
+                            description:"The auth token does not doesn't belong to the user of the token"
+                        },
+                        404:{
+                            description:"User not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
                     }
                 }
             },

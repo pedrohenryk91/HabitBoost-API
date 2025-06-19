@@ -4,10 +4,10 @@ import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
-import { UpdateEmailUseCase } from "services/user/UpdateEmailService";
+import { UpdateEmailRequestUseCase } from "services/user/UpdateEmailRequestService";
 import { z } from "zod";
 
-export async function PATCHUpdateEmail(request: FastifyRequest, reply: FastifyReply) {
+export async function POSTUpdateEmailRequest(request: FastifyRequest, reply: FastifyReply) {
     try {
         const id = String(request.user)
 
@@ -19,7 +19,7 @@ export async function PATCHUpdateEmail(request: FastifyRequest, reply: FastifyRe
 
         const userRepo = new PrismaUserRepository()
         const profileRepo = new PrismaProfileRepository()
-        const service = new UpdateEmailUseCase(userRepo, profileRepo)
+        const service = new UpdateEmailRequestUseCase(userRepo, profileRepo)
 
         await service.execute(id,{
             password,
@@ -28,7 +28,7 @@ export async function PATCHUpdateEmail(request: FastifyRequest, reply: FastifyRe
         })
 
         reply.status(201).send({
-            Description:"Email updated."
+            Description:"Request sent."
         })
     }
     catch (err) {

@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { PATCHUpdateEmail } from "http/controllers/update/PATCH_UpdateEmailController";
+import { POSTUpdateEmailRequest } from "http/controllers/update/POST_UpdateEmailRequestController";
 import { PATCHUpdateGoal } from "http/controllers/update/PATCH_UpdateGoalController";
 import { PATCHUpdateHabitStatus } from "http/controllers/update/PATCH_UpdateHabitStatusController";
 import { PATCHUpdateOverview } from "http/controllers/update/PATCH_UpdateOverviewController";
@@ -8,6 +8,7 @@ import { PATCHUpdateTotalCount } from "http/controllers/update/PATCH_UpdateTotal
 import { PATCHUpdateUsername } from "http/controllers/update/PATCH_UpdateUsernameController";
 import { PUTUpdateHabit } from "http/controllers/update/PUT_UpdateHabitController";
 import { VerifyAuthToken } from "http/middlewares/VerifyAuthToken";
+import { PATCHUpdateEmailValidate } from "http/controllers/update/PATCH_UpdateEmailValidateController";
 
 export async function UpdateRoutes(app: FastifyInstance) {
     app.route({
@@ -29,10 +30,16 @@ export async function UpdateRoutes(app: FastifyInstance) {
         handler:PATCHUpdateTotalCount,
     })
     app.route({
-        url:"/email",
-        method:"PATCH",
+        url:"/email/request",
+        method:"POST",
         preHandler:[VerifyAuthToken],
-        handler:PATCHUpdateEmail,
+        handler:POSTUpdateEmailRequest,
+    })
+    app.route({
+        url:"/email/validate",
+        method:"POST",
+        preHandler:[VerifyAuthToken],
+        handler:PATCHUpdateEmailValidate,
     })
     app.route({
         url:"/password",

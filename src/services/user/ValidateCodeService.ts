@@ -34,6 +34,6 @@ export class ValidateCodeUseCase {
             throw new IncorrectCodeError()
         }
 
-        return await hash(PASSWORD_SIGN, Math.floor(Math.random() * 20) + 10)
+        return await hash(PASSWORD_SIGN, Math.floor(Math.random() * 20))
     }
 }

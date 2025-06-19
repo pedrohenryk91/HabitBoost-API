@@ -96,7 +96,7 @@ export class CreateUserUseCase {
             </td>
         </tr>
     </table>
-</body>`//TODO: The link
+</body>`
         }
 
         const result = await sendMail(welcomeEmail)

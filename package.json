@@ -14,7 +14,7 @@
     "@fastify/jwt": "^9.1.0",
     "@fastify/multipart": "^9.0.3",
     "@fastify/swagger": "^9.4.2",
-    "@fastify/swagger-ui": "^5.2.2",
+    "@fastify/swagger-ui": "^5.2.3",
     "@prisma/client": "^6.4.1",
     "@supabase/supabase-js": "^2.49.4",
     "@types/bcryptjs": "^2.4.6",

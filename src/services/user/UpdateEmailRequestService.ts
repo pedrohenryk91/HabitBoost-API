@@ -7,6 +7,7 @@ import { Email } from "lib/interfaces/Email";
 import { ProfileRepository } from "repositories/ProfileRepository";
 import { UserRepository } from "repositories/UserRepository";
 import { sendMail } from "utils/mail/Mail";
+import { genToken } from "utils/token/generateToken";
 
 interface UpdateEmailParams {
     password: string,
@@ -14,7 +15,7 @@ interface UpdateEmailParams {
     new_email: string,
 }
 
-export class UpdateEmailUseCase {
+export class UpdateEmailRequestUseCase {
     constructor(private UserRepo: UserRepository, private ProfileRepo: ProfileRepository){}
     async execute(id:string,{
         password,
@@ -52,6 +53,11 @@ export class UpdateEmailUseCase {
         const doesEmailAlreadyInUse = await this.UserRepo.findByEmail(new_email)
         if(doesEmailAlreadyInUse) throw new AlreadyInUseError("Email")
 
+        const token = genToken({
+            email:new_email,
+            id:doesProfileExists.id
+        })
+
         const email: Email = {
             to:new_email,
             subject:"No-Reply <Alert>",
@@ -63,11 +69,15 @@ export class UpdateEmailUseCase {
                 <table width="600" cellpadding="20" style="border-radius: 5px; background-color: #ffffff;">
                     <tr>
                         <td style="text-align: center;">
-                            <h1 style="color:#333;">ALERT</h1>
-                            <p style="font-size:large; color:#555;"> Hello ${oldEmailIsCorrect.username},<br>
-                                Someone just changed your email.
+                            <h1 style="color:#333;">Welcome to the HabitBoost app</h1>
+                            <p style="font-size:large; color:#555;"> Hello ${user.username},<br>
+                                You are trying to change your email
                             </p>
-                            <p style="font-size: large;">We hope it was you! ;&#41;</p>
+                            <p style="font-size: large;">Click on the button below to validate your new email:</p>
+                            <a href="https://habitboost.com/confirm-email?token=${token}" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
+                                Validate Email
+                            </a>
+                            <p style="font-size:large; color:#555;">The link expires in 1 hour.</p>
                             <p style="font-size:large; color:#555;">Best Regards,<br>
                                <strong>HabitBoost Team</strong>
                             </p>
@@ -81,10 +91,5 @@ export class UpdateEmailUseCase {
         }
 
         await sendMail(email)
-
-        await this.UserRepo.update(user.id, {
-            email:new_email,
-            updated_at:new Date(),
-        })
     }
 }
