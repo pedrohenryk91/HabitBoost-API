@@ -1,13 +1,7 @@
 import { AbsentFileError } from "errors/AbsentFileError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { supabase } from "lib/supabase";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { UploadImageUseCase } from "services/upload/UploadImageService";
-import { z } from "zod";
-import fs from "fs"
-import path from "path";
-import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
-
 
 export async function POSTUploadImage(request: FastifyRequest, reply: FastifyReply) {
     try {

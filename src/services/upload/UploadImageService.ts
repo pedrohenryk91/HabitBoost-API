@@ -4,7 +4,7 @@ import path from "path";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface UploadImageParams {
-    blob: Blob,
+    blob: Blob | Buffer,
     filename: string,
     mimetype: string,
 }

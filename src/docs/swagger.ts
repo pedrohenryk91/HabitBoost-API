@@ -969,7 +969,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                 }
             },
             "upload/image":{//OK
-                patch:{
+                post:{
                     tags:["Upload"],
                     summary:"Route to upload an profile image to the user (CHECK PARAMETERS DESCRIPTION)",
                     security:[{"BeaererAuth":[]}],
