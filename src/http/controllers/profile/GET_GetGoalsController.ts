@@ -9,15 +9,11 @@ export async function GETGoalsController(request:FastifyRequest, reply:FastifyRe
     try {
         const id = String(request.user)
 
-        const {habitId} = z.object({
-            habitId: z.string()
-        }).parse(request.params)
-
         const profileRepo = new PrismaProfileRepository()
         const goalRepo = new PrismaGoalRepository()
         const service = new GetProfileGoalsUseCase(goalRepo,profileRepo)
 
-        const goals = await service.execute(id,habitId)
+        const goals = await service.execute(id)
 
         reply.status(201).send({
             Description:"Ok",
