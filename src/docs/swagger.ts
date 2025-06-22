@@ -1196,6 +1196,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
             },
             "update/email/validate":{
                 patch:{
+                    tags:["Update"],
                     summary:"Route to validate the update email token.",
                     security:[{"BearerAuth":[]}],
                     requestBody:{

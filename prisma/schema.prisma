@@ -72,7 +72,7 @@ model profile {
   updated_at DateTime?
 
   user_id String? @unique
-  user user? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  user user? @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   category category[]
   habits habit[]
