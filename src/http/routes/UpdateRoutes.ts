@@ -37,7 +37,7 @@ export async function UpdateRoutes(app: FastifyInstance) {
     })
     app.route({
         url:"/email/validate",
-        method:"POST",
+        method:"PATCH",
         preHandler:[VerifyAuthToken],
         handler:PATCHUpdateEmailValidate,
     })
