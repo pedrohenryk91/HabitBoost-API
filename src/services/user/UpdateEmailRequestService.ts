@@ -74,7 +74,7 @@ export class UpdateEmailRequestUseCase {
                                 You are trying to change your email
                             </p>
                             <p style="font-size: large;">Click on the button below to validate your new email:</p>
-                            <a href="https://habitboost.com/confirm-email?token=${token}" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
+                            <a href="https://habitboost.com/validate-update-email?token=${token}" style="display:inline-block; background:#007BFF; color:#fff; padding:10px 20px; text-decoration:none; font-size:medium; border-radius:5px; margin-top:10px;">
                                 Validate Email
                             </a>
                             <p style="font-size:large; color:#555;">The link expires in 1 hour.</p>
