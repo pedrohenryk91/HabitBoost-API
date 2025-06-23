@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { POSTUpdateEmailRequest } from "http/controllers/update/POST_UpdateEmailRequestController";
+import { PATCHUpdateEmailRequest } from "http/controllers/update/PATCH_UpdateEmailRequestController";
 import { PATCHUpdateGoal } from "http/controllers/update/PATCH_UpdateGoalController";
 import { PATCHUpdateHabitStatus } from "http/controllers/update/PATCH_UpdateHabitStatusController";
 import { PATCHUpdateOverview } from "http/controllers/update/PATCH_UpdateOverviewController";
@@ -31,9 +31,9 @@ export async function UpdateRoutes(app: FastifyInstance) {
     })
     app.route({
         url:"/email/request",
-        method:"POST",
+        method:"PATCH",
         preHandler:[VerifyAuthToken],
-        handler:POSTUpdateEmailRequest,
+        handler:PATCHUpdateEmailRequest,
     })
     app.route({
         url:"/email/validate",

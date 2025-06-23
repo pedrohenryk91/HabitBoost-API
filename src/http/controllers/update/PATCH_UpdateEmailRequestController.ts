@@ -7,7 +7,7 @@ import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { UpdateEmailRequestUseCase } from "services/user/UpdateEmailRequestService";
 import { z } from "zod";
 
-export async function POSTUpdateEmailRequest(request: FastifyRequest, reply: FastifyReply) {
+export async function PATCHUpdateEmailRequest(request: FastifyRequest, reply: FastifyReply) {
     try {
         const id = String(request.user)
 

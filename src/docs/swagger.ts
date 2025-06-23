@@ -1149,7 +1149,7 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                 }
             },
             "update/email/request":{//OK ALERT
-                post:{
+                patch:{
                     tags:["Update"],
                     summary:"Route to edit email",
                     description:"Route to edit the email of an logged user. Use auth token.",
