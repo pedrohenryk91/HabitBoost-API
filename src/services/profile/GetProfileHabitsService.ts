@@ -30,7 +30,8 @@ export class GetProfileHabitsUseCase {
             const today = formatDateToYYYYMMDD(new Date())
             const keys = Object.keys(statusByDate)
             keys.forEach((key)=>{
-                if(key < today){
+                const value = statusByDate[key]
+                if(key < today && value !== "concluded"){
                     statusByDate[key] = "missed"
                 }
             })
