@@ -1,0 +1,1 @@
+export type WeekDay = "dom" | "seg" | "ter" | "qua" | "qui" | "sex" | "sab"

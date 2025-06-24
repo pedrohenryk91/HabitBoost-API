@@ -1,3 +1,4 @@
+import { WeekDay } from "lib/types/WeekDay";
 import { z } from "zod";
 
 const DailyInfo = z.object({
@@ -42,7 +43,7 @@ export class OverviewOptional implements OverviewOptionalType {
     sex?: { expt: number; acvd: number }
     sab?: { expt: number; acvd: number }
     total?: number
-  
+
     constructor(data: OverviewOptionalType) {
         Object.assign(this, data)
     }
@@ -54,4 +55,8 @@ export class OverviewOptional implements OverviewOptionalType {
     }
 }
   
-  
+export function getWeekDay(){
+    const days: WeekDay[] = ["dom","seg","ter","qua","qui","sex","sab"]
+    const num = (new Date()).getDay()
+    return days[num]
+}

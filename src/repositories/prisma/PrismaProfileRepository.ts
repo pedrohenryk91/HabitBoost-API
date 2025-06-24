@@ -1,4 +1,5 @@
 import { Prisma, profile } from "@prisma/client";
+import { endOfWeek, startOfWeek } from "date-fns";
 import { prisma } from "lib/prisma";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
@@ -19,15 +20,57 @@ export class PrismaProfileRepository implements ProfileRepository {
     }
 
     async getRanking(){
-        const topUsers: [] = await prisma.$queryRaw`
-            SELECT p.*, u.username
-            FROM profile p
-            JOIN tb_user u ON p.user_id = u.id
-            ORDER BY p.detailed_habit_count->>'total' DESC, p.updated_at DESC
-            LIMIT 3;
-        `;
+        type RawResult = {
+            profile_id: string;
+            total_completed: number;
+        };
 
-        return topUsers
+        const now = new Date()
+    
+        const start = startOfWeek(now, { weekStartsOn: 1})
+        const end = endOfWeek(now, { weekStartsOn: 1})
+    
+        const results: RawResult[] = await prisma.$queryRawUnsafe(`
+            SELECT profile_id, COUNT(*) as total_completed
+            FROM "goal"
+            WHERE
+                "updated_at" BETWEEN $1 AND $2
+                AND "current_count" = "target_count"
+                AND "profile_id" IS NOT NULL
+            GROUP BY profile_id
+            ORDER BY total_completed DESC
+            LIMIT 3;
+        `, start, end);
+
+        const profilesIds = results.map(item => item.profile_id)
+
+        const profiles = await prisma.profile.findMany({
+            where:{
+                id:{
+                    in: profilesIds,
+                },
+            },
+            select:{
+                id:true,
+                image_url:true,
+                user:{
+                    select:{
+                        username:true,
+                    }
+                }
+            }
+        })
+
+        const leaderboard = results.map(item => {
+            const profile = profiles.find(p => p.id === item.profile_id)
+            return {
+                weektotal:Number(item.total_completed),
+                imageUrl:profile?.image_url ?? null,
+                username:String(profile?.user?.username)
+            }
+        })
+
+        return leaderboard
     }
 
     async findById(id: string): Promise<profile | null> {

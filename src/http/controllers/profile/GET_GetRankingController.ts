@@ -10,11 +10,11 @@ export async function GETRanking(request:FastifyRequest, reply:FastifyReply) {
         const profileRepo = new PrismaProfileRepository()
         const service = new GetRankingService(profileRepo)
 
-        const topUsers = await service.execute(id)
+        const leaderboard = await service.execute(id)
 
         reply.status(200).send({
             Description:"Ok",
-            topUsers,
+            leaderboard,
         })
     }
     catch (err) {
