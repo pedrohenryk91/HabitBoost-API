@@ -103,6 +103,15 @@ export class PrismaProfileRepository implements ProfileRepository {
         })
     }
 
+    async updatePrismaInput(id: string, data: Prisma.profileUpdateInput): Promise<profile | null> {
+        return await prisma.profile.update({
+            where:{
+                id,
+            },
+            data,
+        })
+    }
+
     async delete(id: string): Promise<void> {
         await prisma.profile.delete({
             where:{

@@ -537,6 +537,25 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                     }
                 }
             },
+            "delete/image":{
+                delete:{
+                    tags:["Delete"],
+                    summary:"Route to delete the profile image of the user",
+                    security:[{"BearerAuth":[]}],
+                    description:"Route to delete the profile image of the user",
+                    responses:{
+                        201:{
+                            description:"Deleted"
+                        },
+                        404:{
+                            description:"User was not found"
+                        },
+                        500:{
+                            description:"Unknown error"
+                        }
+                    }
+                }
+            },            
             "user/register":{//OK
                 post:{
                     tags:["User"],

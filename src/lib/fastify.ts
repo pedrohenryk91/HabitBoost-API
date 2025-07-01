@@ -16,6 +16,7 @@ import fastifyMultipart from "@fastify/multipart";
 import { CategoryRoutes } from "http/routes/CategoryRoutes";
 import { RankRoutes } from "http/routes/RankRoutes";
 import fastifyCookie from "@fastify/cookie";
+import { DeleteRoutes } from "http/routes/DeleteRoutes";
 
 export const app = fastify();
 
@@ -41,6 +42,7 @@ app.register(GoalRoutes, {prefix:"/goal"})
 app.register(RankRoutes, {prefix:"/ranking"})
 app.register(UpdateRoutes, {prefix:"/update"})
 app.register(UploadRoutes, {prefix:"/upload"})
+app.register(DeleteRoutes, {prefix:"/delete"})
 app.register(CategoryRoutes, {prefix:"/category"})
 
 app.register(cors, {

@@ -7,5 +7,6 @@ export interface ProfileRepository {
     findById(id: string): Promise<profile | null>
     findByUserId(userId: string): Promise<profile | null>
     update(id: string, data: Partial<profile>): Promise<profile | null>
+    updatePrismaInput(id: string, data: Prisma.profileUpdateInput): Promise<profile | null>
     delete(id: string): Promise<void>
 }
