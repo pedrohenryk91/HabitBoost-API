@@ -36,12 +36,13 @@ export class EditGoalUseCase {
 
         let count_updated_at
         if(current_count && target_count){
-            count_updated_at = new Date()
             if(current_count > target_count){
                 throw new NotAllowedError("Current count can not be higher than Target count.")
             }
         } else if(current_count){
-            count_updated_at = new Date()
+            if(current_count == doesGoalExists.target_count){
+                count_updated_at = new Date()
+            }
             if(current_count > doesGoalExists.target_count){
                 throw new NotAllowedError("Current count can not be higher than Target count.")
             }
