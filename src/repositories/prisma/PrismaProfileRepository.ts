@@ -3,7 +3,6 @@ import { endOfWeek, min, startOfWeek } from "date-fns";
 import { prisma } from "lib/prisma";
 import { ProfileRepository } from "repositories/ProfileRepository";
 import { formatDateToYYYYMMDD } from "utils/FormatDate";
-import { sortDatesWithPositions } from "utils/SortDatesWithPositions";
 
 export class PrismaProfileRepository implements ProfileRepository {
 
@@ -65,22 +64,25 @@ export class PrismaProfileRepository implements ProfileRepository {
             }
         })
 
-        let dates: string[] = profiles.map(item => {
-            if(item.count_updated_at){
-                return formatDateToYYYYMMDD(item.count_updated_at)
-            }
-            return ""
-        })
-        let datesRecord = sortDatesWithPositions(dates)
-
-        const leaderboard = results.map(item => {
+        const usersEntry = results.map(item => {
             const profile = profiles.find(p => p.id === item.profile_id)
-            const position = (profile?.count_updated_at ? formatDateToYYYYMMDD(profile.count_updated_at) : null)
+            
             return {
                 weektotal:Number(item.total_completed),
-                imageUrl:profile?.image_url ?? null,
                 username:String(profile?.user?.username),
-                position:(position?datesRecord[position]:4)
+                date:(profile?.count_updated_at?profile?.count_updated_at.toISOString():new Date(3099,12,31).toISOString())
+            }
+        })
+
+        const users = rankUsers(usersEntry)
+        const leaderboard = users.map(user => {
+            const profile = profiles.find(p => p.user?.username === user.username)
+            const {weektotal,position,username} = user
+            return {
+                weektotal,
+                position,
+                username,
+                imageUrl:(profile?.image_url ?? null)
             }
         })
 
