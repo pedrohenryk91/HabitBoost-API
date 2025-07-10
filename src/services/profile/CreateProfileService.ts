@@ -8,6 +8,7 @@ interface CreateProfileParams {
     createdAt?: Date,
     updatedAt?: Date,
     total_habit_count?: number,
+    count_updated_at?: Date,
     detailed_habit_count?: object,
     user_id?: string,
 }
@@ -20,6 +21,7 @@ export class CreateProfileUseCase {
         image_url,
         updatedAt,
         createdAt,
+        count_updated_at,
         total_habit_count,
         detailed_habit_count,
     }: CreateProfileParams){
@@ -34,6 +36,7 @@ export class CreateProfileUseCase {
             user_id,
             created_at: createdAt,
             updated_at: updatedAt,
+            count_updated_at,
             total_habit_count,
             detailed_habit_count,
         })

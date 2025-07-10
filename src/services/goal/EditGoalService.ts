@@ -34,11 +34,14 @@ export class EditGoalUseCase {
             throw new NotAllowedError("User does not own goal.")
         }
 
+        let count_updated_at
         if(current_count && target_count){
+            count_updated_at = new Date()
             if(current_count > target_count){
                 throw new NotAllowedError("Current count can not be higher than Target count.")
             }
         } else if(current_count){
+            count_updated_at = new Date()
             if(current_count > doesGoalExists.target_count){
                 throw new NotAllowedError("Current count can not be higher than Target count.")
             }
@@ -57,6 +60,13 @@ export class EditGoalUseCase {
 
         if(!goal){
             throw new EntityNotFoundError("Goal")
+        }
+
+        if(count_updated_at){
+            await this.ProfileRepo.update(doesProfileExists.id,{
+                count_updated_at,
+                updated_at: new Date(),
+            })
         }
 
         const {id,habit_id,title,created_at,updated_at} = goal

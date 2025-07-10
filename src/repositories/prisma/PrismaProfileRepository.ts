@@ -1,18 +1,21 @@
 import { Prisma, profile } from "@prisma/client";
-import { endOfWeek, startOfWeek } from "date-fns";
+import { endOfWeek, min, startOfWeek } from "date-fns";
 import { prisma } from "lib/prisma";
 import { ProfileRepository } from "repositories/ProfileRepository";
+import { formatDateToYYYYMMDD } from "utils/FormatDate";
+import { sortDatesWithPositions } from "utils/SortDatesWithPositions";
 
 export class PrismaProfileRepository implements ProfileRepository {
 
     async create(data: Partial<profile>): Promise<profile> {
-        const {user_id,created_at,detailed_habit_count,image_url,total_habit_count,updated_at} = data
+        const {user_id,created_at,detailed_habit_count,image_url,total_habit_count,count_updated_at,updated_at} = data
         return await prisma.profile.create({
             data:{
                 user_id,
                 image_url,
                 created_at,
                 updated_at,
+                count_updated_at,
                 total_habit_count,
                 detailed_habit_count:(detailed_habit_count?detailed_habit_count:undefined),
             }
@@ -53,6 +56,7 @@ export class PrismaProfileRepository implements ProfileRepository {
             select:{
                 id:true,
                 image_url:true,
+                count_updated_at:true,
                 user:{
                     select:{
                         username:true,
@@ -61,12 +65,22 @@ export class PrismaProfileRepository implements ProfileRepository {
             }
         })
 
+        let dates: string[] = profiles.map(item => {
+            if(item.count_updated_at){
+                return formatDateToYYYYMMDD(item.count_updated_at)
+            }
+            return ""
+        })
+        let datesRecord = sortDatesWithPositions(dates)
+
         const leaderboard = results.map(item => {
             const profile = profiles.find(p => p.id === item.profile_id)
+            const position = (profile?.count_updated_at ? formatDateToYYYYMMDD(profile.count_updated_at) : null)
             return {
                 weektotal:Number(item.total_completed),
                 imageUrl:profile?.image_url ?? null,
-                username:String(profile?.user?.username)
+                username:String(profile?.user?.username),
+                position:(position?datesRecord[position]:4)
             }
         })
 

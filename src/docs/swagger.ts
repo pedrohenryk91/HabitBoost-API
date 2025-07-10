@@ -301,7 +301,12 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                             "weektotal":{
                                                 type:"number",
                                                 description:"The total of the week of the user"
-                                            }
+                                            },
+                                            "lastUpdated":{
+                                                type:"string",
+                                                format:"date-time",
+                                                description:"The last time that the user was updated"
+                                            },
                                         }
                                     }
                                 }

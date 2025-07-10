@@ -68,6 +68,7 @@ model profile {
   total_habit_count Int @default(0)
   image_url String?
 
+  count_updated_at DateTime?
   created_at DateTime @default(now())
   updated_at DateTime?
 
