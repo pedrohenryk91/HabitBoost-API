@@ -302,10 +302,9 @@ export const SwaggerDocumentationOptions:SwaggerOptions = {
                                                 type:"number",
                                                 description:"The total of the week of the user"
                                             },
-                                            "lastUpdated":{
-                                                type:"string",
-                                                format:"date-time",
-                                                description:"The last time that the user was updated"
+                                            "position":{
+                                                type:"number",
+                                                description:"The position of the user in the ranking"
                                             },
                                         }
                                     }
