@@ -1,4 +1,3 @@
-import { goal } from "@prisma/client";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaGoalRepository } from "repositories/prisma/PrismaGoalRepository";

@@ -10,7 +10,7 @@ type RankedUser = {
   weektotal: number;
 };
 
-function rankUsers(users: UserEntry[]): RankedUser[] {
+export function rankUsers(users: UserEntry[]): RankedUser[] {
   const shuffled = users
     .map(user => ({ ...user, rand: Math.random() }))
     .sort((a, b) => a.rand - b.rand);

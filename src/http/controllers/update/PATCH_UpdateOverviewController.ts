@@ -1,6 +1,6 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { OverviewOptionalSchema } from "lib/interfaces/Overview";
+import { OverviewOptionalSchema } from "lib/types/Overview";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { EditProfileUseCase } from "services/profile/EditProfileService";
 import { z } from "zod";

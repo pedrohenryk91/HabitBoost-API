@@ -1,6 +1,5 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { IncorrectPasswordError } from "errors/IncorrectPasswordError";
-import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";

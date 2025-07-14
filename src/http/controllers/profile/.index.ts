@@ -1,1 +1,6 @@
 export * from "./POST_CreateProfileController"
+export * from "./GET_OverviewAndTotalController"
+export * from "./GET_GetCategoriesController"
+export * from "./GET_GetRankingController"
+export * from "./GET_GetHabitsController"
+export * from "./GET_GetGoalsController"

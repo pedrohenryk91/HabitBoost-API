@@ -3,7 +3,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaGoalRepository } from "repositories/prisma/PrismaGoalRepository";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { GetProfileGoalsUseCase } from "services/profile/GetProfileGoalsService";
-import { z } from "zod";
 
 export async function GETGoalsController(request:FastifyRequest, reply:FastifyReply) {
     try {

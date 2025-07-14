@@ -1,4 +1,4 @@
-import { days, status } from "@prisma/client";
+import { status } from "@prisma/client";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { StatusByDate } from "lib/types/StatusByDate";

@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyRequest } from "fastify";
 import { z } from "zod";
 
 export async function VerifyAuthToken(request: FastifyRequest) {

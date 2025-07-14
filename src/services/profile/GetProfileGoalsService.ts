@@ -1,5 +1,4 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { cpuUsage } from "process";
 import { GoalRepository } from "repositories/GoalRepository";
 import { ProfileRepository } from "repositories/ProfileRepository";
 

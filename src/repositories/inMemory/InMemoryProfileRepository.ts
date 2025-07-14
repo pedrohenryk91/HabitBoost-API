@@ -11,6 +11,7 @@ export class InMemoryProfileRepository implements ProfileRepository {
             id:randomUUID(),
             detailed_habit_count:(data.detailed_habit_count?data.detailed_habit_count:null),
             total_habit_count:Number(data.total_habit_count),
+            count_updated_at:null,
             image_url:String(data.image_url),
             user_id:null,
             created_at: new Date(),

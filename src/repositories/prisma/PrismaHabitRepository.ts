@@ -1,8 +1,6 @@
-import { Prisma, goal, habit } from "@prisma/client";
+import { Prisma, habit } from "@prisma/client";
 import { prisma } from "lib/prisma";
-import { HabitWithGoal } from "lib/types/HabitWithGoal";
 import { HabitRepository } from "repositories/HabitRepository";
-import { object } from "zod";
 
 export class PrismaHabitRepository implements HabitRepository {
     async create(data: Prisma.habitCreateInput): Promise<habit> {

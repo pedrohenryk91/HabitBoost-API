@@ -1,7 +1,6 @@
 import { AlreadyInUseError } from "errors/AlreadyInUseError";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { NODE_ENV } from "lib/env";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
 import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { CreateUserUseCase } from "services/user/CreateUserService";

@@ -1,5 +1,4 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { OverviewOptional, OverviewOptionalType } from "lib/interfaces/Overview";
 import { UserForRank } from "lib/interfaces/UserForRank";
 import { ProfileRepository } from "repositories/ProfileRepository";
 

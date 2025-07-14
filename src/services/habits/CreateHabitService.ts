@@ -1,11 +1,9 @@
-import { days } from "@prisma/client";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { StatusByDate } from "lib/types/StatusByDate";
 import { HabitRepository } from "repositories/HabitRepository";
 import { ProfileRepository } from "repositories/ProfileRepository";
 import { isUserVerifiedFromProfile } from "utils/IsUserVerified";
-import { z } from "zod";
 
 interface CreateHabitParams {
     category_id: string,

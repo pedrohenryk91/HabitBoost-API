@@ -1,1 +1,5 @@
 export * from "./PrismaUserRepository"
+export * from "./PrismaGoalRepository"
+export * from "./PrismaHabitRepository"
+export * from "./PrismaProfileRepository"
+export * from "./PrismaCategoryRepository"

@@ -1,9 +1,8 @@
 import { Prisma, profile } from "@prisma/client";
-import { endOfWeek, min, startOfWeek } from "date-fns";
+import { endOfWeek, startOfWeek } from "date-fns";
 import { prisma } from "lib/prisma";
 import { ProfileRepository } from "repositories/ProfileRepository";
-import { formatDateToYYYYMMDD } from "utils/FormatDate";
-
+import { rankUsers } from "utils/RankUsers";
 export class PrismaProfileRepository implements ProfileRepository {
 
     async create(data: Partial<profile>): Promise<profile> {
@@ -70,7 +69,7 @@ export class PrismaProfileRepository implements ProfileRepository {
             return {
                 weektotal:Number(item.total_completed),
                 username:String(profile?.user?.username),
-                date:(profile?.count_updated_at?profile?.count_updated_at.toISOString():new Date(3099,12,31).toISOString())
+                date:(profile?.count_updated_at?profile.count_updated_at.toISOString():new Date(3099,12,31).toISOString())
             }
         })
 

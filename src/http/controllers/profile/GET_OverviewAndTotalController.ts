@@ -1,10 +1,7 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
-import { PrismaUserRepository } from "repositories/prisma/PrismaUserRepository";
 import { GetUserDataUseCase } from "services/user/GetUserDataService";
-import { z } from "zod";
 
 export async function GETOverviewAndTotal(request: FastifyRequest, reply: FastifyReply) {
     try {

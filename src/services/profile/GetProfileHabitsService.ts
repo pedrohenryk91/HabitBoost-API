@@ -1,5 +1,4 @@
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
-import { Goal } from "lib/types/HabitWithGoal";
 import { statusByDateSchema } from "lib/types/StatusByDate";
 import { HabitRepository } from "repositories/HabitRepository";
 import { ProfileRepository } from "repositories/ProfileRepository";

@@ -1,11 +1,8 @@
-import { status } from "@prisma/client";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { NotAllowedError } from "errors/NotAllowedError";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { PrismaCategoryRepository } from "repositories/prisma/PrismaCategoryRepository";
 import { PrismaHabitRepository } from "repositories/prisma/PrismaHabitRepository";
 import { PrismaProfileRepository } from "repositories/prisma/PrismaProfileRepository";
-import { EditHabitUseCase } from "services/habits/EditHabitService";
 import { EditStatusByDateUseCase } from "services/habits/EditStatusByDateService";
 import { z } from "zod";
 

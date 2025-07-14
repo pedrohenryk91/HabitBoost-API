@@ -1,7 +1,6 @@
-import { AlreadyInUseError } from "errors/AlreadyInUseError";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { IncorrectFormatError } from "errors/IncorrectFormatError";
-import { OverviewOptional, OverviewOptionalSchema, OverviewOptionalType } from "lib/interfaces/Overview";
+import { OverviewOptional, OverviewOptionalSchema, OverviewOptionalType } from "lib/types/Overview";
 import { ProfileRepository } from "repositories/ProfileRepository";
 
 interface EditProfileParams {

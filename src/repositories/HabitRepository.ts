@@ -1,5 +1,4 @@
 import { habit, Prisma } from "@prisma/client";
-import { HabitWithGoal } from "lib/types/HabitWithGoal";
 
 export interface HabitRepository {
     create(data: Prisma.habitCreateInput): Promise<habit>

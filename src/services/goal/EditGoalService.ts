@@ -34,7 +34,7 @@ export class EditGoalUseCase {
             throw new NotAllowedError("User does not own goal.")
         }
 
-        let count_updated_at
+        let count_updated_at: Date | null = null
         if(current_count && target_count){
             if(current_count > target_count){
                 throw new NotAllowedError("Current count can not be higher than Target count.")
@@ -65,7 +65,7 @@ export class EditGoalUseCase {
 
         if(count_updated_at){
             await this.ProfileRepo.update(doesProfileExists.id,{
-                count_updated_at,
+                count_updated_at: count_updated_at,
                 updated_at: new Date(),
             })
         }

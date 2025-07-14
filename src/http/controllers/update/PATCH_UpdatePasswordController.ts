@@ -1,4 +1,3 @@
-import { hash } from "bcryptjs";
 import { EntityNotFoundError } from "errors/EntityNotFoundError";
 import { IncorrectPasswordError } from "errors/IncorrectPasswordError";
 import { FastifyReply, FastifyRequest } from "fastify";
