@@ -62,10 +62,9 @@ export class EditGoalUseCase {
         if(!goal){
             throw new EntityNotFoundError("Goal")
         }
-
         if(count_updated_at){
             await this.ProfileRepo.update(doesProfileExists.id,{
-                count_updated_at: count_updated_at,
+                count_updated_at,
                 updated_at: new Date(),
             })
         }

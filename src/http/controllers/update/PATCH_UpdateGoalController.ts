@@ -12,7 +12,7 @@ export async function PATCHUpdateGoal(request:FastifyRequest, reply:FastifyReply
         const {goalId} = z.object({ goalId: z.string()} ).parse(request.params)
         const {currentCount,newTitle,targetCount} = z.object({
             newTitle:z.string().min(3).optional(),
-            currentCount: z.coerce.number().optional(),
+            currentCount:z.coerce.number().optional(),
             targetCount:z.coerce.number().optional(),
         }).parse(request.body)
 

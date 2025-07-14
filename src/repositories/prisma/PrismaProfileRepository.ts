@@ -112,6 +112,7 @@ export class PrismaProfileRepository implements ProfileRepository {
             data:{
                 image_url:(data.image_url?data.image_url:undefined),
                 detailed_habit_count:(data.detailed_habit_count?data.detailed_habit_count:undefined),
+                count_updated_at:data.count_updated_at,
                 total_habit_count:data.total_habit_count,
                 updated_at:data.updated_at,
             },
